@@ -38,7 +38,7 @@ CREATE TABLE `ProgramTags` (
 
 LOCK TABLES `ProgramTags` WRITE;
 /*!40000 ALTER TABLE `ProgramTags` DISABLE KEYS */;
-INSERT INTO `ProgramTags` VALUES (1,3);
+INSERT INTO `ProgramTags` VALUES (1,3),(1,18),(1,19),(1,20),(1,21),(1,22),(1,23),(1,24),(1,9),(1,10),(1,11),(1,5),(1,6),(1,7),(2,18),(2,19),(2,9),(2,5),(2,7),(2,2),(3,11),(3,2),(3,7),(3,6),(3,8),(3,26),(3,25),(4,1),(4,27),(4,3),(4,10),(4,11),(4,2),(4,7),(4,6),(4,8);
 /*!40000 ALTER TABLE `ProgramTags` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-07 18:11:53
+-- Dump completed on 2023-11-10 12:37:51
