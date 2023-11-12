@@ -1,0 +1,34 @@
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import NavBar from "./NavBar.jsx";
+import Home from "./components/Home.jsx";
+import Events from "./components/Events.jsx";
+import Scholarship from "./components/Scholarship.jsx";
+import Calender from "./components/Calender.jsx"; 
+import Program from "./components/Program.jsx";
+import Newsletter from "./components/Newsletter.jsx";
+
+
+import "./App.css";
+
+function App() {
+  return (
+    <Router>
+      <div className="">
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/events" element={<Events/>} />
+          <Route path="/scholarship" element={<Scholarship />} />
+          <Route path="/calender" element={<Calender/>} />
+          <Route path="/program" element={<Program/>} />
+          <Route path="/newsletter" element={<Newsletter/>} />
+
+        </Routes>
+      </div>
+    </Router>
+  );
+}
+
+export default App;

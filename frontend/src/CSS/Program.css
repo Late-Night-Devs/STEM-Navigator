@@ -1,0 +1,14 @@
+.container{
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: larger;
+   
+}
+.hero-img{
+    height: 40vh;
+    width: 100%;
+    background-position: center left; 
+    background-image: url(https://lh5.googleusercontent.com/86pzOmrRMslg3qMQwTyN76u8msV27okbhdbjzrxNvFRhRr4ACovH-ApY8MZS-buXIjmeDo7K_7qV6k11plveTtA=w16383); 
+    background-size: cover;
+}
