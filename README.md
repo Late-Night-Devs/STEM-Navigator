@@ -28,4 +28,4 @@ camps, courses, and other similar offerings all from within one web application.
 ## Database ( db-dump )
 - Running the docker app first
 - docker compose up d
-- Add tables to the database:  ` docker exec -i db mysql -uroot -pmy-secret db < file1.sql file2.sql file3.sql`
+- Add tables to the database:  example: ` docker exec -i db mysql -uroot -pmy-secret db < file1.sql`
