@@ -81,6 +81,8 @@ const FilterByTag = () => {
           </Col>
         ))}
       </Row>
+
+      {/* testing tag id */}
       <Row>
         <Col>
           <div className="selected-tag-ids">
