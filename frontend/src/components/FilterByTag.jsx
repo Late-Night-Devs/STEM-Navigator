@@ -53,6 +53,10 @@ const FilterByTag = () => {
     });
   };
 
+  // Display selected tag IDs
+  const selectedTagIdsArray = Array.from(selectedTagIds).join(", ");
+
+
   return (
     <Container>
       <Row>
@@ -77,7 +81,14 @@ const FilterByTag = () => {
           </Col>
         ))}
       </Row>
-
+      <Row>
+        <Col>
+          <div className="selected-tag-ids">
+            <h5>Selected Tag IDs:</h5>
+            <p>{selectedTagIdsArray}</p>
+          </div>
+        </Col>
+      </Row>
 
       {/* maybe this is used to add reset filter btn or any options later */}
     </Container>
