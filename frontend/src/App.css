@@ -1,0 +1,7 @@
+.with-shadow {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add your shadow styles here */
+}
+
+.custom-border {
+  border-right: 20px solid #000; /* Adjust color and width as needed */
+}
