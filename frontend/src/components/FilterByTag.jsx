@@ -3,16 +3,15 @@ import axios from "axios";
 import { Card, Container, Row, Col, Form } from "react-bootstrap";
 import "../CSS/FilterByTag.css";
 
+const backend_url = process.env.REACT_APP_BACKEND_URL;
+
 const FilterByTag = ({ setSelectedTagIds }) => {
-
   const [categories, setCategories] = useState({});
-  // eslint-disable-next-line 
-
-  const [tagIdMapping, setTagIdMapping] = useState({}); // Map tag names to IDs
-
+  const [tagIdMapping, setTagIdMapping] = useState({});   // Map tag names to IDs
+ 
   useEffect(() => {
     axios
-      .get("/tags")
+      .get(`${backend_url}/tags`)
       .then((response) => {
         const fetchedCategories = {};                         //create an empty object < key, value >
         const tagIdMap = {};

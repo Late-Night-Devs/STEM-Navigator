@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Card, Row, Col, Button } from 'react-bootstrap';
 // import Viking from '../image/viking.png'; 
-
+const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 const Programs = ({ selectedTagIds }) => {
   const [programs, setPrograms] = useState([]);
@@ -13,7 +13,7 @@ const Programs = ({ selectedTagIds }) => {
         // Convert Set to Array for the request
         const tagIdsArray = Array.from(selectedTagIds);
 
-        const response = await axios.post("/programs/filter", { tagIds: tagIdsArray });
+        const response = await axios.post(`${backend_url}/programs/filter`, { tagIds: tagIdsArray });
 
         setPrograms(response.data);
       } catch (error) {
