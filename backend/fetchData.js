@@ -1,9 +1,16 @@
 const express = require("express");
 const mysql = require("mysql2");
 const path = require("path");
+const cors = require('cors');
 
 const app = express();
 const port = 3000;
+
+// Enable CORS for all routes
+app.use(cors());
+
+// support input req for the body as json file
+app.use(express.json());
 
 // MySQL database connection configuration
 const db = mysql.createConnection({
@@ -27,6 +34,8 @@ app.use(express.static(path.join(__dirname, '../frontend/build')));
 
 // Fetch data from the Programs table
 app.get("/programs", (req, res) => {
+  console.log("Request Body:", req.body);
+
   db.query("SELECT * FROM Programs", (err, results) => {
     if (err) {
       res.status(500).send("Error in fetching records from Programs");
@@ -35,6 +44,26 @@ app.get("/programs", (req, res) => {
     res.json(results);
   });
 });
+
+app.post("/programs/filter", (req, res) => {
+  const tagIds = req.body.tagIds;
+  console.log("Request Body:", req.body);
+  const placeholders = tagIds.map(() => '?').join(',');
+  const sqlQuery = `
+    SELECT p.* FROM Programs p
+    JOIN ProgramTags pt ON p.program_id = pt.program_id
+    WHERE pt.tag_id IN (${placeholders})
+  `;
+
+  db.query(sqlQuery, tagIds, (err, results) => {
+    if (err) {
+      res.status(500).send("Error in fetching filtered programs");
+      return;
+    }
+    res.json(results);
+  });
+});
+
 
 // Fetch data from the ProgramTags table
 app.get("/program-tags", (req, res) => {

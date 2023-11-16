@@ -3,18 +3,18 @@ import axios from "axios";
 import { Card, Container, Row, Col, Form } from "react-bootstrap";
 import "../CSS/FilterByTag.css";
 
-const FilterByTag = () => {
+const FilterByTag = ({ setSelectedTagIds }) => {
 
   const [categories, setCategories] = useState({});
   // eslint-disable-next-line 
-  const [selectedTagIds, setSelectedTagIds] = useState(new Set());
+
   const [tagIdMapping, setTagIdMapping] = useState({}); // Map tag names to IDs
 
   useEffect(() => {
     axios
       .get("/tags")
       .then((response) => {
-        const fetchedCategories = {};
+        const fetchedCategories = {};                         //create an empty object < key, value >
         const tagIdMap = {};
 
         response.data.forEach((tag) => {
@@ -22,7 +22,7 @@ const FilterByTag = () => {
           const tag_name = tag.tag_name.trim();
           const tag_id = tag.tag_id;                          // get this data from the backend
 
-          fetchedCategories[category] = fetchedCategories[category] || [];
+          fetchedCategories[category] = fetchedCategories[category] || []; // if the arr has category already existed || null
           fetchedCategories[category].push(tag_name);
 
           tagIdMap[tag_name] = tag_id;                        // Map tag names to their IDs
@@ -49,13 +49,9 @@ const FilterByTag = () => {
 
       // For searching purposes later, log the updated set of selected tag IDs
       console.log("tag_id selected: ", Array.from(newSelectedTagIds));
-      return newSelectedTagIds;
+      return newSelectedTagIds;                              // update the new state in setSelectedTagIds 
     });
   };
-
-  // Display selected tag IDs
-  const selectedTagIdsArray = Array.from(selectedTagIds).join(", ");
-
 
   return (
     <Container>
@@ -82,15 +78,7 @@ const FilterByTag = () => {
         ))}
       </Row>
 
-      {/* testing tag id */}
-      <Row>
-        <Col>
-          <div className="selected-tag-ids">
-            <h5>Selected Tag IDs:</h5>
-            <p>{selectedTagIdsArray}</p>
-          </div>
-        </Col>
-      </Row>
+
 
       {/* maybe this is used to add reset filter btn or any options later */}
     </Container>
