@@ -108,7 +108,13 @@ INSERT INTO `ProgramTags` VALUES (8,9);
 
 INSERT INTO `ProgramTags` VALUES (9,7);
 
+INSERT INTO `ProgramTags` VALUES (10,12);
 
+
+INSERT INTO `ProgramTags` VALUES (11,10);
+
+
+INSERT INTO `ProgramTags` VALUES (12,11);
 /*!40000 ALTER TABLE `ProgramTags` ENABLE KEYS */
 
 ;

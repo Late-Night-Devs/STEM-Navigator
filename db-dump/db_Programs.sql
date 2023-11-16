@@ -109,7 +109,7 @@ VALUES (
 INSERT INTO `Programs`
 VALUES (
         2,
-        'testing1',
+        'testing2',
         'Joyce Pieretti Ph.D',
         'lsamp@pdx.edu',
         'https://www.pdx.edu/alliance-minority-participation/',
@@ -121,7 +121,7 @@ VALUES (
 INSERT INTO `Programs`
 VALUES (
         3,
-        'testing2',
+        'testing3',
         'name testing3',
         ' lsamp @pdx.edu ',
         ' https: / / www.pdx.edu / alliance - minority - participation / ',
@@ -133,8 +133,8 @@ VALUES (
 INSERT INTO `Programs`
 VALUES (
         4,
-        ' testing3 ',
-        ' name: testing 3 ',
+        ' testing4 ',
+        ' name: testing 4 ',
         ' lsamp @pdx.edu ',
         ' https: / / www.pdx.edu / alliance - minority - participation / ',
         NULL,
@@ -145,8 +145,8 @@ VALUES (
 INSERT INTO `Programs`
 VALUES (
         5,
-        ' testing3 ',
-        ' name: testing 3 ',
+        ' testing5 ',
+        ' name: testing5 ',
         ' lsamp @pdx.edu ',
         ' https: / / www.pdx.edu / alliance - minority - participation / ',
         NULL,
@@ -157,8 +157,8 @@ VALUES (
 INSERT INTO `Programs`
 VALUES (
         6,
-        ' testing3 ',
-        ' name: testing 3 ',
+        ' testing6',
+        ' name: testing 6 ',
         ' lsamp @pdx.edu ',
         ' https: / / www.pdx.edu / alliance - minority - participation / ',
         NULL,
@@ -169,8 +169,8 @@ VALUES (
 INSERT INTO `Programs`
 VALUES (
         7,
-        ' testing3 ',
-        ' name: testing 3 ',
+        ' testing7 ',
+        ' name: testing 7 ',
         ' lsamp @pdx.edu ',
         ' https: / / www.pdx.edu / alliance - minority - participation / ',
         NULL,
@@ -181,8 +181,8 @@ VALUES (
 INSERT INTO `Programs`
 VALUES (
         8,
-        ' testing3 ',
-        ' name: testing 3 ',
+        ' testing8 ',
+        ' name: testing8 ',
         ' lsamp @pdx.edu ',
         ' https: / / www.pdx.edu / alliance - minority - participation / ',
         NULL,
@@ -193,14 +193,53 @@ VALUES (
 INSERT INTO `Programs`
 VALUES (
         9,
-        ' testing3 ',
-        ' name: testing 3 ',
+        ' testing9 ',
+        ' name: testing9 ',
         ' lsamp @pdx.edu ',
         ' https: / / www.pdx.edu / alliance - minority - participation / ',
         NULL,
         NULL,
         NULL
     );
+
+INSERT INTO `Programs`
+VALUES (
+        10,
+        ' testing 10 ',
+        ' name: 10 ',
+        ' lsamp @pdx.edu ',
+        ' https: / / www.pdx.edu / alliance - minority - participation / ',
+        NULL,
+        NULL,
+        NULL
+    );
+
+
+INSERT INTO `Programs`
+VALUES (
+        11,
+        ' 11 ',
+        ' name: 11 ',
+        ' lsamp @pdx.edu ',
+        ' https: / / www.pdx.edu / alliance - minority - participation / ',
+        NULL,
+        NULL,
+        NULL
+    );
+
+
+INSERT INTO `Programs`
+VALUES (
+        12,
+        ' 12 ',
+        ' name: 12 ',
+        ' lsamp @pdx.edu ',
+        ' https: / / www.pdx.edu / alliance - minority - participation / ',
+        NULL,
+        NULL,
+        NULL
+    );
+
 
 /*!40000 ALTER TABLE `Programs` ENABLE KEYS */
 
