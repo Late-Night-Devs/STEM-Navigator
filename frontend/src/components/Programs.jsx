@@ -27,9 +27,9 @@ const Programs = ({ selectedTagIds }) => {
   }, [selectedTagIds]);
 
   return (
-    <Row xs={1} md={2} lg={3} xl={3} className="g-4">
+    <Row xs={1} md={2} lg={3} className="g-4">
       {programs.map((program, index) => (
-        <Col key={index} className="mb-4 d-flex align-items-stretch">
+        <Col key={index} md={4} className="mb-4 d-flex align-items-stretch">
           <Card className="w-100">
             <Card.Body>
               <Card.Title>{program.title}</Card.Title>

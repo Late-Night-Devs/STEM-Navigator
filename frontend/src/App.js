@@ -29,7 +29,7 @@ function App() {
           <FilterByTag setSelectedTagIds={setSelectedTagIds} />
         </Col>
 
-        <Col md={12} lg={6} className="d-flex align-items-center justify-content-center  rounded shadow " style={{ minHeight: '200px' }}>
+        <Col md={12} lg={6} className="border-end  rounded shadow " style={{ minHeight: '200px' }}>
           <div>
             {selectedTagIds.size > 0 ? (
               <Programs selectedTagIds={selectedTagIds} />

@@ -142,6 +142,66 @@ VALUES (
         NULL
     );
 
+INSERT INTO `Programs`
+VALUES (
+        5,
+        ' testing3 ',
+        ' name: testing 3 ',
+        ' lsamp @pdx.edu ',
+        ' https: / / www.pdx.edu / alliance - minority - participation / ',
+        NULL,
+        NULL,
+        NULL
+    );
+
+INSERT INTO `Programs`
+VALUES (
+        6,
+        ' testing3 ',
+        ' name: testing 3 ',
+        ' lsamp @pdx.edu ',
+        ' https: / / www.pdx.edu / alliance - minority - participation / ',
+        NULL,
+        NULL,
+        NULL
+    );
+
+INSERT INTO `Programs`
+VALUES (
+        7,
+        ' testing3 ',
+        ' name: testing 3 ',
+        ' lsamp @pdx.edu ',
+        ' https: / / www.pdx.edu / alliance - minority - participation / ',
+        NULL,
+        NULL,
+        NULL
+    );
+
+INSERT INTO `Programs`
+VALUES (
+        8,
+        ' testing3 ',
+        ' name: testing 3 ',
+        ' lsamp @pdx.edu ',
+        ' https: / / www.pdx.edu / alliance - minority - participation / ',
+        NULL,
+        NULL,
+        NULL
+    );
+
+INSERT INTO `Programs`
+VALUES (
+        9,
+        ' testing3 ',
+        ' name: testing 3 ',
+        ' lsamp @pdx.edu ',
+        ' https: / / www.pdx.edu / alliance - minority - participation / ',
+        NULL,
+        NULL,
+        NULL
+    );
+
 /*!40000 ALTER TABLE `Programs` ENABLE KEYS */
 
 ;

@@ -7,7 +7,7 @@ const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 const FilterByTag = ({ setSelectedTagIds }) => {
   const [categories, setCategories] = useState({});
-  const [tagIdMapping, setTagIdMapping] = useState({});   // Map tag names to IDs
+  const [tagIdMapping, setTagIdMapping] = useState({});       // Map tag names to IDs
  
   useEffect(() => {
     axios
@@ -56,7 +56,7 @@ const FilterByTag = ({ setSelectedTagIds }) => {
     <Container>
       <Row>
         {Object.entries(categories).map(([category, tags]) => (
-          <Col key={category} md={4} className="mb-4">
+          <Col key={category} md={4} className="mb-4 ">
             <Card>
               <Card.Header as="h5" className="bg-success text-white">
                 {category}
