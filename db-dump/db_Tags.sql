@@ -28,7 +28,7 @@ CREATE TABLE `Tags` (
   `category` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`tag_id`),
   UNIQUE KEY `tag_id` (`tag_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `Tags` (
 
 LOCK TABLES `Tags` WRITE;
 /*!40000 ALTER TABLE `Tags` DISABLE KEYS */;
-INSERT INTO `Tags` VALUES (1,'STEM','Program Focus'),(2,'Application Required','Eligibility'),(3,'Citizen Required','Eligibility'),(4,'Research Opportunity','Student Services'),(5,'Student Development','Student Services'),(6,'Career Development','Student Services'),(7,'Financial Assistance','Student Services'),(8,'Conflicts','Eligibility'),(9,'Early Level','University Status'),(10,'Mid Level','University Status'),(11,'Late Level','University Status'),(12,'Student Support','Student Services'),(13,'Internship','Student Services'),(14,'Low Income','Identity '),(15,'First Generation','Identity '),(16,'Women ','Identity '),(17,'ADA Disability','Identity '),(18,'Black','Identity '),(19,'African American','Identity '),(20,'Hispanic','Identity'),(21,'Latino','Identity'),(22,'Native American','Identity'),(23,'Native Hawaiian / Pacific Islander','Identity'),(24,'Indigenous','Identity');
+INSERT INTO `Tags` VALUES (1,'STEM','Program Focus'),(2,'Application Required','Eligibility'),(3,'Citizen Required','Eligibility'),(4,'Research Opportunity','Student Services'),(5,'Student Development','Student Services'),(6,'Career Development','Student Services'),(7,'Financial Assistance','Student Services'),(8,'Conflicts','Eligibility'),(9,'Early Level','University Status'),(10,'Mid Level','University Status'),(11,'Late Level','University Status'),(12,'Student Support','Student Services'),(13,'Internship','Student Services'),(14,'Low Income','Identity '),(15,'First Generation','Identity '),(16,'Women ','Identity '),(17,'ADA Disability','Identity '),(18,'Black','Identity '),(19,'African American','Identity '),(20,'Hispanic','Identity'),(21,'Latinx','Identity'),(22,'Native American','Identity'),(23,'Native Hawaiian / Pacific Islander','Identity'),(24,'Indigenous','Identity'),(25,'Engineering','Program Focus'),(26,'Summer ','Timing'),(27,'Community College','Identity'),(28,'9 Terms','Timing'),(29,'3 Terms','Timing'),(30,'2 Terms','Timing'),(31,'1 Term','Timing'),(32,'24 Months','Timing'),(33,'12 Months','Timing'),(34,'3 Months','Timing'),(35,'10 Weeks','Timing'),(36,'8 Weeks','Timing');
 /*!40000 ALTER TABLE `Tags` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-10 11:49:22
+-- Dump completed on 2023-11-20  7:56:44
