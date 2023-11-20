@@ -1,7 +1,7 @@
 import React from "react";
 import "../CSS/Program.css";
 
-function Program() {
+function ProgramTab() {
   return (
     <div className="m-auto">
       <div className="">
@@ -29,4 +29,4 @@ function Program() {
   );
 }
 
-export default Program;
+export default ProgramTab;

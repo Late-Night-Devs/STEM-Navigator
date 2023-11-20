@@ -6,7 +6,7 @@ import Home from "./components/Home.jsx";
 import Events from "./components/Events.jsx";
 import Scholarship from "./components/Scholarship.jsx";
 import Calender from "./components/Calender.jsx"; 
-import Program from "./components/Program.jsx";
+import ProgramTab from "./components/ProgramTab.jsx";
 import Newsletter from "./components/Newsletter.jsx";
 
 
@@ -22,7 +22,7 @@ function App() {
           <Route path="/events" element={<Events/>} />
           <Route path="/scholarship" element={<Scholarship />} />
           <Route path="/calender" element={<Calender/>} />
-          <Route path="/program" element={<Program/>} />
+          <Route path="/program" element={<ProgramTab/>} />
           <Route path="/newsletter" element={<Newsletter/>} />
 
         </Routes>
