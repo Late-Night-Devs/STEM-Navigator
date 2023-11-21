@@ -1,0 +1,16 @@
+/* https://imagecolorpicker.com/color-code/6a7f10 */
+
+.filter-category .filter-name {
+  background-color: #6a7f10;
+  color: #ffffff;
+}
+.filter-category {
+  background-color: #b1d41b;
+}
+
+.tag {
+  background: rgba(0, 0, 0, 0);
+}
+.list-group-item {
+  border: none;
+}

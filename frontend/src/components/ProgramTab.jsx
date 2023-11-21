@@ -20,12 +20,12 @@ function ProgramTab() {
           </section>
 		  
           <div className="search-container">
-            <div className="filter w-50 p-3 bg-info text-center">
+            <div className="w-50 p-3 text-center" id="filter">
               <h3>Filter By Tag</h3>
               <TagCollection />
             </div>
             
-            <div className="program w-50 p-3 bg-secondary text-center">
+            <div className="w-50 p-3 text-center" id="program">
               <h3>Programs</h3>
             </div>
           </div>
