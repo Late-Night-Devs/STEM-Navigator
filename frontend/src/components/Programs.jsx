@@ -24,7 +24,7 @@ const Programs = ({ selectedTagIds }) => {
   }, [selectedTagIds]);
 
   const noProgramsAfterFilter =
-    selectedTagIds.size > 0 && programs.length === 0;
+    selectedTagIds.size === 0 && programs.length === 0;
 
   return (
     <Row className="g-4">
