@@ -1,6 +1,6 @@
 import React from "react";
 import "../CSS/Program.css";
-import TagCategory from "./TagCategory";
+import TagCollection from "./TagCollection";
 
 function ProgramTab() {
   return (
@@ -21,12 +21,12 @@ function ProgramTab() {
 		  
           <div className="search-container">
             <div className="filter w-50 p-3 bg-info text-center">
-              <h2>Filter By Tag</h2>
-              <TagCategory />
+              <h3>Filter By Tag</h3>
+              <TagCollection />
             </div>
             
             <div className="program w-50 p-3 bg-secondary text-center">
-              <h2>Programs</h2>
+              <h3>Programs</h3>
             </div>
           </div>
         </main>
