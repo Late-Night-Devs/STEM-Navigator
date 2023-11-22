@@ -35,28 +35,28 @@ function AdminPage() {
       </Row>
 
       {/* Tags section */}
-      <Row ClassName="mt-5">
-        <Col md={12} lg={6} className="border-end rounded-shadow" style={{ minHeight: "200px" }}>
-          <div className="text-center">
+      <Row className="p-4">
+        <Col md={12} lg={6} className="" style={{ minHeight: "200px" }}>
+          <div className="text-center border border-dark rounded p-4">
             <h2>Programs</h2>
-              {dummyPrograms.map((program) => (
-                  <button>{program.name}</button>
-              ))}
+            {dummyPrograms.map((program) => (
+              <button key={program.id}>{program.name}</button>
+            ))}
           </div>
         </Col>
 
         {/* Programs Section */}
-        <Col md={12} lg={6} className="border-end rounded-shadow" style={{minHeight: "200px"}}>
+        <Col md={12} lg={6} className="" style={{ minHeight: "200px" }}>
           {/* You may replace this with your actual content */}
-          <div className="text-center">
+          <div className="text-center border border-dark rounded p-4">
             <h2>Tags</h2>
-              {dummyTags.map((tag) => (
-                  <button>{tag.name}</button>
-              ))}
+            {dummyTags.map((tag) => (
+              <button key={tag.id}>{tag.name}</button>
+            ))}
           </div>
         </Col>
-
       </Row>
+
     </div>
   );
 }
