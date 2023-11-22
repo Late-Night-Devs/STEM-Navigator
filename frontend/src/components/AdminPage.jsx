@@ -65,7 +65,7 @@ function AdminPage() {
               <div>
                 {/*<button type="button" class="btn btn-dark  p-3 m-2">Add</button>*/}
                 <button type="button" class="btn btn-dark p-3 m-2">Remove</button>
-                <button type="button" class="btn btn-dark p-3 m-2">Modify</button>
+                {/*<button type="button" class="btn btn-dark p-3 m-2">Modify</button>*/}
               </div>
           </div>
         </Col>
@@ -81,7 +81,7 @@ function AdminPage() {
             <div>
               {/*<button type="button" class="btn btn-dark  p-3 m-2">Add</button>*/}
               <button type="button" class="btn btn-dark p-3 m-2">Remove</button>
-              <button type="button" class="btn btn-dark p-3 m-2">Modify</button>
+              {/*<button type="button" class="btn btn-dark p-3 m-2">Modify</button>*/}
             </div>
           </div>
         </Col>
