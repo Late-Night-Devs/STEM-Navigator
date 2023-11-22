@@ -21,7 +21,7 @@ function AdminPage() {
 
   return (
     <div className="m-auto">
-      {/* Programs section */}
+      {/* Intro section */}
       <Row className="img-hero-welcome">
         {/*<Col className="hero-img"></Col>*/}
         <Col>
@@ -34,10 +34,10 @@ function AdminPage() {
         </Col>
       </Row>
 
-      {/* Tags section */}
-      <Row className="p-4">
-        <Col md={12} lg={6} className="" style={{ minHeight: "200px" }}>
-          <div className="text-center border border-dark rounded p-4">
+      {/* Programs section */}
+      <Row className="">
+        <Col md={12} lg={6} className="" style={{ minHeight: "125px" }}>
+          <div className="text-center border border-dark rounded p-5">
             <h2>Programs</h2>
             {dummyPrograms.map((program) => (
               <button key={program.id}>{program.name}</button>
@@ -45,10 +45,10 @@ function AdminPage() {
           </div>
         </Col>
 
-        {/* Programs Section */}
-        <Col md={12} lg={6} className="" style={{ minHeight: "200px" }}>
+        {/* Tags Section */}
+        <Col md={12} lg={6} className="" style={{ minHeight: "125px" }}>
           {/* You may replace this with your actual content */}
-          <div className="text-center border border-dark rounded p-4">
+          <div className="text-center border border-dark rounded p-5">
             <h2>Tags</h2>
             {dummyTags.map((tag) => (
               <button key={tag.id}>{tag.name}</button>
@@ -57,6 +57,55 @@ function AdminPage() {
         </Col>
       </Row>
 
+      
+    {/* Program and Tag Info*/}
+    <Row className="mt-4">
+        {/* Program Info */}
+        <Col md={12} lg={6} className="" style={{ minHeight: "200px" }}>
+          <div className="text-center border border-dark rounded p-5">
+            <h2>ProgramInfo</h2>
+            <form action="">
+              <div>
+                <label htmlFor="ProgramName">Program Title</label>
+                <input type="text" />
+              </div>
+              <div>
+                <label htmlFor="ProgramLeadContact">Lead Contact</label>
+                <input type="text" />
+              </div>
+              <div>
+                <label htmlFor="ProgramEmail">Contact Email</label>
+                <input type="text" />
+              </div>
+              <div>
+                <label htmlFor="LinkToWeb">Link To Page</label>
+                <input type="text" />
+              </div>
+              <div>
+                <label htmlFor="LongDescription">Long Description</label>
+                <input type="textarea" />
+              </div>
+            </form>
+          </div>
+        </Col>
+
+        {/* Tag Info */}
+        <Col md={12} lg={6} className="" style={{ minHeight: "200px" }}>
+          <div className="text-center border border-dark rounded p-5">
+            <h2 className>Tag Info</h2>
+            <form action="">
+              <div>
+                <label htmlFor="TagName">Tag Name</label>
+                <input type="text" />
+              </div>
+              <div>
+                <label htmlFor="TagCategory">Tag Category</label>
+                <input type="text" />
+              </div>
+            </form>
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 }
