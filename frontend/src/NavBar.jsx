@@ -47,6 +47,11 @@ const NavBar = () => {
               Newsletter
             </a>
           </li>
+          <li className="nav-item">
+            <a className="nav-link" href="/admin-modify-db">
+              Admin Tools
+            </a>
+          </li>
         </ul>
       </div>
     </nav>
