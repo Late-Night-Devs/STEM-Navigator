@@ -54,9 +54,9 @@ function AdminPage() {
       </Row>
 
       {/* Programs section */}
-      <Row className="">
+      <Row className="p-4">
         <Col md={12} lg={6} className="" style={{ minHeight: "125px" }}>
-          <div className="text-center border border-dark rounded p-5">
+          <div className="text-center border  border-dark rounded-5 p-5">
             <h2>Programs</h2>
               {dummyPrograms.map((program) => (
                   <button type="button" class="btn btn-primary p-3 m-1" key={program.id}>{program.name}</button>
@@ -64,7 +64,7 @@ function AdminPage() {
               <hr />
               <div>
                 {/*<button type="button" class="btn btn-dark  p-3 m-2">Add</button>*/}
-                <button type="button" class="btn btn-dark p-3 m-2">Remove</button>
+                <button type="button" class="btn btn-danger p-3 m-2">Remove</button>
                 {/*<button type="button" class="btn btn-dark p-3 m-2">Modify</button>*/}
               </div>
           </div>
@@ -73,26 +73,27 @@ function AdminPage() {
         {/* Tags Section */}
         <Col md={12} lg={6} className="" style={{ minHeight: "125px" }}>
           {/* You may replace this with your actual content */}
-          <div className="text-center border border-dark rounded p-5">
+          <div className="text-center border border-dark rounded-5 p-5">
             {dummyTags.map((tag) => (
               <button type="button" class="btn btn-primary p-3 m-1" key={tag.id}>{tag.name}</button>
             ))}
             <hr />
             <div>
               {/*<button type="button" class="btn btn-dark  p-3 m-2">Add</button>*/}
-              <button type="button" class="btn btn-dark p-3 m-2">Remove</button>
+              <button type="button" class="btn btn-danger p-3 m-2">Remove</button>
               {/*<button type="button" class="btn btn-dark p-3 m-2">Modify</button>*/}
             </div>
           </div>
         </Col>
       </Row>
 
+<hr />
       
     {/* Program and Tag Info*/}
-    <Row className="mt-4">
+    <Row className="p-4">
         {/* Program Info */}
         <Col md={12} lg={6} className="" style={{ minHeight: "200px" }}>
-          <div className="text-center border border-dark rounded p-5">
+          <div className="text-center border border-dark rounded-5 p-5">
             <h2>Program Info</h2>
             <form action="">
               <div>
@@ -129,7 +130,7 @@ function AdminPage() {
 
         {/* Tag Info */}
         <Col md={12} lg={6} className="" style={{ minHeight: "200px" }}>
-          <div className="text-center border border-dark rounded p-5">
+          <div className="text-center border border-dark rounded-5 p-5">
             <h2 className>Tag Info</h2>
             <form action="">
               <div>
