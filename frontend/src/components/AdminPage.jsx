@@ -63,7 +63,7 @@ function AdminPage() {
               ))}
               <hr />
               <div>
-                <button type="button" class="btn btn-dark  p-3 m-2">Add</button>
+                {/*<button type="button" class="btn btn-dark  p-3 m-2">Add</button>*/}
                 <button type="button" class="btn btn-dark p-3 m-2">Remove</button>
                 <button type="button" class="btn btn-dark p-3 m-2">Modify</button>
               </div>
@@ -79,7 +79,7 @@ function AdminPage() {
             ))}
             <hr />
             <div>
-              <button type="button" class="btn btn-dark  p-3 m-2">Add</button>
+              {/*<button type="button" class="btn btn-dark  p-3 m-2">Add</button>*/}
               <button type="button" class="btn btn-dark p-3 m-2">Remove</button>
               <button type="button" class="btn btn-dark p-3 m-2">Modify</button>
             </div>
@@ -93,7 +93,7 @@ function AdminPage() {
         {/* Program Info */}
         <Col md={12} lg={6} className="" style={{ minHeight: "200px" }}>
           <div className="text-center border border-dark rounded p-5">
-            <h2>ProgramInfo</h2>
+            <h2>Program Info</h2>
             <form action="">
               <div>
                 <label htmlFor="ProgramName" className ="p-2">Program Title</label>
