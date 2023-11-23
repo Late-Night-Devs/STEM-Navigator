@@ -69,7 +69,7 @@ function AdminPage() {
       </Row>
 
       {/* Programs section */}
-      <Row className="p-2">
+      <Row className="p-3">
         <Col md={12} lg={6} className="" style={{ minHeight: "125px" }}>
           <div className="text-center border  border-dark rounded-5 p-2">
             <h2>Programs</h2>
@@ -88,7 +88,7 @@ function AdminPage() {
             <hr />
             <div>
               {/*<button type="button" class="btn btn-dark  p-3 m-2">Add</button>*/}
-              <button type="button" class="btn btn-danger p-3 m-2">
+              <button type="button" class="btn btn-danger p-2 m-2">
                 Remove
               </button>
               {/*<button type="button" class="btn btn-dark p-3 m-2">Modify</button>*/}
@@ -116,7 +116,7 @@ function AdminPage() {
             <hr />
             <div>
               {/*<button type="button" class="btn btn-dark  p-3 m-2">Add</button>*/}
-              <button type="button" class="btn btn-danger p-3 m-2">
+              <button type="button" class="btn btn-danger p-2 m-2">
                 Remove
               </button>
               {/*<button type="button" class="btn btn-dark p-3 m-2">Modify</button>*/}
@@ -128,7 +128,7 @@ function AdminPage() {
       <hr />
 
       {/* Program and Tag Info*/}
-      <Row className="p-4">
+      <Row className="p-3">
         {/* Program Info */}
         <Col md={12} lg={6} className="" style={{ minHeight: "200px" }}>
           <div className="text-center border border-dark rounded-5 p-5">
@@ -162,10 +162,10 @@ function AdminPage() {
                 <label htmlFor="LongDescription" className="p-2 align-top">
                   Long Description
                 </label>
-                <textarea cols="45" rows="15"></textarea>
+                <textarea cols="45" rows="9"></textarea>
               </div>
               <div className="mt-3">
-                <input type="submit" class="btn btn-success p-3 m-2" />
+                <input type="submit" class="btn btn-success p-2 m-2" />
               </div>
             </form>
           </div>
@@ -189,7 +189,7 @@ function AdminPage() {
                 <input type="text" size="42" />
               </div>
               <div className="mt-3">
-                <input type="submit" class="btn btn-success p-3 m-2" />
+                <input type="submit" class="btn btn-success p-2 m-2" />
               </div>
             </form>
           </div>
