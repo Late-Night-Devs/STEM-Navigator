@@ -138,35 +138,30 @@ function AdminPage() {
                 <label htmlFor="ProgramName" className="p-2">
                   Program Title
                 </label>
-                <br />
                 <input type="text" size="42" />
               </div>
               <div>
                 <label htmlFor="ProgramLeadContact" className="p-2">
                   Lead Contact
                 </label>
-                <br />
                 <input type="text" size="42" />
               </div>
               <div>
                 <label htmlFor="ProgramEmail" className="p-2">
                   Contact Email
                 </label>
-                <br />
                 <input type="text" size="42" />
               </div>
               <div>
                 <label htmlFor="LinkToWeb" className="p-2">
                   Link To Page
                 </label>
-                <br />
                 <input type="text" size="42" />
               </div>
               <div>
-                <label htmlFor="LongDescription" className="p-2">
+                <label htmlFor="LongDescription" className="p-2 align-top">
                   Long Description
                 </label>
-                <br />
                 <textarea cols="45" rows="15"></textarea>
               </div>
               <div className="mt-3">
@@ -185,14 +180,12 @@ function AdminPage() {
                 <label htmlFor="TagName" className="p-2">
                   Tag Name
                 </label>
-                <br />
                 <input type="text" size="42" />
               </div>
               <div>
                 <label htmlFor="TagCategory" className="p-2">
                   Tag Category
                 </label>
-                <br />
                 <input type="text" size="42" />
               </div>
               <div className="mt-3">
