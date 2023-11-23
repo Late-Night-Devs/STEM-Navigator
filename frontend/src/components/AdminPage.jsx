@@ -4,15 +4,21 @@ import { Row, Col } from "react-bootstrap"; // Make sure to import Bootstrap com
 function AdminPage() {
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [selectedTag, setSelectedTag] = useState(null);
+  const [showProgramInfo, setShowProgramInfo] = useState(false);
+  const [showTagInfo, setShowTagInfo] = useState(false);
 
   const handleProgramClick = (program) => {
     setSelectedProgram(program.id === selectedProgram ? null : program.id);
     setSelectedTag(null);
+    setShowTagInfo(false);
+    setShowProgramInfo(true);
   };
 
   const handleTagClick = (tag) => {
     setSelectedTag(tag.id === selectedTag ? null : tag.id);
     setSelectedProgram(null);
+    setShowProgramInfo(false);
+    setShowTagInfo(true);
   };
 
   const isProgramSelected = (programId) => programId === selectedProgram;
@@ -128,72 +134,76 @@ function AdminPage() {
       <hr />
 
       {/* Program and Tag Info*/}
-      <Row className="p-3">
+      <Row className="p-3 mx-auto d-flex justify-content-center">
         {/* Program Info */}
-        <Col md={12} lg={6} className="" style={{ minHeight: "200px" }}>
-          <div className="text-center border border-dark rounded-5 p-5">
-            <h2>Program Info</h2>
-            <form action="">
-              <div>
-                <label htmlFor="ProgramName" className="p-2">
-                  Program Title
-                </label>
-                <input type="text" size="42" />
-              </div>
-              <div>
-                <label htmlFor="ProgramLeadContact" className="p-2">
-                  Lead Contact
-                </label>
-                <input type="text" size="42" />
-              </div>
-              <div>
-                <label htmlFor="ProgramEmail" className="p-2">
-                  Contact Email
-                </label>
-                <input type="text" size="42" />
-              </div>
-              <div>
-                <label htmlFor="LinkToWeb" className="p-2">
-                  Link To Page
-                </label>
-                <input type="text" size="42" />
-              </div>
-              <div>
-                <label htmlFor="LongDescription" className="p-2 align-top">
-                  Long Description
-                </label>
-                <textarea cols="45" rows="9"></textarea>
-              </div>
-              <div className="mt-3">
-                <input type="submit" class="btn btn-success p-2 m-2" />
-              </div>
-            </form>
-          </div>
-        </Col>
+        {showProgramInfo && (
+          <Col md={12} lg={6} className="" style={{ minHeight: "200px" }}>
+            <div className="text-center border border-dark rounded-5 p-5">
+              <h2>Program Info</h2>
+              <form action="">
+                <div>
+                  <label htmlFor="ProgramName" className="p-2">
+                    Program Title
+                  </label>
+                  <input type="text" size="42" />
+                </div>
+                <div>
+                  <label htmlFor="ProgramLeadContact" className="p-2">
+                    Lead Contact
+                  </label>
+                  <input type="text" size="42" />
+                </div>
+                <div>
+                  <label htmlFor="ProgramEmail" className="p-2">
+                    Contact Email
+                  </label>
+                  <input type="text" size="42" />
+                </div>
+                <div>
+                  <label htmlFor="LinkToWeb" className="p-2">
+                    Link To Page
+                  </label>
+                  <input type="text" size="42" />
+                </div>
+                <div>
+                  <label htmlFor="LongDescription" className="p-2 align-top">
+                    Long Description
+                  </label>
+                  <textarea cols="45" rows="9"></textarea>
+                </div>
+                <div className="mt-3">
+                  <input type="submit" class="btn btn-success p-2 m-2" />
+                </div>
+              </form>
+            </div>
+          </Col>
+        )}
 
         {/* Tag Info */}
-        <Col md={12} lg={6} className="" style={{ minHeight: "200px" }}>
-          <div className="text-center border border-dark rounded-5 p-5">
-            <h2 className>Tag Info</h2>
-            <form action="">
-              <div>
-                <label htmlFor="TagName" className="p-2">
-                  Tag Name
-                </label>
-                <input type="text" size="42" />
-              </div>
-              <div>
-                <label htmlFor="TagCategory" className="p-2">
-                  Tag Category
-                </label>
-                <input type="text" size="42" />
-              </div>
-              <div className="mt-3">
-                <input type="submit" class="btn btn-success p-2 m-2" />
-              </div>
-            </form>
-          </div>
-        </Col>
+        {showTagInfo && (
+          <Col md={12} lg={6} className="" style={{ minHeight: "200px" }}>
+            <div className="text-center border border-dark rounded-5 p-5">
+              <h2 className>Tag Info</h2>
+              <form action="">
+                <div>
+                  <label htmlFor="TagName" className="p-2">
+                    Tag Name
+                  </label>
+                  <input type="text" size="42" />
+                </div>
+                <div>
+                  <label htmlFor="TagCategory" className="p-2">
+                    Tag Category
+                  </label>
+                  <input type="text" size="42" />
+                </div>
+                <div className="mt-3">
+                  <input type="submit" class="btn btn-success p-2 m-2" />
+                </div>
+              </form>
+            </div>
+          </Col>
+        )}
       </Row>
     </div>
   );
