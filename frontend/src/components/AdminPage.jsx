@@ -1,28 +1,52 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap"; // Make sure to import Bootstrap components
 
 function AdminPage() {
+  // state values representing the the selected program or tag
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [selectedTag, setSelectedTag] = useState(null);
+  // state values representing the visibility of the Program Info or Tag Info
   const [showProgramInfo, setShowProgramInfo] = useState(false);
   const [showTagInfo, setShowTagInfo] = useState(false);
 
   const handleProgramClick = (program) => {
+    // if clicking a selected program, deselect it
     setSelectedProgram(program.id === selectedProgram ? null : program.id);
     setSelectedTag(null);
     setShowTagInfo(false);
-    setShowProgramInfo(true);
   };
 
   const handleTagClick = (tag) => {
+    // if clicking a selected tag, deselect it
     setSelectedTag(tag.id === selectedTag ? null : tag.id);
     setSelectedProgram(null);
     setShowProgramInfo(false);
-    setShowTagInfo(true);
+    //setShowTagInfo(true);
   };
 
+  useEffect(() => {
+    // This block will be executed after the component has re-rendered
+    // when the selectedProgram changes state, update the visibility of ProgramInfo
+    if (selectedProgram === null) {
+      setShowProgramInfo(false);
+    } else {
+      setShowProgramInfo(true);
+    }
+  }, [selectedProgram]);
+
+  // when the selectedTag changes state, update the visibility of TagInfo
+  useEffect(() => {
+    if (selectedTag === null) {
+      setShowTagInfo(false);
+    } else {
+      setShowTagInfo(true);
+    }
+  }, [selectedTag]);
+
+  // utility to determine if a program or tag is currently selected
   const isProgramSelected = (programId) => programId === selectedProgram;
   const isTagSelected = (tagId) => tagId === selectedTag;
+
   // Dummy programs
   const dummyPrograms = [
     { id: 1, name: "LSAMP" },
@@ -74,7 +98,7 @@ function AdminPage() {
         </Col>
       </Row>
 
-      {/* Programs section */}
+      {/* PROGRAMS SECTION */}
       <Row className="p-3">
         <Col md={12} lg={6} className="" style={{ minHeight: "125px" }}>
           <div className="text-center border  border-dark rounded-5 p-2">
@@ -102,7 +126,7 @@ function AdminPage() {
           </div>
         </Col>
 
-        {/* Tags Section */}
+        {/* TAGS SECTION */}
         <Col md={12} lg={6} className="" style={{ minHeight: "125px" }}>
           <div className="text-center border border-dark rounded-5 p-2">
             <h2>Tags</h2>
@@ -134,8 +158,8 @@ function AdminPage() {
       <hr />
 
       {/* Program and Tag Info*/}
-      <Row className="p-3 mx-auto d-flex justify-content-center">
-        {/* Program Info */}
+      <Row className="p-2 mx-auto d-flex justify-content-center">
+        {/* PROGRAM INFO */}
         {showProgramInfo && (
           <Col md={10} lg={8} className="" style={{ minHeight: "200px" }}>
             <div className="text-center border border-dark rounded-5 p-5">
@@ -179,7 +203,7 @@ function AdminPage() {
           </Col>
         )}
 
-        {/* Tag Info */}
+        {/* TAG INFO */}
         {showTagInfo && (
           <Col md={10} lg={8} className="" style={{ minHeight: "200px" }}>
             <div className="text-center border border-dark rounded-5 p-5">
