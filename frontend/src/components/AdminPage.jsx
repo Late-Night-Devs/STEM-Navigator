@@ -137,7 +137,7 @@ function AdminPage() {
       <Row className="p-3 mx-auto d-flex justify-content-center">
         {/* Program Info */}
         {showProgramInfo && (
-          <Col md={12} lg={6} className="" style={{ minHeight: "200px" }}>
+          <Col md={10} lg={8} className="" style={{ minHeight: "200px" }}>
             <div className="text-center border border-dark rounded-5 p-5">
               <h2>Program Info</h2>
               <form action="">
@@ -181,7 +181,7 @@ function AdminPage() {
 
         {/* Tag Info */}
         {showTagInfo && (
-          <Col md={12} lg={6} className="" style={{ minHeight: "200px" }}>
+          <Col md={10} lg={8} className="" style={{ minHeight: "200px" }}>
             <div className="text-center border border-dark rounded-5 p-5">
               <h2 className>Tag Info</h2>
               <form action="">
