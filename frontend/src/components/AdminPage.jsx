@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap"; // Make sure to import Bootstrap components
-import ProgramList from "./ProgramList";
+import { ButtonList } from "./ButtonList";
 
 function AdminPage() {
   // state values representing the the selected program or tag
@@ -101,38 +101,19 @@ function AdminPage() {
 
       {/* PROGRAMS SECTION */}
       <Row className="p-3">
-        <ProgramList
-          Programs={dummyPrograms}
-          isProgramSelected={isProgramSelected}
-          handleProgramClick={handleProgramClick}
+        <h2>Programs</h2>
+        <ButtonList
+          items={dummyPrograms}
+          isItemSelected={isProgramSelected}
+          handleButtonClick={handleProgramClick}
         />
         {/* TAGS SECTION */}
-        <Col md={12} lg={6} className="" style={{ minHeight: "125px" }}>
-          <div className="text-center border border-dark rounded-5 p-2">
-            <h2>Tags</h2>
-            {dummyTags.map((tag) => (
-              <button
-                type="button"
-                //class="btn btn-primary p-2 m-1"
-                onClick={() => handleTagClick(tag)}
-                className={`btn btn-primary p-2 m-1 ${
-                  isTagSelected(tag.id) ? "bg-info" : "bg-primary"
-                }`}
-                key={tag.id}
-              >
-                {tag.name}
-              </button>
-            ))}
-            <hr />
-            <div>
-              {/*<button type="button" class="btn btn-dark  p-3 m-2">Add</button>*/}
-              <button type="button" class="btn btn-danger p-2 m-2">
-                Remove
-              </button>
-              {/*<button type="button" class="btn btn-dark p-3 m-2">Modify</button>*/}
-            </div>
-          </div>
-        </Col>
+          <h2>Tags</h2>
+          <ButtonList
+           items={dummyTags}
+           isItemSelected={isTagSelected} 
+           handleButtonClick={handleTagClick}
+           />
       </Row>
 
       <hr />

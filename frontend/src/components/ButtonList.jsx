@@ -4,21 +4,20 @@ import { Col } from "react-bootstrap";
 /**
  * Contains A list of programs represented by buttons with a state.
  */
-const ProgramList = ({ Programs, isProgramSelected, handleProgramClick }) => {
+export const ButtonList = ({ items, isItemSelected, handleButtonClick }) => {
   return (
     <Col md={12} lg={6} className="" style={{ minHeight: "125px" }}>
       <div className="text-center border border-dark rounded-5 p-2">
-        <h2>Programs</h2>
-        {Programs.map((program) => (
+        {items.map((item) => (
           <button
             type="button"
             className={`btn btn-primary p-2 m-1 ${
-              isProgramSelected(program.id) ? "bg-info" : "bg-primary"
+              isItemSelected(item.id) ? "bg-info" : "bg-primary"
             }`}
-            key={program.id}
-            onClick={() => handleProgramClick(program)}
+            key={item.id}
+            onClick={() => handleButtonClick(item)}
           >
-            {program.name}
+            {item.name}
           </button>
         ))}
         <hr />
@@ -32,4 +31,4 @@ const ProgramList = ({ Programs, isProgramSelected, handleProgramClick }) => {
   );
 };
 
-export default ProgramList;
+export default ButtonList;
