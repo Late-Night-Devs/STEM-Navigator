@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap"; // Make sure to import Bootstrap components
+import ProgramList from "./ProgramList";
 
 function AdminPage() {
   // state values representing the the selected program or tag
@@ -100,32 +101,11 @@ function AdminPage() {
 
       {/* PROGRAMS SECTION */}
       <Row className="p-3">
-        <Col md={12} lg={6} className="" style={{ minHeight: "125px" }}>
-          <div className="text-center border  border-dark rounded-5 p-2">
-            <h2>Programs</h2>
-            {dummyPrograms.map((program) => (
-              <button
-                type="button"
-                className={`btn btn-primary p-2 m-1 ${
-                  isProgramSelected(program.id) ? "bg-info" : "bg-primary"
-                }`}
-                key={program.id}
-                onClick={() => handleProgramClick(program)}
-              >
-                {program.name}
-              </button>
-            ))}
-            <hr />
-            <div>
-              {/*<button type="button" class="btn btn-dark  p-3 m-2">Add</button>*/}
-              <button type="button" class="btn btn-danger p-2 m-2">
-                Remove
-              </button>
-              {/*<button type="button" class="btn btn-dark p-3 m-2">Modify</button>*/}
-            </div>
-          </div>
-        </Col>
-
+        <ProgramList
+          Programs={dummyPrograms}
+          isProgramSelected={isProgramSelected}
+          handleProgramClick={handleProgramClick}
+        />
         {/* TAGS SECTION */}
         <Col md={12} lg={6} className="" style={{ minHeight: "125px" }}>
           <div className="text-center border border-dark rounded-5 p-2">
