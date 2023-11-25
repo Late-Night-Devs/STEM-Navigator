@@ -4,7 +4,7 @@ import { ButtonList } from "./ButtonList";
 import { ProgramInfo } from "./ProgramInfo";
 import { TagInfo } from "./TagInfo";
 
-function AdminPage() {
+function AdminTools() {
   // state values representing the the selected program or tag
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [selectedTag, setSelectedTag] = useState(null);
@@ -131,4 +131,4 @@ function AdminPage() {
   );
 }
 
-export default AdminPage;
+export default AdminTools;

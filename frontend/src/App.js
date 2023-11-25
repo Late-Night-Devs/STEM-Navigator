@@ -4,11 +4,10 @@ import NavBar from "./NavBar.jsx";
 import Home from "./components/Home.jsx";
 import Events from "./components/Events.jsx";
 import Scholarship from "./components/Scholarship.jsx";
-import Calender from "./components/Calender.jsx"; 
+import Calender from "./components/Calender.jsx";
 import ProgramTab from "./components/ProgramTab.jsx";
 import Newsletter from "./components/Newsletter.jsx";
-import AdminPage from"./components/AdminPage.jsx";
-
+import AdminTools from "./components/AdminTools.jsx";
 
 import "./App.css";
 
@@ -19,13 +18,12 @@ function App() {
         <NavBar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/events" element={<Events/>} />
+          <Route path="/events" element={<Events />} />
           <Route path="/scholarship" element={<Scholarship />} />
-          <Route path="/calender" element={<Calender/>} />
-          <Route path="/program" element={<ProgramTab/>} />
-          <Route path="/newsletter" element={<Newsletter/>} />
-          <Route path="/admin-modify-db" element={<AdminPage/>} />
-
+          <Route path="/calender" element={<Calender />} />
+          <Route path="/program" element={<ProgramTab />} />
+          <Route path="/newsletter" element={<Newsletter />} />
+          <Route path="/admin-modify-db" element={<AdminTools />} />
         </Routes>
       </div>
     </Router>
@@ -33,43 +31,6 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import React, { useState } from "react";
 // import { Container, Row, Col, Navbar } from "react-bootstrap";
