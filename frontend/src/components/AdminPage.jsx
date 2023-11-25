@@ -1,6 +1,8 @@
 import { React, useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap"; // Make sure to import Bootstrap components
 import { ButtonList } from "./ButtonList";
+import { ProgramInfo } from "./ProgramInfo";
+import { TagInfo } from "./TagInfo";
 
 function AdminPage() {
   // state values representing the the selected program or tag
@@ -87,7 +89,6 @@ function AdminPage() {
     <div className="m-auto">
       {/* Intro section */}
       <Row className="img-hero-welcome p-2">
-        {/*<Col className="hero-img"></Col>*/}
         <Col>
           <section>
             <h1 className="intro text-center fw-bold">Admin Tools</h1>
@@ -99,96 +100,32 @@ function AdminPage() {
         </Col>
       </Row>
 
-      {/* PROGRAMS SECTION */}
+      {/* PROGRAMS AND TAGS*/}
       <Row className="p-3">
-        <h2>Programs</h2>
+        {/* PROGRAMS */}
         <ButtonList
+          name="Programs"
           items={dummyPrograms}
           isItemSelected={isProgramSelected}
           handleButtonClick={handleProgramClick}
         />
-        {/* TAGS SECTION */}
-          <h2>Tags</h2>
-          <ButtonList
-           items={dummyTags}
-           isItemSelected={isTagSelected} 
-           handleButtonClick={handleTagClick}
-           />
+        {/* TAGS*/}
+        <ButtonList
+          name="Tags"
+          items={dummyTags}
+          isItemSelected={isTagSelected}
+          handleButtonClick={handleTagClick}
+        />
       </Row>
 
       <hr />
 
-      {/* Program and Tag Info*/}
+      {/* PROGRAM INFO AND TAG INFO*/}
       <Row className="p-2 mx-auto d-flex justify-content-center">
         {/* PROGRAM INFO */}
-        {showProgramInfo && (
-          <Col md={10} lg={8} className="" style={{ minHeight: "200px" }}>
-            <div className="text-center border border-dark rounded-5 p-5">
-              <h2>Program Info</h2>
-              <form action="">
-                <div>
-                  <label htmlFor="ProgramName" className="p-2">
-                    Program Title
-                  </label>
-                  <input type="text" size="42" />
-                </div>
-                <div>
-                  <label htmlFor="ProgramLeadContact" className="p-2">
-                    Lead Contact
-                  </label>
-                  <input type="text" size="42" />
-                </div>
-                <div>
-                  <label htmlFor="ProgramEmail" className="p-2">
-                    Contact Email
-                  </label>
-                  <input type="text" size="42" />
-                </div>
-                <div>
-                  <label htmlFor="LinkToWeb" className="p-2">
-                    Link To Page
-                  </label>
-                  <input type="text" size="42" />
-                </div>
-                <div>
-                  <label htmlFor="LongDescription" className="p-2 align-top">
-                    Long Description
-                  </label>
-                  <textarea cols="45" rows="9"></textarea>
-                </div>
-                <div className="mt-3">
-                  <input type="submit" class="btn btn-success p-2 m-2" />
-                </div>
-              </form>
-            </div>
-          </Col>
-        )}
-
+        {showProgramInfo && <ProgramInfo />}
         {/* TAG INFO */}
-        {showTagInfo && (
-          <Col md={10} lg={8} className="" style={{ minHeight: "200px" }}>
-            <div className="text-center border border-dark rounded-5 p-5">
-              <h2 className>Tag Info</h2>
-              <form action="">
-                <div>
-                  <label htmlFor="TagName" className="p-2">
-                    Tag Name
-                  </label>
-                  <input type="text" size="42" />
-                </div>
-                <div>
-                  <label htmlFor="TagCategory" className="p-2">
-                    Tag Category
-                  </label>
-                  <input type="text" size="42" />
-                </div>
-                <div className="mt-3">
-                  <input type="submit" class="btn btn-success p-2 m-2" />
-                </div>
-              </form>
-            </div>
-          </Col>
-        )}
+        {showTagInfo && <TagInfo />}
       </Row>
     </div>
   );

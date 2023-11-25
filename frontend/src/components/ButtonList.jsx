@@ -4,10 +4,16 @@ import { Col } from "react-bootstrap";
 /**
  * Contains A list of programs represented by buttons with a state.
  */
-export const ButtonList = ({ items, isItemSelected, handleButtonClick }) => {
+export const ButtonList = ({
+  name,
+  items,
+  isItemSelected,
+  handleButtonClick,
+}) => {
   return (
     <Col md={12} lg={6} className="" style={{ minHeight: "125px" }}>
       <div className="text-center border border-dark rounded-5 p-2">
+        <h2>{name}</h2>
         {items.map((item) => (
           <button
             type="button"
