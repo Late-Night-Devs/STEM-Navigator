@@ -1,7 +1,8 @@
 import React from "react";
 import { Col } from "react-bootstrap";
 
-export const TagInfo = ({ tagData, onTagDataChange }) => { // Accept tagData and onTagDataChange as props
+export const TagInfo = ({ tagData, onTagDataChange }) => {
+  // Accept tagData and onTagDataChange as props
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -9,20 +10,20 @@ export const TagInfo = ({ tagData, onTagDataChange }) => { // Accept tagData and
   };
 
   return (
-    <Col md={10} lg={8} className="" style={{ minHeight: "200px" }}>
-      <div className="text-center border border-dark rounded-5 p-5">
+    <Col md={12} className="" style={{ minHeight: "200px" }}>
+      <div className="text-center border border-dark rounded-5 p-2 m-3">
         <h2>Tag Info</h2>
         <form action="">
           <div>
             <label htmlFor="TagName" className="p-2">
               Tag Name
             </label>
-            <input 
-              type="text" 
-              size="42" 
+            <input
+              type="text"
+              size="42"
               id="TagName"
               name="tag_name"
-              value={tagData?.tag_name || ''}
+              value={tagData?.tag_name || ""}
               onChange={handleChange}
             />
           </div>
@@ -30,12 +31,12 @@ export const TagInfo = ({ tagData, onTagDataChange }) => { // Accept tagData and
             <label htmlFor="TagCategory" className="p-2">
               Tag Category
             </label>
-            <input 
-              type="text" 
-              size="42" 
+            <input
+              type="text"
+              size="42"
               id="TagCategory"
               name="category"
-              value={tagData?.category || ''}
+              value={tagData?.category || ""}
               onChange={handleChange}
             />
           </div>
