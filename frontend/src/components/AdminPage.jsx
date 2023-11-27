@@ -17,15 +17,6 @@ function AdminPage() {
 
   const [selectedProgramInfo, setSelectedProgramInfo] = useState(null);
 
-  const fetchProgramInfo = async (programId) => {
-    try {
-      const response = await axios.get(`${backend_url}/programs/${programId}`);
-      setSelectedProgramInfo(response.data);
-    } catch (error) {
-      console.error("Error fetching program info:", error);
-    }
-  };
-
   /* fetch programs from /programs endpoint */
   useEffect(() => {
     axios.get(`${backend_url}/programs`)
@@ -50,16 +41,13 @@ function AdminPage() {
       setSelectedProgram(null);
       setSelectedProgramInfo(null);
     } else {
-    setSelectedProgram(program.id);
-    fetchProgramInfo(program.id);
-    // set tag info invisible
+    // find a program with the same id as the selected program
+    const programInfo = programs.find(p => p.program_id === program.id);
+    setSelectedProgram(program.id); 
+    setSelectedProgramInfo(programInfo); 
     setSelectedTag(null); 
     setShowTagInfo(false);
     }
-
-    setSelectedProgram(program.id === selectedProgram ? null : program.id);
-    setSelectedTag(null);
-    setShowTagInfo(false);
   };
 
   // utility to determine if a program or tag is currently selected
@@ -148,7 +136,7 @@ function AdminPage() {
       {/* PROGRAM INFO AND TAG INFO*/}
       <Row className="p-4 mx-auto d-flex justify-content-center">
         {/* PROGRAM INFO */}
-        {showProgramInfo && <ProgramInfo data={selectedProgramInfo} />}
+        {showProgramInfo && <ProgramInfo programData={selectedProgramInfo} />}
         {/* TAG INFO */}
         {showTagInfo && <TagInfo />}
       </Row>
