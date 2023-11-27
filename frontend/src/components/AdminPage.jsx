@@ -44,18 +44,22 @@ function AdminPage() {
   }, []);
 
   // Transform programs data for ButtonList
-  const programItems = programs.map((program) => ({
-    key: program.program_id,
-    id: program.program_id,
-    name: program.title,
-  }));
+  const programItems = programs
+    .map((program) => ({
+      key: program.program_id,
+      id: program.program_id,
+      name: program.title,
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   // Transform tags data for TagsList
-  const tagItems = tags.map((tag) => ({
-    key: tag.tag_id,
-    id: tag.tag_id,
-    name: tag.tag_name,
-  }));
+  const tagItems = tags
+    .map((tag) => ({
+      key: tag.tag_id,
+      id: tag.tag_id,
+      name: tag.tag_name,
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   const handleProgramClick = (program) => {
     // if clicking a selected program, deselect it
