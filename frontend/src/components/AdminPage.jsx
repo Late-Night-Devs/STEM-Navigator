@@ -155,6 +155,14 @@ function AdminPage() {
           {showProgramInfo && <ProgramInfo programData={selectedProgramInfo} />}
           {/* TAG INFO */}
           {showTagInfo && <TagInfo tagData={selectedTagInfo} />}
+          {/* When not showing tags or programs, display this default message */}
+          {!showTagInfo && !showProgramInfo && (
+            <div className="text-center border border-dark rounded-5 p-2 m-3 flex-fill">
+              <p className="p-2 m-2">
+                Click on a Program or Tag to show information here.
+              </p>
+            </div>
+          )}
         </Col>
       </Row>
     </div>
