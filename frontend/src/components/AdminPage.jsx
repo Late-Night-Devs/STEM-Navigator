@@ -3,8 +3,11 @@ import { Row, Col } from "react-bootstrap"; // Make sure to import Bootstrap com
 import { ButtonList } from "./ButtonList";
 import { ProgramInfo } from "./ProgramInfo";
 import { TagInfo } from "./TagInfo";
+import axios from 'axios';
+const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 function AdminPage() {
+  const [programs, setPrograms] = useState([]);
   // state values representing the the selected program or tag
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [selectedTag, setSelectedTag] = useState(null);
@@ -12,12 +15,56 @@ function AdminPage() {
   const [showProgramInfo, setShowProgramInfo] = useState(false);
   const [showTagInfo, setShowTagInfo] = useState(false);
 
+  const [selectedProgramInfo, setSelectedProgramInfo] = useState(null);
+
+  const fetchProgramInfo = async (programId) => {
+    try {
+      const response = await axios.get(`${backend_url}/programs/${programId}`);
+      setSelectedProgramInfo(response.data);
+    } catch (error) {
+      console.error("Error fetching program info:", error);
+    }
+  };
+
+  /* fetch programs from /programs endpoint */
+  useEffect(() => {
+    axios.get(`${backend_url}/programs`)
+      .then(response => {
+        setPrograms(response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching programs:", error);
+      });
+  }, []);
+
+  // Transform programs data for ButtonList
+  const programItems = programs.map(program => ({
+    key: program.program_id,
+    id: program.program_id,
+    name: program.title
+  }));
+
   const handleProgramClick = (program) => {
     // if clicking a selected program, deselect it
+    if (program.id === selectedProgram) {
+      setSelectedProgram(null);
+      setSelectedProgramInfo(null);
+    } else {
+    setSelectedProgram(program.id);
+    fetchProgramInfo(program.id);
+    // set tag info invisible
+    setSelectedTag(null); 
+    setShowTagInfo(false);
+    }
+
     setSelectedProgram(program.id === selectedProgram ? null : program.id);
     setSelectedTag(null);
     setShowTagInfo(false);
   };
+
+  // utility to determine if a program or tag is currently selected
+  const isProgramSelected = (programId) => programId === selectedProgram;
+  const isTagSelected = (tagId) => tagId === selectedTag;
 
   const handleTagClick = (tag) => {
     // if clicking a selected tag, deselect it
@@ -46,29 +93,7 @@ function AdminPage() {
     }
   }, [selectedTag]);
 
-  // utility to determine if a program or tag is currently selected
-  const isProgramSelected = (programId) => programId === selectedProgram;
-  const isTagSelected = (tagId) => tagId === selectedTag;
 
-  // Dummy programs
-  const dummyPrograms = [
-    { id: 1, name: "LSAMP" },
-    { id: 2, name: "EWX" },
-    { id: 3, name: "ACCESS" },
-    { id: 4, name: "NATIONS" },
-    { id: 5, name: "GANAS" },
-    { id: 6, name: "EMPOWER" },
-    { id: 7, name: "TRIO" },
-    { id: 8, name: "S^3" },
-    { id: 9, name: "MESA C2C" },
-    { id: 10, name: "NSF REU" },
-    { id: 11, name: "URMP" },
-    { id: 12, name: "HONORS COLLEGE" },
-    { id: 13, name: "MECOP / CECOP" },
-    { id: 14, name: "MCNAIR" },
-    { id: 15, name: "EAGLES" },
-    // Add more dummy programs as needed
-  ];
 
   // Dummy tags
   const dummyTags = [
@@ -101,11 +126,11 @@ function AdminPage() {
       </Row>
 
       {/* PROGRAMS AND TAGS*/}
-      <Row className="p-3">
+      <Row className="p-4">
         {/* PROGRAMS */}
         <ButtonList
           name="Programs"
-          items={dummyPrograms}
+          items={programItems}
           isItemSelected={isProgramSelected}
           handleButtonClick={handleProgramClick}
         />
@@ -121,9 +146,9 @@ function AdminPage() {
       <hr />
 
       {/* PROGRAM INFO AND TAG INFO*/}
-      <Row className="p-2 mx-auto d-flex justify-content-center">
+      <Row className="p-4 mx-auto d-flex justify-content-center">
         {/* PROGRAM INFO */}
-        {showProgramInfo && <ProgramInfo />}
+        {showProgramInfo && <ProgramInfo data={selectedProgramInfo} />}
         {/* TAG INFO */}
         {showTagInfo && <TagInfo />}
       </Row>
