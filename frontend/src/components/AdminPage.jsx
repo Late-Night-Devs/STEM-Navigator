@@ -3,6 +3,7 @@ import { Row, Col } from "react-bootstrap"; // Make sure to import Bootstrap com
 import { ButtonList } from "./ButtonList";
 import { ProgramInfo } from "./ProgramInfo";
 import { TagInfo } from "./TagInfo";
+import MultiSelectExample from "./MultiSelectExample";
 import axios from "axios";
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
@@ -129,6 +130,7 @@ function AdminPage() {
               Select a Program or Tag by clicking on it. You can only select one
               at a time!
             </p>
+            <MultiSelectExample />
           </section>
         </Col>
       </Row>

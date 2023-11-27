@@ -1,4 +1,5 @@
 import React from "react";
+import MultiSelectExample from "./MultiSelectExample";
 
 export const ProgramInfo = ({ programData, onProgramDataChange }) => {
   // Accept onProgramDataChange as a prop
@@ -63,6 +64,12 @@ export const ProgramInfo = ({ programData, onProgramDataChange }) => {
             value={programData?.link_to_web || ""}
             onChange={handleChange}
           />
+        </div>
+        <div>
+          <label htmlFor="Select Tags" className="p-2">
+            Select Tags
+          </label>
+          <MultiSelectExample />
         </div>
         <div>
           <label htmlFor="LongDescription" className="p-2 align-top">
