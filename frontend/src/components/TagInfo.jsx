@@ -41,7 +41,11 @@ export const TagInfo = ({ tagData, onTagDataChange }) => {
             />
           </div>
           <div className="mt-3">
-            <input type="submit" className="btn btn-success p-2 m-2" />
+            <input
+              type="submit"
+              className="btn btn-success p-2 m-2"
+              value="Submit"
+            />
           </div>
         </form>
       </div>
