@@ -10,7 +10,7 @@ export const ProgramInfo = ({ programData, onProgramDataChange }) => {
   };
 
   return (
-    <div className="text-center border border-dark rounded-5 p-2 m-3 flex-fill">
+    <div className="text-center border border-dark rounded-5 p-2 m-3">
       <h2>Program Info</h2>
       <form action="">
         <div>
@@ -65,13 +65,13 @@ export const ProgramInfo = ({ programData, onProgramDataChange }) => {
             onChange={handleChange}
           />
         </div>
-        <div>
+        <div style={{ maxWidth: "500px", margin: "auto" }} className="p-2">
           <label htmlFor="Select Tags" className="p-2">
             Select Tags
           </label>
           <MultiSelectExample />
         </div>
-        <div>
+        <div className="mt-2">
           <label htmlFor="LongDescription" className="p-2 align-top">
             Long Description
           </label>
