@@ -66,12 +66,6 @@ export const ProgramInfo = ({ programData, onProgramDataChange }) => {
           />
         </div>
         <div>
-          <label htmlFor="Select Tags" className="p-2">
-            Select Tags
-          </label>
-          <MultiSelectExample />
-        </div>
-        <div>
           <label htmlFor="LongDescription" className="p-2 align-top">
             Long Description
           </label>
@@ -83,6 +77,12 @@ export const ProgramInfo = ({ programData, onProgramDataChange }) => {
             value={programData?.long_description || ""}
             onChange={handleChange}
           ></textarea>
+        </div>
+        <div style={{ maxWidth: "500px", margin: "auto" }} className="p-2">
+          <label htmlFor="Select Tags" className="p-2">
+            Select Tags
+          </label>
+          <MultiSelectExample />
         </div>
         <div className="mt-3">
           <input

@@ -130,7 +130,6 @@ function AdminPage() {
               Select a Program or Tag by clicking on it. You can only select one
               at a time!
             </p>
-            <MultiSelectExample />
           </section>
         </Col>
       </Row>
