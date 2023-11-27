@@ -8,6 +8,7 @@ const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 function AdminPage() {
   const [programs, setPrograms] = useState([]);
+  const [tags, setTags] = useState([]);
   // state values representing the the selected program or tag
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [selectedTag, setSelectedTag] = useState(null);
@@ -17,7 +18,7 @@ function AdminPage() {
 
   const [selectedProgramInfo, setSelectedProgramInfo] = useState(null);
 
-  /* fetch programs from /programs endpoint */
+  // fetch programs from /programs endpoint 
   useEffect(() => {
     axios.get(`${backend_url}/programs`)
       .then(response => {
@@ -28,12 +29,33 @@ function AdminPage() {
       });
   }, []);
 
+  // fetch tags from the /tags endpoint
+  useEffect(() => {
+    axios.get(`${backend_url}/tags`) 
+      .then(response => {
+        setTags(response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching tags:", error);
+      });
+  }, []);
+
+
+
   // Transform programs data for ButtonList
   const programItems = programs.map(program => ({
     key: program.program_id,
     id: program.program_id,
     name: program.title
   }));
+
+  const tagItems = tags.map(tag => ({
+    key: tag.tag_id, 
+    id: tag.tag_id,
+    name: tag.tag_name 
+  }));
+  
+
 
   const handleProgramClick = (program) => {
     // if clicking a selected program, deselect it
@@ -83,20 +105,6 @@ function AdminPage() {
 
 
 
-  // Dummy tags
-  const dummyTags = [
-    { id: 1, name: "STEM" },
-    { id: 2, name: "Engineering" },
-    { id: 3, name: "Low Income" },
-    { id: 4, name: "Ada Disability" },
-    { id: 5, name: "Summer" },
-    { id: 6, name: "Latino / Hispanic" },
-    { id: 7, name: "Black / African American" },
-    { id: 8, name: "First Generation" },
-    { id: 9, name: "Native American" },
-    { id: 10, name: "Pacific Islander" },
-    // Add more dummy tags as needed
-  ];
 
   return (
     <div className="m-auto">
@@ -125,7 +133,7 @@ function AdminPage() {
         {/* TAGS*/}
         <ButtonList
           name="Tags"
-          items={dummyTags}
+          items={tagItems}
           isItemSelected={isTagSelected}
           handleButtonClick={handleTagClick}
         />
