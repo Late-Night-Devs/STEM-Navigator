@@ -10,7 +10,7 @@ export const ProgramInfo = ({ programData, onProgramDataChange }) => {
   };
 
   return (
-    <div className="text-center border border-dark rounded-5 p-2 m-3">
+    <div className="text-center border border-dark rounded-5 p-2 m-3 flex-fill">
       <h2>Program Info</h2>
       <form action="">
         <div>

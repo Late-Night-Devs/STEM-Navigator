@@ -3,12 +3,13 @@ import { Row, Col } from "react-bootstrap"; // Make sure to import Bootstrap com
 import { ButtonList } from "./ButtonList";
 import { ProgramInfo } from "./ProgramInfo";
 import { TagInfo } from "./TagInfo";
-import axios from "axios";
-const backend_url = process.env.REACT_APP_BACKEND_URL;
+import useFetchData from "../useFetchData";
+//import axios from "axios";
+//const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 function AdminPage() {
-  const [programs, setPrograms] = useState([]);
-  const [tags, setTags] = useState([]);
+  const { data: programs, error: programsError } = useFetchData("programs");
+  const { data: tags, error: tagsError } = useFetchData("tags");
   // state values representing the the selected program or tag
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [selectedTag, setSelectedTag] = useState(null);
@@ -20,6 +21,7 @@ function AdminPage() {
   const [selectedTagInfo, setSelectedTagInfo] = useState(null);
 
   // fetch programs from /programs endpoint
+  /*
   useEffect(() => {
     axios
       .get(`${backend_url}/programs`)
@@ -42,6 +44,7 @@ function AdminPage() {
         console.error("Error fetching tags:", error);
       });
   }, []);
+  */
 
   // Transform programs data for ButtonList
   const programItems = programs
@@ -137,6 +140,13 @@ function AdminPage() {
       <Row className="p-4">
         {/* PROGRAMS */}
         <Col md={12} lg={6}>
+          {(programsError || tagsError) && (
+            <div className="bg-danger rounded-5 text-center p-2">
+              <h5 className="text-white text-xl">
+                Failed to load data. Ensure the backend is running!
+              </h5>
+            </div>
+          )}
           <ButtonList
             name="Programs"
             items={programItems}
