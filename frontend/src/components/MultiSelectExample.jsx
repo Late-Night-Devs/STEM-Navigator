@@ -4,6 +4,7 @@ import Select from "react-select";
 
 export default class MultiSelectExample extends React.Component {
   render() {
+    /*
     const options = [
       { value: "chocolate", label: "Chocolate" },
       { value: "strawberry", label: "Strawberry" },
@@ -20,10 +21,11 @@ export default class MultiSelectExample extends React.Component {
       { value: "coconut", label: "Coconut" },
       { value: "birthday-cake", label: "Birthday Cake" },
     ];
+    */
 
     return (
       <div>
-        <Select options={options} isMulti />
+        <Select options={this.props.allProgramTags} isMulti />
       </div>
     );
   }

@@ -10,6 +10,13 @@ import useFetchData from "../useFetchData";
 function AdminPage() {
   const { data: programs, error: programsError } = useFetchData("programs");
   const { data: tags, error: tagsError } = useFetchData("tags");
+  // currently unused, but should be used to fill out the default values in the Multi Select
+  const { data: programTags, error: programTagsError } =
+    useFetchData("program-tags");
+
+  /* formattedProgramTags uses Tags and formats them for use by the MultiSelect <Select options={}>*/
+  const [formattedProgramTags, setFormattedProgramTags] = useState(null);
+
   // state values representing the the selected program or tag
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [selectedTag, setSelectedTag] = useState(null);
@@ -19,6 +26,7 @@ function AdminPage() {
 
   const [selectedProgramInfo, setSelectedProgramInfo] = useState(null);
   const [selectedTagInfo, setSelectedTagInfo] = useState(null);
+  //const [selectedProgramTagInfo, setSelectedProgramTagInfo] = useState([]);
 
   // Transform programs data for ButtonList
   const programItems = programs
@@ -52,6 +60,17 @@ function AdminPage() {
       setShowTagInfo(false);
     }
   };
+
+  // runs when tags are available and formats them to be used by the Multi Select
+  useEffect(() => {
+    if (tags) {
+      const formattedTags = tags.map((pt) => {
+        const tagInfo = tags.find((tag) => tag.tag_id === pt.tag_id);
+        return { value: tagInfo.tag_id.toString(), label: tagInfo.tag_name };
+      });
+      setFormattedProgramTags(formattedTags);
+    }
+  }, [tags]); // Depend on tags and programTags
 
   // utility to determine if a program or tag is currently selected
   const isProgramSelected = (programId) => programId === selectedProgram;
@@ -114,7 +133,7 @@ function AdminPage() {
       <Row className="p-4">
         {/* PROGRAMS */}
         <Col md={12} lg={6}>
-          {(programsError || tagsError) && (
+          {(programsError || tagsError || programTagsError) && (
             <div className="bg-danger rounded-5 text-center p-2">
               <h5 className="text-white text-xl">
                 Failed to load data. Ensure the backend is running!
@@ -144,7 +163,12 @@ function AdminPage() {
           className="d-flex flex-column justify-content-center"
         >
           {/* PROGRAM INFO */}
-          {showProgramInfo && <ProgramInfo programData={selectedProgramInfo} />}
+          {showProgramInfo && (
+            <ProgramInfo
+              programData={selectedProgramInfo}
+              allProgramTags={formattedProgramTags}
+            />
+          )}
           {/* TAG INFO */}
           {showTagInfo && <TagInfo tagData={selectedTagInfo} />}
           {/* When not showing tags or programs, display this default message */}

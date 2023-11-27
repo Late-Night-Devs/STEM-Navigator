@@ -1,7 +1,11 @@
 import React from "react";
 import MultiSelectExample from "./MultiSelectExample";
 
-export const ProgramInfo = ({ programData, onProgramDataChange }) => {
+export const ProgramInfo = ({
+  programData,
+  allProgramTags,
+  onProgramDataChange,
+}) => {
   // Accept onProgramDataChange as a prop
 
   const handleChange = (e) => {
@@ -82,7 +86,7 @@ export const ProgramInfo = ({ programData, onProgramDataChange }) => {
           <label htmlFor="Select Tags" className="p-2">
             Select Tags
           </label>
-          <MultiSelectExample />
+          <MultiSelectExample allProgramTags={allProgramTags} />
         </div>
         <div className="mt-3">
           <input
