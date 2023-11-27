@@ -17,6 +17,7 @@ function AdminPage() {
   const [showTagInfo, setShowTagInfo] = useState(false);
 
   const [selectedProgramInfo, setSelectedProgramInfo] = useState(null);
+  const [selectedTagInfo, setSelectedTagInfo] = useState(null);
 
   // fetch programs from /programs endpoint 
   useEffect(() => {
@@ -49,6 +50,7 @@ function AdminPage() {
     name: program.title
   }));
 
+  // Transform tags data for TagsList
   const tagItems = tags.map(tag => ({
     key: tag.tag_id, 
     id: tag.tag_id,
@@ -78,6 +80,18 @@ function AdminPage() {
 
   const handleTagClick = (tag) => {
     // if clicking a selected tag, deselect it
+    if (tag.id === selectedTag) {
+      setSelectedTag(null);
+      setSelectedTagInfo(null);
+    } else {
+      const tagInfo = tags.find(t => t.tag_id === tag.id);
+      setSelectedTag(tag.id);
+      setSelectedTagInfo(tagInfo);
+      setSelectedProgram(null);
+      setSelectedProgramInfo(null);
+    }
+
+
     setSelectedTag(tag.id === selectedTag ? null : tag.id);
     setSelectedProgram(null);
     setShowProgramInfo(false);
@@ -146,7 +160,7 @@ function AdminPage() {
         {/* PROGRAM INFO */}
         {showProgramInfo && <ProgramInfo programData={selectedProgramInfo} />}
         {/* TAG INFO */}
-        {showTagInfo && <TagInfo />}
+        {showTagInfo && <TagInfo tagData={selectedTagInfo}/>}
       </Row>
     </div>
   );
