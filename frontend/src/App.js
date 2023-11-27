@@ -7,7 +7,7 @@ import Scholarship from "./components/Scholarship.jsx";
 import Calender from "./components/Calender.jsx";
 import ProgramTab from "./components/ProgramTab.jsx";
 import Newsletter from "./components/Newsletter.jsx";
-import AdminTools from "./components/AdminTools.jsx";
+import AdminPage from "./components/AdminPage.jsx";
 
 import "./App.css";
 
@@ -23,7 +23,7 @@ function App() {
           <Route path="/calender" element={<Calender />} />
           <Route path="/program" element={<ProgramTab />} />
           <Route path="/newsletter" element={<Newsletter />} />
-          <Route path="/admin-modify-db" element={<AdminTools />} />
+          <Route path="/admin-modify-db" element={<AdminPage />} />
         </Routes>
       </div>
     </Router>
