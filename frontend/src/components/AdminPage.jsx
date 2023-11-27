@@ -154,7 +154,11 @@ function AdminPage() {
           />
         </Col>
 
-        <Col md={12} lg={6} className="d-flex justify-content-center">
+        <Col
+          md={12}
+          lg={6}
+          className="d-flex flex-column justify-content-center"
+        >
           {/* PROGRAM INFO */}
           {showProgramInfo && <ProgramInfo programData={selectedProgramInfo} />}
           {/* TAG INFO */}
