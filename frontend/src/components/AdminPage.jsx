@@ -20,32 +20,6 @@ function AdminPage() {
   const [selectedProgramInfo, setSelectedProgramInfo] = useState(null);
   const [selectedTagInfo, setSelectedTagInfo] = useState(null);
 
-  // fetch programs from /programs endpoint
-  /*
-  useEffect(() => {
-    axios
-      .get(`${backend_url}/programs`)
-      .then((response) => {
-        setPrograms(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching programs:", error);
-      });
-  }, []);
-
-  // fetch tags from the /tags endpoint
-  useEffect(() => {
-    axios
-      .get(`${backend_url}/tags`)
-      .then((response) => {
-        setTags(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching tags:", error);
-      });
-  }, []);
-  */
-
   // Transform programs data for ButtonList
   const programItems = programs
     .map((program) => ({

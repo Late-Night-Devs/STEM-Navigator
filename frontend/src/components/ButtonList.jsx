@@ -1,8 +1,6 @@
 import { React, useState } from "react";
-//import { Col } from "react-bootstrap";
-
 /**
- * Contains A list of programs represented by buttons with a state.
+ * Contains A list of programs or tags represented by buttons with a state.
  */
 export const ButtonList = ({
   name,
