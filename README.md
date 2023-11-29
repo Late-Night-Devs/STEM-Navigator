@@ -22,10 +22,10 @@ camps, courses, and other similar offerings all from within one web application.
 
 ## Back End
 - `npm i `
-- `node fetchdata.js`
+- `node server.js`
 - `localhost:3000`
   
 ## Database ( db-dump )
 - Running the docker app first
-- docker compose up d
+- docker-compose up -d
 - Add tables to the database:  example: ` docker exec -i db mysql -uroot -pmy-secret db < file1.sql`
