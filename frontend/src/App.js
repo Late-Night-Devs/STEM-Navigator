@@ -8,7 +8,7 @@ import Calender from "./components/Calender.jsx";
 import ProgramTab from "./components/ProgramTab.jsx";
 import Newsletter from "./components/Newsletter.jsx";
 import AdminPage from "./components/AdminPage.jsx";
-
+import Profile from "./Auth0/testingProfile.jsx";
 import "./App.css";
 
 function App() {
@@ -24,6 +24,7 @@ function App() {
           <Route path="/program" element={<ProgramTab />} />
           <Route path="/newsletter" element={<Newsletter />} />
           <Route path="/admin-modify-db" element={<AdminPage />} />
+          <Route path="/profile-testing" component={<Profile />} />
         </Routes>
       </div>
     </Router>
