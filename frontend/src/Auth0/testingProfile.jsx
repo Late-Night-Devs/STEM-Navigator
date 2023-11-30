@@ -11,7 +11,7 @@ const Profile = () => {
     }
 
     return (
-        <div className="profile">
+        <div className="profile p-4">
             <h2>User Profile</h2>
             {user && (
                 <div>
