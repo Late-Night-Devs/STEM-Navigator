@@ -4,10 +4,13 @@ import { ButtonList } from "./ButtonList";
 import { ProgramInfo } from "./ProgramInfo";
 import { TagInfo } from "./TagInfo";
 import useFetchData from "../useFetchData";
+import { useAuth0 } from "@auth0/auth0-react"; // Import the Auth0 hook
 //import axios from "axios";
 //const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 function AdminPage() {
+  const { user, isAuthenticated } = useAuth0(); // Get user information
+
   const { data: programs, error: programsError } = useFetchData("programs");
   const { data: tags, error: tagsError } = useFetchData("tags");
   // currently unused, but should be used to fill out the default values in the Multi Select
@@ -17,7 +20,7 @@ function AdminPage() {
   /* formattedProgramTags uses Tags and formats them for use by the MultiSelect <Select options={}>*/
   const [formattedProgramTags, setFormattedProgramTags] = useState(null);
 
-  // state values representing the the selected program or tag
+  // state values representing the selected program or tag
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [selectedTag, setSelectedTag] = useState(null);
   // state values representing the visibility of the Program Info or Tag Info
@@ -88,11 +91,6 @@ function AdminPage() {
       setSelectedProgram(null);
       setSelectedProgramInfo(null);
     }
-
-    setSelectedTag(tag.id === selectedTag ? null : tag.id);
-    setSelectedProgram(null);
-    setShowProgramInfo(false);
-    //setShowTagInfo(true);
   };
 
   useEffect(() => {
@@ -105,14 +103,22 @@ function AdminPage() {
     }
   }, [selectedProgram]);
 
-  // when the selectedTag changes state, update the visibility of TagInfo
   useEffect(() => {
+    // when the selectedTag changes state, update the visibility of TagInfo
     if (selectedTag === null) {
       setShowTagInfo(false);
     } else {
       setShowTagInfo(true);
     }
   }, [selectedTag]);
+
+  // Redirect or show an error if the user is not authenticated or not the specific user
+  if (
+    !isAuthenticated ||
+    (user && user.email !== "latenightdevsfw23@gmail.com")
+  ) {
+    return <p>Access Denied</p>;
+  }
 
   return (
     <div className="m-auto">
@@ -129,7 +135,7 @@ function AdminPage() {
         </Col>
       </Row>
 
-      {/* PROGRAMS AND TAGS*/}
+      {/* PROGRAMS AND TAGS */}
       <Row className="p-4">
         {/* PROGRAMS */}
         <Col md={12} lg={6}>
@@ -148,7 +154,7 @@ function AdminPage() {
             className="d-flex justify-content-center"
           />
 
-          {/* TAGS*/}
+          {/* TAGS */}
           <ButtonList
             name="Tags"
             items={tagItems}
