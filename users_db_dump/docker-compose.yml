@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:latest
+    container_name: db2
+    environment:
+      MYSQL_ROOT_PASSWORD: my-secret2
+      MYSQL_DATABASE: db2
+    ports:
+      - "3308:3308"
+    volumes:
+      - db_data:/var/lib/mysql		# save at a different location?
+
+volumes:
+  db_data:
+
