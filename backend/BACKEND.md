@@ -1,7 +1,10 @@
 ### Backend folder structure
 backend/
+
 │
+
 ├── src/
+
 │   ├── controllers/     // Controllers handle the logic for each route.
 │   │   ├── programController.js
 │   │   └── tagController.js
