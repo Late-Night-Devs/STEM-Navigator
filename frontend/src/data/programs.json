@@ -1,0 +1,81 @@
+{
+    "programs": [
+        {
+            "name": "Data Science Immersive",
+            "tags": [
+                "3 Terms",
+                "Research Included",
+                "First Generation",
+                "Math Major"
+            ],
+            "description": "A comprehensive program covering data analysis, machine learning, and big data technologies.",
+            "link": "/programs/data-science-immersive"
+        },
+        {
+            "name": "Environmental Science Fieldwork",
+            "tags": [
+                "1 Year",
+                "Summer Only",
+                "Low Income",
+                "Community College Transfer Student"
+            ],
+            "description": "An experiential learning program focusing on fieldwork in environmental science.",
+            "link": "/programs/environmental-science-fieldwork"
+        },
+        {
+            "name": "Robotics Engineering",
+            "tags": [
+                "2 Terms",
+                "ADA Disability",
+                "Honor College Student",
+                "DS Major"
+            ],
+            "description": "A program designed to provide hands-on experience in robotics engineering and automation.",
+            "link": "/programs/robotics-engineering"
+        },
+        {
+            "name": "Undergraduate Research Opportunity",
+            "tags": [
+                "9 Terms",
+                "Research Included",
+                "First Generation",
+                "Asian"
+            ],
+            "description": "Opportunity for undergraduates to participate in cutting-edge research across various disciplines.",
+            "link": "/programs/undergraduate-research-opportunity"
+        },
+        {
+            "name": "Undergraduate Research Opportunity",
+            "tags": [
+                "9 Terms",
+                "Research Included",
+                "First Generation",
+                "Asian"
+            ],
+            "description": "Opportunity for undergraduates to participate in cutting-edge research across various disciplines.",
+            "link": "/programs/undergraduate-research-opportunity"
+        },
+        {
+            "name": "Internship Opportunity",
+            "tags": [
+                "9 Terms",
+                "Research Included",
+                "First Generation",
+                "Native Hawaiian / Pacific Islander"
+            ],
+            "description": "Opportunity for undergraduates to participate in cutting-edge research across various disciplines.",
+            "link": "/programs/undergraduate-research-opportunity"
+        },
+        {
+            "name": "Program 123",
+            "tags": [
+                "9 Terms",
+                "Research Included",
+                "First Generation",
+                "Asian"
+            ],
+            "description": "Opportunity for undergraduates to participate in cutting-edge research across various disciplines.",
+            "link": "/programs/undergraduate-research-opportunity"
+        }
+    ]
+}

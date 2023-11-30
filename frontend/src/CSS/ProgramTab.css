@@ -1,0 +1,15 @@
+.container{
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: larger;
+   
+}
+.hero-img{
+    height: 40vh;
+    width: 100%;
+    background-position: center left; 
+
+    background-image:url("../image/20170518_PSU_Spring_289.JPG");
+    background-size: cover;
+}
