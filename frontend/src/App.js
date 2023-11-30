@@ -24,7 +24,7 @@ function App() {
           <Route path="/program" element={<ProgramTab />} />
           <Route path="/newsletter" element={<Newsletter />} />
           <Route path="/admin-modify-db" element={<AdminPage />} />
-          <Route path="/profile-testing" component={<Profile />} />
+          <Route path="/profile-testing" element={<Profile />} />
         </Routes>
       </div>
     </Router>

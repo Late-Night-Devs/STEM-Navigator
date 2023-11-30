@@ -1,3 +1,5 @@
+// this is for testing auth0 
+// fetching data user from auth0 for the frontend
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
