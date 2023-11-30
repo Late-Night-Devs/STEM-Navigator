@@ -19,7 +19,9 @@ const Profile = () => {
                     <p><strong>Name:</strong> {user.name}</p>
                     <p><strong>Email:</strong> {user.email}</p>
                     {/* Display other user information here */}
-                    <pre>{JSON.stringify(user, null, 2)}</pre> {/* This will display all user information in a formatted JSON view */}
+                    <hr></hr>
+                    {/* This will display all user information in a formatted JSON view */}
+                    <pre>{JSON.stringify(user, null, 2)}</pre>
                 </div>
             )}
         </div>
