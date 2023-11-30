@@ -9,7 +9,7 @@ import { useAuth0 } from "@auth0/auth0-react"; // Import the Auth0 hook
 //const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 function AdminPage() {
-  const { user, isAuthenticated } = useAuth0(); // Get user information
+  const { user, isAuthenticated, isLoading } = useAuth0(); // Get user information
 
   const { data: programs, error: programsError } = useFetchData("programs");
   const { data: tags, error: tagsError } = useFetchData("tags");
@@ -111,6 +111,10 @@ function AdminPage() {
       setShowTagInfo(true);
     }
   }, [selectedTag]);
+
+  if (isLoading) {
+    return null; // Render nothing while loading
+  }
 
   // Redirect or show an error if the user is not authenticated or not the specific user
   if (
