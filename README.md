@@ -16,16 +16,17 @@ camps, courses, and other similar offerings all from within one web application.
 
 
 # How to run the application:
+- `cd` into the correct directory before each part
+
 ## Front End:
-- `npm i `
-- `npm start `
+- `npm i`
+- `npm start`
 
 ## Back End
 - `npm i `
 - `node server.js`
-- `localhost:3000`
   
 ## Database ( db-dump )
 - Running the docker app first
-- docker-compose up -d
-- Add tables to the database:  example: ` docker exec -i db mysql -uroot -pmy-secret db < file1.sql`
+- `docker compose up -d`
+- Add tables to the database:  example: `docker exec -i db mysql -uroot -pmy-secret db < file1.sql`
