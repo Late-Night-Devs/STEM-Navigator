@@ -8,14 +8,13 @@ import Calender from "./components/Calender.jsx";
 import ProgramTab from "./components/ProgramPage/ProgramTab.jsx";
 import Newsletter from "./components/Newsletter.jsx";
 import AdminPage from "./components/AdminPage/AdminPage.jsx";
-import Profile from "./Auth0/testingProfile.jsx";
+import Profile from "./components/Auth0/testingProfile.jsx";
 import "./App.css";
 
 function App() {
   return (
     <Router>
-      <div className="">
-        <NavBar />
+      <NavBar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/events" element={<Events />} />
@@ -25,8 +24,7 @@ function App() {
           <Route path="/newsletter" element={<Newsletter />} />
           <Route path="/admin-modify-db" element={<AdminPage />} />
           <Route path="/profile-testing" element={<Profile />} />
-        </Routes>
-      </div>
+      </Routes>
     </Router>
   );
 }

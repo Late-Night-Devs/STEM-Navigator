@@ -77,8 +77,6 @@ const FilterByTag = ({ setSelectedTagIds }) => {
         ))}
       </Row>
 
-
-
       {/* maybe this is used to add reset filter btn or any options later */}
     </Container>
   );

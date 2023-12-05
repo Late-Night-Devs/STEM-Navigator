@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "./image/PSU_logo.png";
 import "./CSS/NavBar.css";
-import LogInOutBtn from "./Auth0/logInOutBtn";
+import LogInOutBtn from "./components/Auth0/logInOutBtn";
 import { useAuth0 } from "@auth0/auth0-react"; // Import the Auth0 hook
 
 const NavBar = () => {
