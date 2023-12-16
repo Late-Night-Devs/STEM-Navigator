@@ -46,6 +46,7 @@ function AdminPage() {
       key: tag.tag_id,
       id: tag.tag_id,
       name: tag.tag_name,
+      category: tag.category,
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -167,6 +168,12 @@ function AdminPage() {
           />
         </Col>
 
+        {/* This column shows one of: 
+            -- a form with program information
+            -- a form with tag information
+            -- a default message
+            depending on values of showTagInfo and showProgramInfo
+        */}
         <Col
           md={12}
           lg={6}
