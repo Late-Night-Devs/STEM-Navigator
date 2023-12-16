@@ -3,13 +3,13 @@ import styled from "styled-components";
 
 const selectedButtonClass = "bg-warning";
 const CategoryColors = {
-  Eligibility: "#E0FAF",
-  Identity: "#ADE8F4",
-  ProgramFocus: "#ADE8F4",
-  StudentServices: "#48CAE4",
-  Timing: "#0096C7",
-  UniversityStatus: "#0077B6",
-  NoCategory: "#fb8500",
+  Eligibility: "#6C8B2D",
+  Identity: "#87AE38",
+  ProgramFocus: "#9EC64F",
+  StudentServices: "#B2D172",
+  Timing: "#6EBF4E",
+  UniversityStatus: "#8AA55C",
+  NoCategory: "#AA8644",
 };
 
 // StyledButton component for dynamic styling
@@ -38,20 +38,20 @@ const StyledButton = styled.button`
   }};
 `;
 
-const AddButton = styled.button`
-  background-color: #6c757d; // btn-secondary
+// this can help to avoid repeated code
+const BaseButton = styled.button`
   color: white;
-  padding: 0.25em 1em;
-  margin: 1em;
+  padding: 0.5em 4em 0.5em 4em;
+  margin: 0 1em 1em 1em;
   border-radius: 10px;
 `;
 
-const RemoveButton = styled.button`
-  background-color: #dc3545; // btn-danger
-  color: white;
-  padding: 0.25em 1em;
-  margin: 0.25em;
-  border-radius: 10px;
+const AddButton = styled(BaseButton)`
+  background-color: #6c757d; // unique background
+`;
+
+const RemoveButton = styled(BaseButton)`
+  background-color: #dc3545;
 `;
 
 export const ButtonList = ({
@@ -60,26 +60,44 @@ export const ButtonList = ({
   isItemSelected,
   handleButtonClick,
 }) => {
-  // Sort items by category, placing items without a category at the end
-  const sortedItems = items.sort((a, b) => {
-    if (!a.category) return 1;
-    if (!b.category) return -1;
-    return a.category.localeCompare(b.category);
-  });
+  // Function to group items by category
+  const groupByCategory = (items) => {
+    return items.reduce((groups, item) => {
+      const category = item.category || "NoCategory";
+      if (!groups[category]) {
+        groups[category] = [];
+      }
+      groups[category].push(item);
+      return groups;
+    }, {});
+  };
+
+  // Grouped items by category
+  const groupedItems = groupByCategory(items);
+
+  // Get category names and sort them alphabetically
+  const sortedCategories = Object.keys(groupedItems).sort();
 
   return (
     <div className="mb-5" style={{ minHeight: "125px" }}>
       <div className="text-center border border-dark rounded-5 p-1 m-3">
-        {sortedItems.map((item) => (
-          <StyledButton
-            type="button"
-            category={item.category}
-            className={isItemSelected(item.id) ? selectedButtonClass : ""}
-            key={item.id}
-            onClick={() => handleButtonClick(item)}
-          >
-            {item.name}
-          </StyledButton>
+        <h3>{name}</h3>
+        <hr />
+        {sortedCategories.map((category) => (
+          <div key={category}>
+            <h5>{category !== "NoCategory" ? category : ""}</h5>
+            {groupedItems[category].map((item) => (
+              <StyledButton
+                type="button"
+                category={item.category}
+                className={isItemSelected(item.id) ? selectedButtonClass : ""}
+                key={item.id}
+                onClick={() => handleButtonClick(item)}
+              >
+                {item.name}
+              </StyledButton>
+            ))}
+          </div>
         ))}
         <hr />
         <div>

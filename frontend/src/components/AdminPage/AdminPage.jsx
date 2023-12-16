@@ -46,7 +46,7 @@ function AdminPage() {
       key: tag.tag_id,
       id: tag.tag_id,
       name: tag.tag_name,
-      category: tag.category,
+      category: tag.category.trim(),
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -141,7 +141,7 @@ function AdminPage() {
       </Row>
 
       {/* PROGRAMS AND TAGS */}
-      <Row className="p-4">
+      <Row className="p-2">
         {/* PROGRAMS */}
         <Col md={12} lg={6}>
           {(programsError || tagsError || programTagsError) && (
@@ -158,7 +158,6 @@ function AdminPage() {
             handleButtonClick={handleProgramClick}
             className="d-flex justify-content-center"
           />
-
           {/* TAGS */}
           <ButtonList
             name="Tags"
