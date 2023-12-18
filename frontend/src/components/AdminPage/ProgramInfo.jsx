@@ -69,12 +69,12 @@ export const ProgramInfo = ({
             onChange={handleChange}
           />
         </div>
+        <label htmlFor="LongDescription" className="p-2 align-top">
+          Long Description
+        </label>
         <div>
-          <label htmlFor="LongDescription" className="p-2 align-top">
-            Long Description
-          </label>
           <textarea
-            cols="45"
+            cols="54"
             rows="11"
             id="LongDescription"
             name="description" // Add a name attribute
