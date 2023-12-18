@@ -1,15 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 
+const lightGreen = "#BFD49B";
+const darkGreen = "#5EBD4B";
 const selectedButtonClass = "bg-warning";
+
 const CategoryColors = {
-  Eligibility: "#6C8B2D",
-  Identity: "#87AE38",
-  ProgramFocus: "#9EC64F",
-  StudentServices: "#B2D172",
-  Timing: "#6EBF4E",
-  UniversityStatus: "#8AA55C",
-  NoCategory: "#AA8644",
+  Eligibility: lightGreen,
+  Identity: darkGreen,
+  ProgramFocus: lightGreen,
+  StudentServices: darkGreen,
+  Timing: lightGreen,
+  UniversityStatus: darkGreen,
+  NoCategory: lightGreen,
 };
 
 // StyledButton component for dynamic styling
