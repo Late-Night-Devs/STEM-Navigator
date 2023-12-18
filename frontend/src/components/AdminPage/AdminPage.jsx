@@ -5,8 +5,15 @@ import { ProgramInfo } from "./ProgramInfo";
 import { TagInfo } from "./TagInfo";
 import useFetchData from "./useFetchData";
 import { useAuth0 } from "@auth0/auth0-react"; // Import the Auth0 hook
+import styled from "styled-components";
 //import axios from "axios";
 //const backend_url = process.env.REACT_APP_BACKEND_URL;
+
+const StickyColumn = styled(Col)`
+  position: sticky;
+  top: 0px; // You can adjust this value as needed
+  align-self: start; // Ensures the column starts at the top of its container
+`;
 
 function AdminPage() {
   const { user, isAuthenticated, isLoading } = useAuth0(); // Get user information
@@ -173,7 +180,7 @@ function AdminPage() {
             -- a default message
             depending on values of showTagInfo and showProgramInfo
         */}
-        <Col
+        <StickyColumn
           md={12}
           lg={6}
           className="d-flex flex-column justify-content-center"
@@ -195,7 +202,7 @@ function AdminPage() {
               </p>
             </div>
           )}
-        </Col>
+        </StickyColumn>
       </Row>
     </div>
   );
