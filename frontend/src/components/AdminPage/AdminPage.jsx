@@ -24,8 +24,9 @@ function AdminPage() {
   const { data: programTags, error: programTagsError } =
     useFetchData("program-tags");
 
-  /* formattedProgramTags uses Tags and formats them for use by the MultiSelect <Select options={}>*/
+  /* formattedProgramTags uses Tags and formats them for use by the Select <Select options={}>*/
   const [formattedProgramTags, setFormattedProgramTags] = useState(null);
+  const [formattedCategories, setFormattedCategories] = useState([]);
 
   // state values representing the selected program or tag
   const [selectedProgram, setSelectedProgram] = useState(null);
@@ -71,6 +72,18 @@ function AdminPage() {
       setShowTagInfo(false);
     }
   };
+
+  // Extract unique categories from tags
+  useEffect(() => {
+    if (tags) {
+      const uniqueCategories = new Set(tags.map((tag) => tag.category.trim()));
+      const formatted = Array.from(uniqueCategories).map((category) => ({
+        value: category, // The category name itself is the value
+        label: category, // The category name is also the label
+      }));
+      setFormattedCategories(formatted);
+    }
+  }, [tags]);
 
   // runs when tags are available and formats them to be used by the Multi Select
   useEffect(() => {
@@ -193,7 +206,7 @@ function AdminPage() {
             />
           )}
           {/* TAG INFO */}
-          {showTagInfo && <TagInfo tagData={selectedTagInfo} />}
+          {showTagInfo && <TagInfo tagData={selectedTagInfo} categories={formattedCategories} />}
           {/* When not showing tags or programs, display this default message */}
           {!showTagInfo && !showProgramInfo && (
             <div className="text-center border border-dark rounded-5 p-2 m-3 flex-fill">

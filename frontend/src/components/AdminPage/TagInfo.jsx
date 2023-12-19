@@ -1,7 +1,7 @@
 import React from "react";
 import Select from "react-select";
 
-export const TagInfo = ({ tagData, onTagDataChange }) => {
+export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
   // Accept tagData and onTagDataChange as props
 
   const handleChange = (e) => {
@@ -32,7 +32,7 @@ export const TagInfo = ({ tagData, onTagDataChange }) => {
           </label>
         </div>
         <div style={{ paddingLeft: "50px", paddingRight: "50px" }}>
-          <Select options={[]} />
+          <Select options={categories} />
         </div>
 
         <div className="mt-3">
