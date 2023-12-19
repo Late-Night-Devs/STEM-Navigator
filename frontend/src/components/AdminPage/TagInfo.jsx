@@ -1,5 +1,5 @@
 import React from "react";
-import MultiSelectExample from "./MultiSelectExample";
+import Select from "react-select";
 
 export const TagInfo = ({ tagData, onTagDataChange }) => {
   // Accept tagData and onTagDataChange as props
@@ -30,21 +30,11 @@ export const TagInfo = ({ tagData, onTagDataChange }) => {
           <label htmlFor="Select Category" className="p-2">
             Select Category
           </label>
-          <MultiSelectExample allProgramTags={[]} />
         </div>
-        {/*<div>
-          <label htmlFor="TagCategory" className="p-2">
-            Tag Category
-          </label>
-          <input
-            type="text"
-            size="42"
-            id="TagCategory"
-            name="category"
-            value={tagData?.category || ""}
-            onChange={handleChange}
-          />
-        </div>*/}
+        <div style={{ paddingLeft: "50px", paddingRight: "50px" }}>
+          <Select options={[]} />
+        </div>
+
         <div className="mt-3">
           <input
             type="submit"
