@@ -9,10 +9,50 @@ import styled from "styled-components";
 //import axios from "axios";
 //const backend_url = process.env.REACT_APP_BACKEND_URL;
 
+const PageContainer = styled.div`
+  margin: auto;
+`;
+
+const IntroSection = styled.section`
+  padding: 2rem;
+  text-align: center;
+
+  h1 {
+    font-weight: bold;
+  }
+`;
+
+const ProgramsAndTagsRow = styled(Row)`
+  padding: 2rem;
+`;
+
+const Column = styled(Col)`
+  // Add any specific styles you might have had here
+`;
+
 const StickyColumn = styled(Col)`
   position: sticky;
-  top: 0px; // You can adjust this value as needed
-  align-self: start; // Ensures the column starts at the top of its container
+  top: 50px;
+  height: fit-content; // Adjust the height
+  max-height: 100vh; // Limit the max height
+  overflow-y: auto; // Allow internal scrolling if content is too long
+`;
+
+const ErrorMessage = styled.div`
+  background-color: #dc3545; // Bootstrap danger background
+  color: white;
+  text-align: center;
+  padding: 2rem;
+  border-radius: 5px;
+`;
+
+const DefaultMessage = styled.div`
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 2rem;
+  margin: 3rem;
+  flex-fill: 1;
 `;
 
 function AdminPage() {
@@ -146,78 +186,61 @@ function AdminPage() {
   }
 
   return (
-    <div className="m-auto">
-      {/* Intro section */}
-      <Row className="img-hero-welcome p-2">
+    <PageContainer>
+      <Row className="img-hero-welcome">
         <Col>
-          <section>
-            <h1 className="intro text-center fw-bold">Admin Tools</h1>
-            <p className="text-center">
+          <IntroSection>
+            <h1 className="intro">Admin Tools</h1>
+            <p>
               Select a Program or Tag by clicking on it. You can only select one
               at a time!
             </p>
-          </section>
+          </IntroSection>
         </Col>
       </Row>
 
-      {/* PROGRAMS AND TAGS */}
-      <Row className="p-2">
-        {/* PROGRAMS */}
-        <Col md={12} lg={6}>
+      <ProgramsAndTagsRow>
+        <Column md={12} lg={6}>
           {(programsError || tagsError || programTagsError) && (
-            <div className="bg-danger rounded-5 text-center p-2">
-              <h5 className="text-white text-xl">
-                Failed to load data. Ensure the backend is running!
-              </h5>
-            </div>
+            <ErrorMessage>
+              <h5>Failed to load data. Ensure the backend is running!</h5>
+            </ErrorMessage>
           )}
           <ButtonList
             name="Programs"
             items={programItems}
             isItemSelected={isProgramSelected}
             handleButtonClick={handleProgramClick}
-            className="d-flex justify-content-center"
           />
-          {/* TAGS */}
           <ButtonList
             name="Tags"
             items={tagItems}
             isItemSelected={isTagSelected}
             handleButtonClick={handleTagClick}
           />
-        </Col>
+        </Column>
 
-        {/* This column shows one of: 
-            -- a form with program information
-            -- a form with tag information
-            -- a default message
-            depending on values of showTagInfo and showProgramInfo
-        */}
-        <StickyColumn
-          md={12}
-          lg={6}
-          className="d-flex flex-column justify-content-center"
-        >
-          {/* PROGRAM INFO */}
+        <StickyColumn md={12} lg={6}>
           {showProgramInfo && (
             <ProgramInfo
               programData={selectedProgramInfo}
               allProgramTags={formattedProgramTags}
             />
           )}
-          {/* TAG INFO */}
-          {showTagInfo && <TagInfo tagData={selectedTagInfo} categories={formattedCategories} />}
-          {/* When not showing tags or programs, display this default message */}
+          {showTagInfo && (
+            <TagInfo
+              tagData={selectedTagInfo}
+              categories={formattedCategories}
+            />
+          )}
           {!showTagInfo && !showProgramInfo && (
-            <div className="text-center border border-dark rounded-5 p-2 m-3 flex-fill">
-              <p className="p-2 m-2">
-                Click on a Program or Tag to show information here.
-              </p>
-            </div>
+            <DefaultMessage>
+              <p>Click on a Program or Tag to show information here.</p>
+            </DefaultMessage>
           )}
         </StickyColumn>
-      </Row>
-    </div>
+      </ProgramsAndTagsRow>
+    </PageContainer>
   );
 }
 

@@ -31,6 +31,7 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
             Select Category
           </label>
         </div>
+        {/* TODO this should change to show the current selected tag's category on clicking a tag */}
         <div style={{ paddingLeft: "50px", paddingRight: "50px" }}>
           <Select options={categories} />
         </div>
