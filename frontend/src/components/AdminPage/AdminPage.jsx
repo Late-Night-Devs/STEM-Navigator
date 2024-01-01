@@ -56,7 +56,11 @@ function AdminPage() {
   const { data: programs, error: programsError } = useFetchData("programs");
   // fetch the tags data from the backend
   const { data: tags, error: tagsError } = useFetchData("tags");
-  // currently unused, but should be used to fill out the default values in the Multi Select
+  // currently unused
+  /*
+    pre-populate the Tags Selection on the Program edit form with 
+    any program-tags entries which have the selected program id.
+  */
   const { data: programTags, error: programTagsError } =
     useFetchData("program-tags");
 
@@ -100,6 +104,19 @@ function AdminPage() {
       setSelectedProgram(null);
       setSelectedProgramInfo(null);
     } else {
+      // we selected a new program
+      // get the associated tags for that program (found in programTags)
+      const associatedTags = programTags
+        .filter((pt) => pt.program_id === program.id)
+        .map((pt) => {
+          const tagInfo = tags.find((tag) => tag.tag_id === pt.tag_id);
+          return tagInfo
+            ? { value: tagInfo.tag_id.toString(), label: tagInfo.tag_name }
+            : null;
+        })
+        .filter((tag) => tag !== null);
+      //console.log("Associated Tags:", associatedTags);
+
       // find a program with the same id as the selected program
       const programInfo = programs.find((p) => p.program_id === program.id);
       setSelectedProgram(program.id);
