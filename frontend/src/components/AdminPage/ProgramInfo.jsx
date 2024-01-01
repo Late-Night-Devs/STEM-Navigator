@@ -9,9 +9,11 @@ export const ProgramInfo = ({
 }) => {
   // Accept onProgramDataChange as a prop
 
+  const associatedTags = programData ? programData.AssociatedTags : null;
+  const programInfo = programData ? programData.ProgramInfo : null;
   const handleChange = (e) => {
     const { name, value } = e.target;
-    onProgramDataChange({ ...programData, [name]: value });
+    onProgramDataChange({ ...programData.ProgramInfo, [name]: value });
   };
 
   return (
@@ -27,7 +29,7 @@ export const ProgramInfo = ({
             size="42"
             id="ProgramName"
             name="title" // Add a name attribute
-            value={programData?.title || ""}
+            value={programData?.ProgramInfo.title || ""}
             onChange={handleChange}
           />
         </div>
@@ -40,7 +42,7 @@ export const ProgramInfo = ({
             size="42"
             id="ProgramLeadContact"
             name="leadContact" // Add a name attribute
-            value={programData?.lead_contact || ""}
+            value={programData?.ProgramInfo.lead_contact || ""}
             onChange={handleChange}
           />
         </div>
@@ -53,7 +55,7 @@ export const ProgramInfo = ({
             size="42"
             id="ProgramEmail"
             name="email" // Add a name attribute
-            value={programData?.contact_email || ""}
+            value={programData?.ProgramInfo.contact_email || ""}
             onChange={handleChange}
           />
         </div>
@@ -66,7 +68,7 @@ export const ProgramInfo = ({
             size="42"
             id="LinkToWeb"
             name="link" // Add a name attribute
-            value={programData?.link_to_web || ""}
+            value={programData?.ProgramInfo.link_to_web || ""}
             onChange={handleChange}
           />
         </div>
@@ -79,7 +81,7 @@ export const ProgramInfo = ({
             rows="11"
             id="LongDescription"
             name="description" // Add a name attribute
-            value={programData?.long_description || ""}
+            value={programData?.ProgramInfo.long_description || ""}
             onChange={handleChange}
           ></textarea>
         </div>
@@ -89,7 +91,11 @@ export const ProgramInfo = ({
           </label>
           {/*<MultiSelectExample allProgramTags={allProgramTags} />*/}
           <div>
-            <Select options={allProgramTags} isMulti />
+            <Select
+              defaultValue={associatedTags || []} // if null, empty array
+              options={allProgramTags}
+              isMulti
+            />
           </div>
         </div>
         <div className="mt-3">

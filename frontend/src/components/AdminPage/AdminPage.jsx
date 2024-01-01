@@ -120,7 +120,10 @@ function AdminPage() {
       // find a program with the same id as the selected program
       const programInfo = programs.find((p) => p.program_id === program.id);
       setSelectedProgram(program.id);
-      setSelectedProgramInfo(programInfo);
+      setSelectedProgramInfo({
+        ProgramInfo: programInfo,
+        AssociatedTags: associatedTags,
+      });
       setSelectedTag(null);
       setShowTagInfo(false);
     }
