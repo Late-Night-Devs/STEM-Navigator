@@ -239,6 +239,9 @@ function AdminPage() {
         <StickyColumn md={12} lg={6}>
           {showProgramInfo && (
             <ProgramInfo
+              // using a 'key' prop forces a re-render when the key changes.
+
+              key={selectedProgram || "default-key"}
               programData={selectedProgramInfo}
               allProgramTags={formattedProgramTags}
             />

@@ -10,7 +10,7 @@ export const ProgramInfo = ({
   // Accept onProgramDataChange as a prop
 
   const associatedTags = programData ? programData.AssociatedTags : null;
-  const programInfo = programData ? programData.ProgramInfo : null;
+  //const programInfo = programData ? programData.ProgramInfo : null;
   const handleChange = (e) => {
     const { name, value } = e.target;
     onProgramDataChange({ ...programData.ProgramInfo, [name]: value });
