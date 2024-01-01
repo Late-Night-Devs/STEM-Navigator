@@ -1,4 +1,5 @@
 import React from "react";
+import Select from "react-select";
 import MultiSelectExample from "./MultiSelectExample";
 
 export const ProgramInfo = ({
@@ -86,7 +87,10 @@ export const ProgramInfo = ({
           <label htmlFor="Select Tags" className="p-2">
             Select Tags
           </label>
-          <MultiSelectExample allProgramTags={allProgramTags} />
+          {/*<MultiSelectExample allProgramTags={allProgramTags} />*/}
+          <div>
+            <Select options={allProgramTags} isMulti />
+          </div>
         </div>
         <div className="mt-3">
           <input
