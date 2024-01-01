@@ -15,6 +15,33 @@ const CategoryColors = {
   NoCategory: lightGreen,
 };
 
+const StyledButton = styled.button`
+  padding: 0.25em 1em;
+  margin: 0.25em;
+  border-radius: 10px;
+  background-color: ${({ $category }) => {
+    // Add $ prefix to make it transient
+    switch ($category) {
+      case "Eligibility":
+        return CategoryColors.Eligibility;
+      case "Identity":
+      case "Identity ":
+        return CategoryColors.Identity;
+      case "Program Focus":
+        return CategoryColors.ProgramFocus;
+      case "Student Services":
+        return CategoryColors.StudentServices;
+      case "Timing":
+        return CategoryColors.Timing;
+      case "University Status":
+        return CategoryColors.UniversityStatus;
+      default:
+        return CategoryColors.NoCategory;
+    }
+  }};
+`;
+
+/*
 // StyledButton component for dynamic styling
 const StyledButton = styled.button`
   padding: 0.25em 1em;
@@ -40,6 +67,7 @@ const StyledButton = styled.button`
     }
   }};
 `;
+*/
 
 // this can help to avoid repeated code
 const BaseButton = styled.button`
@@ -92,7 +120,7 @@ export const ButtonList = ({
             {groupedItems[category].map((item) => (
               <StyledButton
                 type="button"
-                category={item.category}
+                $category={item.category} // transient prop?
                 className={isItemSelected(item.id) ? selectedButtonClass : ""}
                 key={item.id}
                 onClick={() => handleButtonClick(item)}
