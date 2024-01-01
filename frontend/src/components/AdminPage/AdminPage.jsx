@@ -6,9 +6,8 @@ import { TagInfo } from "./TagInfo";
 import useFetchData from "./useFetchData";
 import { useAuth0 } from "@auth0/auth0-react"; // Import the Auth0 hook
 import styled from "styled-components";
-//import axios from "axios";
-//const backend_url = process.env.REACT_APP_BACKEND_URL;
 
+// styled components
 const PageContainer = styled.div`
   margin: auto;
 `;
@@ -24,10 +23,6 @@ const IntroSection = styled.section`
 
 const ProgramsAndTagsRow = styled(Row)`
   padding: 2rem;
-`;
-
-const Column = styled(Col)`
-  // Add any specific styles you might have had here
 `;
 
 const StickyColumn = styled(Col)`
@@ -57,8 +52,9 @@ const DefaultMessage = styled.div`
 
 function AdminPage() {
   const { user, isAuthenticated, isLoading } = useAuth0(); // Get user information
-
+  // fetch the programs data from the backend
   const { data: programs, error: programsError } = useFetchData("programs");
+  // fetch the tags data from the backend
   const { data: tags, error: tagsError } = useFetchData("tags");
   // currently unused, but should be used to fill out the default values in the Multi Select
   const { data: programTags, error: programTagsError } =
@@ -68,16 +64,16 @@ function AdminPage() {
   const [formattedProgramTags, setFormattedProgramTags] = useState(null);
   const [formattedCategories, setFormattedCategories] = useState([]);
 
-  // state values representing the selected program or tag
+  // state values representing the selected program or tag (represented by a yellow button)
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [selectedTag, setSelectedTag] = useState(null);
+
   // state values representing the visibility of the Program Info or Tag Info
   const [showProgramInfo, setShowProgramInfo] = useState(false);
   const [showTagInfo, setShowTagInfo] = useState(false);
 
   const [selectedProgramInfo, setSelectedProgramInfo] = useState(null);
   const [selectedTagInfo, setSelectedTagInfo] = useState(null);
-  //const [selectedProgramTagInfo, setSelectedProgramTagInfo] = useState([]);
 
   // Transform programs data for ButtonList
   const programItems = programs
@@ -200,7 +196,7 @@ function AdminPage() {
       </Row>
 
       <ProgramsAndTagsRow>
-        <Column md={12} lg={6}>
+        <Col md={12} lg={6}>
           {(programsError || tagsError || programTagsError) && (
             <ErrorMessage>
               <h5>Failed to load data. Ensure the backend is running!</h5>
@@ -218,7 +214,7 @@ function AdminPage() {
             isItemSelected={isTagSelected}
             handleButtonClick={handleTagClick}
           />
-        </Column>
+        </Col>
 
         <StickyColumn md={12} lg={6}>
           {showProgramInfo && (
