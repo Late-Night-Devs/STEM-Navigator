@@ -1,6 +1,5 @@
 import React from "react";
 import Select from "react-select";
-import MultiSelectExample from "./MultiSelectExample";
 
 export const ProgramInfo = ({
   programData,
@@ -89,7 +88,6 @@ export const ProgramInfo = ({
           <label htmlFor="Select Tags" className="p-2">
             Select Tags
           </label>
-          {/*<MultiSelectExample allProgramTags={allProgramTags} />*/}
           <div>
             <Select
               defaultValue={associatedTags || []} // if null, empty array
