@@ -41,34 +41,6 @@ const StyledButton = styled.button`
   }};
 `;
 
-/*
-// StyledButton component for dynamic styling
-const StyledButton = styled.button`
-  padding: 0.25em 1em;
-  margin: 0.25em;
-  border-radius: 10px;
-  background-color: ${({ category }) => {
-    switch (category) {
-      case "Eligibility":
-        return CategoryColors.Eligibility;
-      case "Identity":
-      case "Identity ":
-        return CategoryColors.Identity;
-      case "Program Focus":
-        return CategoryColors.ProgramFocus;
-      case "Student Services":
-        return CategoryColors.StudentServices;
-      case "Timing":
-        return CategoryColors.Timing;
-      case "University Status":
-        return CategoryColors.UniversityStatus;
-      default:
-        return CategoryColors.NoCategory;
-    }
-  }};
-`;
-*/
-
 // this can help to avoid repeated code
 const BaseButton = styled.button`
   color: white;
@@ -109,6 +81,25 @@ export const ButtonList = ({
   // Get category names and sort them alphabetically
   const sortedCategories = Object.keys(groupedItems).sort();
 
+  const handleAddBtnClick = () => {
+    try {
+      // try to add the entry to the database
+      // by using an API endpoint with axios
+      console.log("Use backend api to add item to database");
+    } catch (error) {
+      console.error("Error adding program:", error);
+    }
+  };
+  const handleRemoveBtnClick = () => {
+    try {
+      // try to add the entry to the database
+      // by using an API endpoint with axios
+      console.log("Use backend api to remove item from database");
+    } catch (error) {
+      console.error("Error removing program:", error);
+    }
+  };
+
   return (
     <div className="mb-5" style={{ minHeight: "125px" }}>
       <div className="text-center border border-dark rounded-5 p-1 m-3">
@@ -132,8 +123,12 @@ export const ButtonList = ({
         ))}
         <hr />
         <div>
-          <AddButton type="button">Add</AddButton>
-          <RemoveButton type="button">Remove</RemoveButton>
+          <AddButton type="button" onClick={handleAddBtnClick}>
+            Add
+          </AddButton>
+          <RemoveButton type="button" onClick={handleRemoveBtnClick}>
+            Remove
+          </RemoveButton>
         </div>
       </div>
     </div>

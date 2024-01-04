@@ -72,7 +72,7 @@ function AdminPage() {
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [selectedTag, setSelectedTag] = useState(null);
 
-  // state values representing the visibility of the Program Info or Tag Info
+  // boolean state values representing the visibility of the Program Info or Tag Info
   const [showProgramInfo, setShowProgramInfo] = useState(false);
   const [showTagInfo, setShowTagInfo] = useState(false);
 
