@@ -46,17 +46,19 @@ export const ProgramInfo = ({
           />
         </div>
         <div>
-          <label htmlFor="ProgramEmail" className="p-2">
+          <label className="p-2">
+            {/*<label //htmlFor="ProgramEmail" className="p-2">*/}
             Contact Email
+            <input
+              type="text"
+              size="42"
+              //id="ProgramEmail"
+              name="email" // Add a name attribute
+              value={programData?.ProgramInfo.contact_email || ""}
+              onChange={handleChange}
+              autoComplete="email"
+            />
           </label>
-          <input
-            type="text"
-            size="42"
-            id="ProgramEmail"
-            name="email" // Add a name attribute
-            value={programData?.ProgramInfo.contact_email || ""}
-            onChange={handleChange}
-          />
         </div>
         <div>
           <label htmlFor="LinkToWeb" className="p-2">
@@ -71,30 +73,32 @@ export const ProgramInfo = ({
             onChange={handleChange}
           />
         </div>
-        <label htmlFor="LongDescription" className="p-2 align-top">
+        <label className="p-2 align-top">
+          {/*<label htmlFor="LongDescription" className="p-2 align-top">*/}
           Long Description
-        </label>
-        <div>
-          <textarea
-            cols="54"
-            rows="11"
-            id="LongDescription"
-            name="description" // Add a name attribute
-            value={programData?.ProgramInfo.long_description || ""}
-            onChange={handleChange}
-          ></textarea>
-        </div>
-        <div style={{ maxWidth: "500px", margin: "auto" }} className="p-2">
-          <label htmlFor="Select Tags" className="p-2">
-            Select Tags
-          </label>
           <div>
-            <Select
-              defaultValue={associatedTags || []} // if null, empty array
-              options={allProgramTags}
-              isMulti
-            />
+            <textarea
+              cols="54"
+              rows="11"
+              //id="LongDescription"
+              name="description" // Add a name attribute
+              value={programData?.ProgramInfo.long_description || ""}
+              onChange={handleChange}
+            ></textarea>
           </div>
+        </label>
+        <div style={{ maxWidth: "500px", margin: "auto" }} className="p-2">
+          {/*<label htmlFor="Select Tags" className="p-2">*/}
+          <label className="p-2">
+            Select Tags
+            <div>
+              <Select
+                defaultValue={associatedTags || []} // if null, empty array
+                options={allProgramTags}
+                isMulti
+              />
+            </div>
+          </label>
         </div>
         <div className="mt-3">
           <input
