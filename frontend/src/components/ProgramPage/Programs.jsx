@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Card, Row, Col, Button } from "react-bootstrap";
 import Viking from "../../image/viking.png";
+
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 const Programs = ({ selectedTagIds }) => {
   const [programs, setPrograms] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(9); // Adjust the number of items per page as needed
 
   useEffect(() => {
     const fetchPrograms = async () => {
@@ -23,60 +26,93 @@ const Programs = ({ selectedTagIds }) => {
     fetchPrograms();
   }, [selectedTagIds]);
 
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = programs.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   const noProgramsAfterFilter =
     selectedTagIds.size === 0 && programs.length === 0;
 
   return (
-    <Row className="g-4">
-      {programs.map((program, index) => (
-        <Col key={index} md={4} className="mb-4">
-          <Card className="w-100">
-            <Card.Body>
-              <Card.Title>{program.title}</Card.Title>
-              <Card.Text>
-                Lead Contact: {program.lead_contact}
-                <br />
-                Contact Email:{" "}
-                <a href={`mailto:${program.contact_email}`}>
-                  {program.contact_email}
-                </a>
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer className="text-center">
-              <Button
-                variant="primary"
-                href={program.link_to_web}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learn More
-              </Button>
-            </Card.Footer>
-          </Card>
-        </Col>
-      ))}
-      {noProgramsAfterFilter && (
-        <Col xs={12} className="text-center mt-3">
-          {" "}
-          <div className="mt-5">
-            {" "}
-            <h4 className="text-center" style={{ color: "green" }}>
-              No Programs Found, Please Deselect Some Tags!
-            </h4>
-            <img
-              src={Viking}
-              alt="Viking"
-              style={{
-                width: "250px",
-                height: "auto",
-                display: "block",
-                margin: "1rem auto",
-              }}
-            />
-          </div>
-        </Col>
-      )}
-    </Row>
+    <>
+      <Row className="g-4">
+        {currentItems.map((program, index) => (
+          <Col key={index} md={4} className="mb-4">
+            <Card className="w-100">
+              <Card.Body>
+                <Card.Title>{program.title}</Card.Title>
+                <Card.Text>
+                  Lead Contact: {program.lead_contact}
+                  <br />
+                  Contact Email:{" "}
+                  <a href={`mailto:${program.contact_email}`}>
+                    {program.contact_email}
+                  </a>
+                </Card.Text>
+              </Card.Body>
+              <Card.Footer className="text-center">
+                <Button
+                  variant="primary"
+                  href={program.link_to_web}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Learn More
+                </Button>
+              </Card.Footer>
+            </Card>
+          </Col>
+        ))}
+        {noProgramsAfterFilter && (
+          <Col xs={12} className="text-center mt-3">
+            <div className="mt-5">
+              <h4 className="text-center" style={{ color: "green" }}>
+                No Programs Found, Please Deselect Some Tags!
+              </h4>
+              <img
+                src={Viking}
+                alt="Viking"
+                style={{
+                  width: "250px",
+                  height: "auto",
+                  display: "block",
+                  margin: "1rem auto",
+                }}
+              />
+            </div>
+          </Col>
+        )}
+      </Row>
+      <Pagination
+        itemsPerPage={itemsPerPage}
+        totalItems={programs.length}
+        paginate={paginate}
+      />
+    </>
+  );
+};
+
+const Pagination = ({ itemsPerPage, totalItems, paginate }) => {
+  const pageNumbers = [];
+
+  for (let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  return (
+    <nav>
+      <ul className="pagination">
+        {pageNumbers.map((number) => (
+          <li key={number} className="page-item">
+            <button onClick={() => paginate(number)} className="page-link">
+              {number}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 };
 
