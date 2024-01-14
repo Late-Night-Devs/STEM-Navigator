@@ -40,16 +40,20 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
           />
         </div>
         <div style={{ maxWidth: "500px", margin: "auto" }} className="p-2">
-          <label htmlFor="Select Category" className="p-2">
+          <label className="p-2">
             Select Category
+            <div style={{ paddingLeft: "50px", paddingRight: "50px" }}>
+              <Select
+                options={categories}
+                onChange={handleCategoryChange}
+                value={
+                  tagData
+                    ? categories.find((c) => c.value === tagData.category)
+                    : null
+                }
+              />
+            </div>
           </label>
-        </div>
-        {/* TODO this should change to show the current selected tag's category on clicking a tag */}
-        <div style={{ paddingLeft: "50px", paddingRight: "50px" }}>
-          <Select
-            options={categories}
-            onChange={handleCategoryChange} // update tagData with selected category
-          />
         </div>
 
         <div className="mt-3">
