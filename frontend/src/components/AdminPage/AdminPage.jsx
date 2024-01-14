@@ -3,7 +3,7 @@ import { Row, Col } from "react-bootstrap"; // Make sure to import Bootstrap com
 import { ButtonList } from "./ButtonList";
 import { ProgramInfo } from "./ProgramInfo";
 import { TagInfo } from "./TagInfo";
-import useFetchData from "./useFetchData";
+import useFetchData from "./useData";
 import { useAuth0 } from "@auth0/auth0-react"; // Import the Auth0 hook
 import styled from "styled-components";
 
@@ -250,6 +250,7 @@ function AdminPage() {
             <TagInfo
               tagData={selectedTagInfo}
               categories={formattedCategories}
+              onTagDataChange={setSelectedTagInfo}
             />
           )}
           {!showTagInfo && !showProgramInfo && (

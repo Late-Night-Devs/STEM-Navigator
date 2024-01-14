@@ -1,18 +1,31 @@
 import React from "react";
 import Select from "react-select";
+import { usePostData } from "./useData"; // should be used to post data to the backend
 
 export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
-  // Accept tagData and onTagDataChange as props
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    onTagDataChange({ ...tagData, [name]: value });
+    onTagDataChange({ ...tagData, [name]: value }); // append or edit value
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // handle form submission here
+    // gather the payload data
+    // post to the backend
+    console.log("Submitting form to backend");
+  };
+
+  const handleCategoryChange = (selectedOption) => {
+    onTagDataChange({ ...tagData, category: selectedOption.value });
+    // handle the category change
+    console.log("Changing selected tag category to " + selectedOption.value);
   };
 
   return (
     <div className="text-center border border-dark rounded-5 p-2 m-3 flex-fill">
       ;<h2>Tag Info</h2>
-      <form action="">
+      <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="TagName" className="p-2">
             Tag Name
@@ -33,7 +46,10 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
         </div>
         {/* TODO this should change to show the current selected tag's category on clicking a tag */}
         <div style={{ paddingLeft: "50px", paddingRight: "50px" }}>
-          <Select options={categories} />
+          <Select
+            options={categories}
+            onChange={handleCategoryChange} // update tagData with selected category
+          />
         </div>
 
         <div className="mt-3">
