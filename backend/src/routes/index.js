@@ -18,5 +18,6 @@ router.use("/program-tags", programTagsRoutes);
 router.use("/admin", adminRoutes);
 
 // for USERS table
+// testing localhost:3000/user
 router.use("/user", userRoutes);
 module.exports = router;
