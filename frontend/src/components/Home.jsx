@@ -1,11 +1,10 @@
 import React from "react";
-
+// import logo2 from "../img/hero-image.png";
 
 function Home() {
   return (
     <div className="m-auto">
       <div className="">
-   
         <header>
           <h1 className="welcome text-primary text-center p-5">
             welcome home page
