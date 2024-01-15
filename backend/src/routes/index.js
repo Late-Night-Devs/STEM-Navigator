@@ -5,6 +5,7 @@ const programRoutes = require("./programRoutes");
 const tagRoutes = require("./tagRoutes");
 const programTagsRoutes = require("./programTagsRoutes");
 const adminRoutes = require("./adminRoutes");
+const userRoutes = require("./userRoutes");
 
 // PATH localhost:3000/programs/${programRoutes}
 router.use("/programs", programRoutes);
@@ -16,4 +17,6 @@ router.use("/program-tags", programTagsRoutes);
 
 router.use("/admin", adminRoutes);
 
+// for USERS table
+router.use("/user", userRoutes);
 module.exports = router;
