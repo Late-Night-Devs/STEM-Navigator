@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Dropdown } from 'react-bootstrap';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Link } from 'react-router-dom';
+import loadingBtn from '../../image/loadingBtn.gif'
 const LogInOutBtn = () => {
     const { loginWithRedirect, logout, isAuthenticated, isLoading, user } = useAuth0();
     const getUserInitials = (name) => {
@@ -13,7 +14,9 @@ const LogInOutBtn = () => {
             {/* User authentication section */}
             {isLoading ? (
                 // Display loading indicator when authentication status is being determined
-                <nav className="text-white"> ... </nav>
+                <div className="text-white px-2">
+                    <img src={loadingBtn} alt="Loading indicator" style={{ width: '20px', height: '20px' }} />
+                </div>
             ) : isAuthenticated ? (
                 // If authenticated, show user's profile and logout option
                 <Dropdown>

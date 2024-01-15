@@ -9,21 +9,23 @@ import ProgramTab from "./components/ProgramPage/ProgramTab.jsx";
 import Newsletter from "./components/Newsletter.jsx";
 import AdminPage from "./components/AdminPage/AdminPage.jsx";
 import Profile from "./components/Auth0/testingProfile.jsx";
+import NoticeMessage from "./components/Auth0/NoticeMessage.jsx";
 import "./App.css";
 
 function App() {
   return (
     <Router>
       <NavBar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/scholarship" element={<Scholarship />} />
-          <Route path="/calender" element={<Calender />} />
-          <Route path="/program" element={<ProgramTab />} />
-          <Route path="/newsletter" element={<Newsletter />} />
-          <Route path="/admin-modify-db" element={<AdminPage />} />
-          <Route path="/profile-testing" element={<Profile />} />
+      <NoticeMessage /> 
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/scholarship" element={<Scholarship />} />
+        <Route path="/calender" element={<Calender />} />
+        <Route path="/program" element={<ProgramTab />} />
+        <Route path="/newsletter" element={<Newsletter />} />
+        <Route path="/admin-modify-db" element={<AdminPage />} />
+        <Route path="/profile-testing" element={<Profile />} />
       </Routes>
     </Router>
   );
