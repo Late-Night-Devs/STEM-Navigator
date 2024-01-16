@@ -44,7 +44,6 @@ exports.addUser = (req, res) => {
                 console.error(insertErr);
                 return res.status(500).send('Error in adding a new user');
             }
-
             return res.json({ message: 'User added successfully', user: newUser });
         });
     });
