@@ -10,3 +10,5 @@ exports.getAllFavorites = (req, res) => {
         res.json(results);
     });
 };
+
+
