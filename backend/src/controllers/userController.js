@@ -1,7 +1,7 @@
 const db = require('../models/db');
 
 exports.getAllUsers = (req, res) => {
-    console.log("getAllUsers");
+    console.log("GET Req: get all users");
     db.query("SELECT * FROM Users", (err, results) => {
         if (err) {
             res.status(500).send("Error in fetching records from Users");
@@ -13,7 +13,7 @@ exports.getAllUsers = (req, res) => {
 
 exports.addUser = (req, res) => {
     const { firstName, lastName, email } = req.body;
-    console.log("add user:  ", req.body);
+    console.log("POST Req: login with user -  ", req.body);
     // Validation: Check if both first and last names are empty
     if (!firstName && !lastName) {
         return res.status(400).json({ message: 'At least one of first or last names is required' });
