@@ -35,7 +35,8 @@ exports.addUser = (req, res) => {
             first_name: firstName,
             last_name: lastName,
             email: email,
-            admin: "FALSE"
+            // I need to double-check this admin role again. 
+            admin: 'FALSE'
         };
 
         // Insert the new user into the database
