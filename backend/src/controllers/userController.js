@@ -35,12 +35,12 @@ exports.addUser = (req, res) => {
             first_name: firstName,
             last_name: lastName,
             email: email,
-            // I need to double-check this admin role again. 
+            // STILL bug here: keep showing null value when testing with postman for BE and DB
             admin: 'FALSE'
         };
 
         // Insert the new user into the database
-        db.query('INSERT INTO Users SET ?', newUser, (insertErr, insertResults) => {
+        db.query('INSERT INTO Users SET ?', newUser, (insertErr) => {
             if (insertErr) {
                 console.error(insertErr);
                 return res.status(500).send('Error in adding a new user');
@@ -50,9 +50,3 @@ exports.addUser = (req, res) => {
     });
 };
 
-
-/*
-
-
- 
-*/
