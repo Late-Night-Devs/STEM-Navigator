@@ -7,7 +7,15 @@ const LoginCheckMessage = () => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      setShowVerificationNotice(true);
+      // Delay the appearance of the message by 2s
+      const delay = 1000;
+
+      const timeoutId = setTimeout(() => {
+        setShowVerificationNotice(true);
+      }, delay);
+
+      // Clear the timeout if the component unmounts
+      return () => clearTimeout(timeoutId);
     } else {
       setShowVerificationNotice(false);
     }
@@ -15,19 +23,21 @@ const LoginCheckMessage = () => {
 
   return (
     <div>
-      {showVerificationNotice && (
-        <div
-          style={{
-            backgroundColor: "#5C5394",
-            color: "white",
-            textAlign: "center",
-          }}
-        >
-          <p className="p-2 mb-0">
-            Please login with an email account to save your progress.
-          </p>
-        </div>
-      )}
+      <div
+        className={`fade ${
+          showVerificationNotice ? "show" : "hide"
+        }`}
+        // role="alert"
+        style={{
+          backgroundColor: "#5C5394",
+          color: "white",
+          textAlign: "center",
+        }}
+      >
+        <p className="p-2 mb-0">
+          Please login with an email account to save your progress.
+        </p>
+      </div>
     </div>
   );
 };
