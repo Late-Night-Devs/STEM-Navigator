@@ -3,10 +3,7 @@ import { Row, Col } from "react-bootstrap"; // Make sure to import Bootstrap com
 import { ButtonList } from "./ButtonList";
 import { ProgramInfo } from "./ProgramInfo";
 import { TagInfo } from "./TagInfo";
-import useFetchData, {
-  handleRemoveSelectedTag,
-  useDeleteData,
-} from "./dataUtils";
+import useFetchData, { handleRemoveSelectedTag } from "./dataUtils";
 import { useAuth0 } from "@auth0/auth0-react"; // Import the Auth0 hook
 import styled from "styled-components";
 
@@ -183,11 +180,17 @@ function AdminPage() {
   };
 
   const handleRemoveTag = () => {
-    const onSuccess = (data) => {
+    if (selectedTag == null) {
+      console.log("no selected tag to remove");
+      return;
+    }
+    const onSuccess = (response_data) => {
       // Handle successful deletion
+      console.log(response_data);
     };
     const onError = (error) => {
       // Handle error
+      console.log(error);
     };
     handleRemoveSelectedTag(selectedTag, onError, onSuccess);
   };

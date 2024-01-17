@@ -52,7 +52,6 @@ export const handleRemoveSelectedTag = (selectedTag, onSuccess, onError) => {
       axios
         .delete(`${backend_url}/tags/${selectedTag}`)
         .then((response) => {
-          console.log("Tag deleted successfully:", response.data);
           if (onSuccess) onSuccess(response.data);
         })
         .catch((error) => {
@@ -60,9 +59,6 @@ export const handleRemoveSelectedTag = (selectedTag, onSuccess, onError) => {
           if (onError) onError(error);
         });
     }
-  } else {
-    console.log("No tag selected for deletion.");
-    if (onError) onError(new Error("No tag selected"));
   }
 };
 
