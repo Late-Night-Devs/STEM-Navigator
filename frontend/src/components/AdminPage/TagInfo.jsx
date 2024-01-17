@@ -1,6 +1,6 @@
 import React from "react";
 import Select from "react-select";
-import { usePostData } from "./useData"; // should be used to post data to the backend
+//import { usePostData } from "./useData"; // should be used to post data to the backend
 
 export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
   const handleChange = (e) => {
