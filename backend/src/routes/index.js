@@ -6,7 +6,6 @@ const tagRoutes = require("./tagRoutes");
 const programTagsRoutes = require("./programTagsRoutes");
 const adminRoutes = require("./adminRoutes");
 const userRoutes = require("./userRoutes");
-const userFavoriteRoutes = require("./userFavoriteRoutes");
 
 // PATH localhost:3000/programs/${programRoutes}
 router.use("/programs", programRoutes);
@@ -22,7 +21,5 @@ router.use("/admin", adminRoutes);
 // testing localhost:3000/user
 router.use("/user", userRoutes);
 
-// Userfavorite table
-router.use("/favorite", userFavoriteRoutes);
 
 module.exports = router;

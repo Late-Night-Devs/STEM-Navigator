@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { Card, Row, Col, Button } from "react-bootstrap";
 import Viking from "../../image/viking.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 const Programs = ({ selectedTagIds }) => {
   const [programs, setPrograms] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(9); // Adjust the number of items per page as needed
+  const [itemsPerPage] = useState(9);
 
   useEffect(() => {
     const fetchPrograms = async () => {
@@ -32,37 +36,14 @@ const Programs = ({ selectedTagIds }) => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const noProgramsAfterFilter =
-    selectedTagIds.size === 0 && programs.length === 0;
+  const noProgramsAfterFilter = currentItems.length === 0;
 
   return (
     <>
       <Row className="g-4">
-        {currentItems.map((program, index) => (
-          <Col key={index} md={4} className="mb-4">
-            <Card className="w-100">
-              <Card.Body>
-                <Card.Title>{program.title}</Card.Title>
-                <Card.Text>
-                  Lead Contact: {program.lead_contact}
-                  <br />
-                  Contact Email:{" "}
-                  <a href={`mailto:${program.contact_email}`}>
-                    {program.contact_email}
-                  </a>
-                </Card.Text>
-              </Card.Body>
-              <Card.Footer className="text-center">
-                <Button
-                  variant="primary"
-                  href={program.link_to_web}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Learn More
-                </Button>
-              </Card.Footer>
-            </Card>
+        {currentItems.map((program) => (
+          <Col key={program.id} md={4} className="mb-4">
+            <ProgramCard program={program} />
           </Col>
         ))}
         {noProgramsAfterFilter && (
@@ -91,6 +72,93 @@ const Programs = ({ selectedTagIds }) => {
         paginate={paginate}
       />
     </>
+  );
+};
+
+
+const ProgramCard = ({program}) => {
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [userID, setUserID] = useState(null);
+  const { user, isAuthenticated } = useAuth0();
+
+  const fetchUserID = useCallback(async () => {
+    if (isAuthenticated && user?.email_verified) {
+      try {
+        const userResponse = await axios.get(`${backend_url}/user/findUserID`, {
+          params: { email: user.email },
+        });
+        setUserID(userResponse.data.userID);
+      } catch (error) {
+        console.error("Error fetching userID:", error);
+      }
+    }
+  }, [isAuthenticated, user?.email_verified, user?.email]);
+
+  useEffect(() => {
+    // Call the memoized fetchUserID function
+    fetchUserID();
+  }, []);
+  
+  const toggleFavorite = async () => {
+    // Add logic to check if user email is verified
+    if (isAuthenticated && userID !== null) {
+      const favoriteRequest = isFavorite ? "removeFavorite" : "addFavorite";
+      const url = `${backend_url}/user/favorite/${favoriteRequest}`;
+
+      const requestData = {
+        userID: userID,
+        programID: program.id,
+      };
+
+      console.log("this is programID for the request -- ", program.id);
+      try {
+        const response = await axios.post(url, requestData);
+        console.log(response.data);
+        setIsFavorite((prevIsFavorite) => !prevIsFavorite);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    } else {
+      console.log(
+        "User email is not verified. Please verify your email before using the bookmark."
+      );
+      // You can show a message or take any other action here
+      return;
+    }
+  };
+  return (
+    <Card className="w-100 position-relative">
+      <FontAwesomeIcon
+        icon={isFavorite ? solidStar : regularStar}
+        className="star-icon position-absolute top-0 end-0 m-2"
+        onClick={toggleFavorite}
+        style={{
+          cursor: "pointer",
+          color: isFavorite ? "gold" : "grey",
+        }}
+      />
+      <Card.Body>
+        <Card.Title>{program.title}</Card.Title>
+        <Card.Text>
+          Lead Contact: {program.lead_contact}
+          <br />
+          Contact Email:{" "}
+          <a href={`mailto:${program.contact_email}`}>
+            {program.contact_email}
+          </a>
+        </Card.Text>
+      </Card.Body>
+      <Card.Footer className="text-center">
+        <Button
+          variant="primary"
+          href={program.link_to_web}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn More
+        </Button>
+      </Card.Footer>
+    </Card>
   );
 };
 

@@ -11,6 +11,27 @@ exports.getAllUsers = (req, res) => {
     });
 };
 
+exports.findUserID = (req, res) => {
+    const { email } = req.query;
+    console.log(`GET Req: find user ID for email - ${email}`);
+
+    db.query("SELECT user_id FROM Users WHERE email = ?", [email], (err, results) => {
+        if (err) {
+            res.status(500).send("Error in fetching user ID from Users");
+            return;
+        }
+
+        if (results.length === 0) {
+            res.status(404).json({ message: 'User not found with this email' });
+            return;
+        }
+
+        const userID = results[0].user_id;
+        res.json({ userID });
+    });
+};
+
+
 exports.addUser = (req, res) => {
     const { firstName, lastName, email } = req.body;
     console.log("POST Req: login with user -  ", req.body);
@@ -27,7 +48,7 @@ exports.addUser = (req, res) => {
         }
 
         if (selectResults.length > 0) {
-            return res.status(409).json({ message: 'User with this email already exists' });
+            return res.status(400).json({ message: 'User with this email already exists' });
         }
 
         // Assuming you have a Users table with columns: id, first_name, last_name, email
