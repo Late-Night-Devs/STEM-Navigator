@@ -122,7 +122,6 @@ const ProgramCard = ({program}) => {
       console.log(
         "User email is not verified. Please verify your email before using the bookmark."
       );
-      // You can show a message or take any other action here
       return;
     }
   };
