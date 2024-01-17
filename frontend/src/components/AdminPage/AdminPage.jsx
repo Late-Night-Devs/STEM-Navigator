@@ -207,6 +207,8 @@ function AdminPage() {
     setAddingTag(false);
     setSelectedProgram(null);
     setSelectedProgramInfo(null);
+    setSelectedTag(null);
+    setSelectedTagInfo(null);
   };
 
   const handleAddTag = () => {
@@ -214,6 +216,8 @@ function AdminPage() {
     setAddingProgram(false);
     setSelectedTag(null);
     setSelectedTagInfo(null);
+    setSelectedProgram(null);
+    setSelectedProgramInfo(null);
   };
 
   const handleRemoveTag = () => {
