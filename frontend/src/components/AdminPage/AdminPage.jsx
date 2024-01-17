@@ -3,7 +3,7 @@ import { Row, Col } from "react-bootstrap"; // Make sure to import Bootstrap com
 import { ButtonList } from "./ButtonList";
 import { ProgramInfo } from "./ProgramInfo";
 import { TagInfo } from "./TagInfo";
-import useFetchData, { handleRemoveSelectedTag } from "./dataUtils";
+import useFetchData, { handleDelete } from "./dataUtils";
 import { useAuth0 } from "@auth0/auth0-react"; // Import the Auth0 hook
 import styled from "styled-components";
 
@@ -172,11 +172,25 @@ function AdminPage() {
 
   const handleRemoveProgram = () => {
     // remove the selected program (if there is one)
-    if (selectedProgram != null) {
-      console.log("request remove program: " + selectedProgram.toString());
-      // give a warning?
-      // make call to backend to remove this program (and associated programTag entries) from the database
+    if (selectedProgram == null) {
+      console.log("no selected program to remove");
+      return;
     }
+    const onSuccess = (response_data) => {
+      // Handle successful deletion
+      console.log(response_data);
+    };
+    const onError = (error) => {
+      // Handle error
+      console.log(error);
+    };
+    handleDelete(
+      "programs",
+      selectedProgram,
+      "are you sure you want to delete the selected program?",
+      onError,
+      onSuccess
+    );
   };
 
   const handleRemoveTag = () => {
@@ -192,7 +206,13 @@ function AdminPage() {
       // Handle error
       console.log(error);
     };
-    handleRemoveSelectedTag(selectedTag, onError, onSuccess);
+    handleDelete(
+      "tags",
+      selectedTag,
+      "are you sure you want to delete the selected tag?",
+      onSuccess,
+      onError
+    );
   };
 
   useEffect(() => {

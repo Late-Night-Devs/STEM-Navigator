@@ -46,16 +46,24 @@ const usepostdata = (endpoint, payload) => {
 };
 */
 
-export const handleRemoveSelectedTag = (selectedTag, onSuccess, onError) => {
-  if (selectedTag != null) {
-    if (window.confirm(`Are you sure you want to delete the tag?`)) {
+// generic way to handle deleting a resource from the backend by dynamically building the backend endpoint
+// this allows us to delete tags and programs with the same functionality
+export const handleDelete = (
+  resourceType,
+  resourceId,
+  confirmMessage, 
+  onSuccess,
+  onError
+) => {
+  if (resourceId != null) {
+    if (window.confirm(confirmMessage)) {
       axios
-        .delete(`${backend_url}/tags/${selectedTag}`)
+        .delete(`${backend_url}/${resourceType}/${resourceId}`)
         .then((response) => {
           if (onSuccess) onSuccess(response.data);
         })
         .catch((error) => {
-          console.error("Error deleting tag:", error);
+          console.error(`Error deleting ${resourceType}:`, error);
           if (onError) onError(error);
         });
     }
