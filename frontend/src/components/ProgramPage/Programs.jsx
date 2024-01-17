@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Card, Row, Col, Button } from "react-bootstrap";
-import Viking from "../image/viking.png";
+import Viking from "../../image/viking.png";
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 const Programs = ({ selectedTagIds }) => {

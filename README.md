@@ -16,16 +16,17 @@ camps, courses, and other similar offerings all from within one web application.
 
 
 # How to run the application:
+- `cd` into the correct directory before each part
+
 ## Front End:
-- `npm i `
-- `npm start `
+- `npm i`
+- `npm start`
 
 ## Back End
 - `npm i `
-- `node fetchdata.js`
-- `localhost:3000`
+- `node server.js`
   
 ## Database ( db-dump )
 - Running the docker app first
-- `docker compose up -d`
-- Add tables to the database:  example: `docker exec -i db mysql -uroot -pmy-secret db < file1.sql`
+- Build n run the docker compose file: `docker compose up -d`
+- Create tables and feed data: `docker exec -i db mysql -uroot -pmy-secret db < stem_navigator.sql`

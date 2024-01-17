@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Card, Container, Row, Col, Form } from "react-bootstrap";
-import "../CSS/FilterByTag.css";
+import "../../CSS/FilterByTag.css";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
@@ -76,8 +76,6 @@ const FilterByTag = ({ setSelectedTagIds }) => {
           </Col>
         ))}
       </Row>
-
-
 
       {/* maybe this is used to add reset filter btn or any options later */}
     </Container>

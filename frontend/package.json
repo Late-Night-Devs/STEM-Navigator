@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.3",
     "axios": "^1.6.1",
     "bootstrap": "^5.3.2",
     "react": "^18.2.0",
@@ -10,6 +11,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.19.0",
     "react-scripts": "^5.0.1",
+    "react-select": "^5.8.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
