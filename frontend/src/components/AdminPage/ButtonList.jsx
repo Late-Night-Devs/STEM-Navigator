@@ -62,6 +62,7 @@ export const ButtonList = ({
   items,
   isItemSelected,
   handleButtonClick,
+  handleRemoveBtnClick,
 }) => {
   // Function to group items by category
   const groupByCategory = (items) => {
@@ -88,15 +89,6 @@ export const ButtonList = ({
       console.log("Use backend api to add item to database");
     } catch (error) {
       console.error("Error adding program:", error);
-    }
-  };
-  const handleRemoveBtnClick = () => {
-    try {
-      // try to add the entry to the database
-      // by using an API endpoint with axios
-      console.log("Use backend api to remove item from database");
-    } catch (error) {
-      console.error("Error removing program:", error);
     }
   };
 

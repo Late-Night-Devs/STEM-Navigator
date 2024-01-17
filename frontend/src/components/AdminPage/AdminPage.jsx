@@ -170,6 +170,24 @@ function AdminPage() {
     }
   };
 
+  const handleRemoveProgram = () => {
+    // remove the selected program (if there is one)
+    if (selectedProgram != null) {
+      console.log("request remove program: " + selectedProgram.toString());
+      // give a warning?
+      // make call to backend to remove this program (and associated programTag entries) from the database
+    }
+  };
+
+  const handleRemoveTag = () => {
+    // remove the selected tag (if there is one)
+    if (selectedTag != null) {
+      console.log("request remove tag: " + selectedTag.toString());
+      // give a warning?
+      // make call to backend to remove this tag (and associated programTag entries) from the database
+    }
+  };
+
   useEffect(() => {
     // This block will be executed after the component has re-rendered
     // when the selectedProgram changes state, update the visibility of ProgramInfo
@@ -227,12 +245,14 @@ function AdminPage() {
             items={programItems}
             isItemSelected={isProgramSelected}
             handleButtonClick={handleProgramClick}
+            handleRemoveBtnClick={handleRemoveProgram}
           />
           <ButtonList
             name="Tags"
             items={tagItems}
             isItemSelected={isTagSelected}
             handleButtonClick={handleTagClick}
+            handleRemoveBtnClick={handleRemoveTag}
           />
         </Col>
 
