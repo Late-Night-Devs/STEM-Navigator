@@ -79,6 +79,10 @@ function AdminPage() {
   const [selectedProgramInfo, setSelectedProgramInfo] = useState(null);
   const [selectedTagInfo, setSelectedTagInfo] = useState(null);
 
+  // handle add btn press
+  const [addingProgram, setAddingProgram] = useState(false);
+  const [addingTag, setAddingTag] = useState(false);
+
   // Transform programs data for ButtonList
   const programItems = programs
     .map((program) => ({
@@ -99,6 +103,8 @@ function AdminPage() {
     .sort((a, b) => a.name.localeCompare(b.name));
 
   const handleProgramClick = (program) => {
+    setAddingProgram(false);
+    setAddingTag(false);
     // if clicking a selected program, deselect it
     if (program.id === selectedProgram) {
       setSelectedProgram(null);
@@ -158,6 +164,9 @@ function AdminPage() {
 
   const handleTagClick = (tag) => {
     // if clicking a selected tag, deselect it
+    setAddingProgram(false);
+    setAddingTag(false);
+
     if (tag.id === selectedTag) {
       setSelectedTag(null);
       setSelectedTagInfo(null);
@@ -191,6 +200,20 @@ function AdminPage() {
       onError,
       onSuccess
     );
+  };
+
+  const handleAddProgram = () => {
+    setAddingProgram(true);
+    setAddingTag(false);
+    setSelectedProgram(null);
+    setSelectedProgramInfo(null);
+  };
+
+  const handleAddTag = () => {
+    setAddingTag(true);
+    setAddingProgram(false);
+    setSelectedTag(null);
+    setSelectedTagInfo(null);
   };
 
   const handleRemoveTag = () => {
@@ -273,6 +296,7 @@ function AdminPage() {
             isItemSelected={isProgramSelected}
             handleButtonClick={handleProgramClick}
             handleRemoveBtnClick={handleRemoveProgram}
+            handleAddBtnClick={handleAddProgram}
           />
           <ButtonList
             name="Tags"
@@ -280,6 +304,7 @@ function AdminPage() {
             isItemSelected={isTagSelected}
             handleButtonClick={handleTagClick}
             handleRemoveBtnClick={handleRemoveTag}
+            handleAddBtnClick={handleAddTag}
           />
         </Col>
 
@@ -287,7 +312,6 @@ function AdminPage() {
           {showProgramInfo && (
             <ProgramInfo
               // using a 'key' prop forces a re-render when the key changes.
-
               key={selectedProgram || "default-key"}
               programData={selectedProgramInfo}
               allProgramTags={formattedProgramTags}
@@ -300,7 +324,23 @@ function AdminPage() {
               onTagDataChange={setSelectedTagInfo}
             />
           )}
-          {!showTagInfo && !showProgramInfo && (
+          {/* render the blank form for adding new program */}
+          {addingProgram && (
+            <ProgramInfo
+              programData={{}}
+              allProgramTags={formattedProgramTags}
+            />
+          )}
+          {/* render the blank form for adding new tag */}
+          {addingTag && (
+            <TagInfo
+              tagData={{}}
+              categories={formattedCategories}
+              onTagDataChange={setSelectedTagInfo}
+            />
+          )}
+
+          {!showTagInfo && !showProgramInfo && !addingProgram && !addingTag && (
             <DefaultMessage>
               <p>Click on a Program or Tag to show information here.</p>
             </DefaultMessage>

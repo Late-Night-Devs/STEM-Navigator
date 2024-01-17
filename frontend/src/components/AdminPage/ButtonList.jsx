@@ -63,6 +63,7 @@ export const ButtonList = ({
   isItemSelected,
   handleButtonClick,
   handleRemoveBtnClick,
+  handleAddBtnClick,
 }) => {
   // Function to group items by category
   const groupByCategory = (items) => {
@@ -82,6 +83,7 @@ export const ButtonList = ({
   // Get category names and sort them alphabetically
   const sortedCategories = Object.keys(groupedItems).sort();
 
+  /*
   const handleAddBtnClick = () => {
     try {
       // try to add the entry to the database
@@ -91,6 +93,7 @@ export const ButtonList = ({
       console.error("Error adding program:", error);
     }
   };
+  */
 
   return (
     <div className="mb-5" style={{ minHeight: "125px" }}>

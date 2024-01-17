@@ -24,7 +24,7 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
 
   return (
     <div className="text-center border border-dark rounded-5 p-2 m-3 flex-fill">
-      ;<h2>Tag Info</h2>
+      <h2>Tag Info</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="TagName" className="p-2">

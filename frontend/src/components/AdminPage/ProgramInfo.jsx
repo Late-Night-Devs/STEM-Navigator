@@ -28,7 +28,7 @@ export const ProgramInfo = ({
             size="42"
             id="ProgramName"
             name="title" // Add a name attribute
-            value={programData?.ProgramInfo.title || ""}
+            value={programData?.ProgramInfo?.title || ""}
             onChange={handleChange}
           />
         </div>
@@ -41,7 +41,7 @@ export const ProgramInfo = ({
             size="42"
             id="ProgramLeadContact"
             name="leadContact" // Add a name attribute
-            value={programData?.ProgramInfo.lead_contact || ""}
+            value={programData?.ProgramInfo?.lead_contact || ""}
             onChange={handleChange}
           />
         </div>
@@ -54,7 +54,7 @@ export const ProgramInfo = ({
               size="42"
               //id="ProgramEmail"
               name="email" // Add a name attribute
-              value={programData?.ProgramInfo.contact_email || ""}
+              value={programData?.ProgramInfo?.contact_email || ""}
               onChange={handleChange}
               autoComplete="email"
             />
@@ -69,7 +69,7 @@ export const ProgramInfo = ({
             size="42"
             id="LinkToWeb"
             name="link" // Add a name attribute
-            value={programData?.ProgramInfo.link_to_web || ""}
+            value={programData?.ProgramInfo?.link_to_web || ""}
             onChange={handleChange}
           />
         </div>
@@ -82,7 +82,7 @@ export const ProgramInfo = ({
               rows="11"
               //id="LongDescription"
               name="description" // Add a name attribute
-              value={programData?.ProgramInfo.long_description || ""}
+              value={programData?.ProgramInfo?.long_description || ""}
               onChange={handleChange}
             ></textarea>
           </div>
