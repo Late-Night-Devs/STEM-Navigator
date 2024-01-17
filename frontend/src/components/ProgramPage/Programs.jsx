@@ -10,7 +10,6 @@ const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 const Programs = ({ selectedTagIds }) => {
   const [programs, setPrograms] = useState([]);
-  const [favorites, setFavorites] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(9);
 
@@ -30,59 +29,20 @@ const Programs = ({ selectedTagIds }) => {
     fetchPrograms();
   }, [selectedTagIds]);
 
-  const toggleFavorite = (programId) => {
-    setFavorites((prevFavorites) => ({
-      ...prevFavorites,
-      [programId]: !prevFavorites[programId],
-    }));
-  };
-
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = programs.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const noProgramsAfterFilter =
-    selectedTagIds.size === 0 && programs.length === 0;
+  const noProgramsAfterFilter = currentItems.length === 0;
 
   return (
     <>
       <Row className="g-4">
         {currentItems.map((program) => (
           <Col key={program.id} md={4} className="mb-4">
-            <Card className="w-100 position-relative">
-              <FontAwesomeIcon
-                icon={favorites[program.id] ? solidStar : regularStar}
-                className="star-icon position-absolute top-0 end-0 m-2"
-                onClick={() => toggleFavorite(program.id)}
-                style={{
-                  cursor: "pointer",
-                  color: favorites[program.id] ? "gold" : "grey",
-                }}
-              />
-              <Card.Body>
-                <Card.Title>{program.title}</Card.Title>
-                <Card.Text>
-                  Lead Contact: {program.lead_contact}
-                  <br />
-                  Contact Email:{" "}
-                  <a href={`mailto:${program.contact_email}`}>
-                    {program.contact_email}
-                  </a>
-                </Card.Text>
-              </Card.Body>
-              <Card.Footer className="text-center">
-                <Button
-                  variant="primary"
-                  href={program.link_to_web}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Learn More
-                </Button>
-              </Card.Footer>
-            </Card>
+            <ProgramCard program={program} />
           </Col>
         ))}
         {noProgramsAfterFilter && (
@@ -111,6 +71,49 @@ const Programs = ({ selectedTagIds }) => {
         paginate={paginate}
       />
     </>
+  );
+};
+
+const ProgramCard = ({ program }) => {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const toggleFavorite = () => {
+    setIsFavorite((prevIsFavorite) => !prevIsFavorite);
+  };
+
+  return (
+    <Card className="w-100 position-relative">
+      <FontAwesomeIcon
+        icon={isFavorite ? solidStar : regularStar}
+        className="star-icon position-absolute top-0 end-0 m-2"
+        onClick={toggleFavorite}
+        style={{
+          cursor: "pointer",
+          color: isFavorite ? "gold" : "grey",
+        }}
+      />
+      <Card.Body>
+        <Card.Title>{program.title}</Card.Title>
+        <Card.Text>
+          Lead Contact: {program.lead_contact}
+          <br />
+          Contact Email:{" "}
+          <a href={`mailto:${program.contact_email}`}>
+            {program.contact_email}
+          </a>
+        </Card.Text>
+      </Card.Body>
+      <Card.Footer className="text-center">
+        <Button
+          variant="primary"
+          href={program.link_to_web}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn More
+        </Button>
+      </Card.Footer>
+    </Card>
   );
 };
 
