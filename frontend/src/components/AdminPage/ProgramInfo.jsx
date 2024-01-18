@@ -10,7 +10,6 @@ export const ProgramInfo = ({
 
   const associatedTags = programData ? programData.AssociatedTags : null;
 
-
   //const programInfo = programData ? programData.ProgramInfo : null;
   /* INCORRECT STRUCTURE
   const handleChange = (e) => {
@@ -20,13 +19,12 @@ export const ProgramInfo = ({
   */
 
   const handleChange = (e) => {
-  const { name, value } = e.target;
-  onProgramDataChange({ 
-    ...programData, 
-    ProgramInfo: { ...programData.ProgramInfo, [name]: value }
-  });
-};
-
+    const { name, value } = e.target;
+    onProgramDataChange({
+      ...programData,
+      ProgramInfo: { ...programData.ProgramInfo, [name]: value },
+    });
+  };
 
   return (
     <div className="text-center border border-dark rounded-5 p-2 m-3 flex-fill">
@@ -53,7 +51,7 @@ export const ProgramInfo = ({
             type="text"
             size="42"
             id="ProgramLeadContact"
-            name="leadContact" // Add a name attribute
+            name="lead_contact" // Add a name attribute
             value={programData?.ProgramInfo?.lead_contact || ""}
             onChange={handleChange}
           />
@@ -66,7 +64,7 @@ export const ProgramInfo = ({
               type="text"
               size="42"
               //id="ProgramEmail"
-              name="email" // Add a name attribute
+              name="contact_email" // Add a name attribute
               value={programData?.ProgramInfo?.contact_email || ""}
               onChange={handleChange}
               autoComplete="email"
@@ -81,7 +79,7 @@ export const ProgramInfo = ({
             type="text"
             size="42"
             id="LinkToWeb"
-            name="link" // Add a name attribute
+            name="link_to_web" // Add a name attribute
             value={programData?.ProgramInfo?.link_to_web || ""}
             onChange={handleChange}
           />
@@ -94,7 +92,7 @@ export const ProgramInfo = ({
               cols="54"
               rows="11"
               //id="LongDescription"
-              name="description" // Add a name attribute
+              name="long_description" // Add a name attribute
               value={programData?.ProgramInfo?.long_description || ""}
               onChange={handleChange}
             ></textarea>
