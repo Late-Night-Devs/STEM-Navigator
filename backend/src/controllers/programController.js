@@ -58,6 +58,10 @@ exports.deleteProgram = (req, res) => {
             res.status(500).send("Error in removing associated UserFavorites for the program");
             return;
         }
+
+        if (resultsUserFavorites.affectedRows === 0) {
+            console.log('No Record of program_id in UserFavorites Table');
+        }
         // 2: Delete in ProgramTags table
         db.query("DELETE FROM ProgramTags WHERE program_id = ?", [programId], (errProgramTags, resultsProgramTags) => {
             if (errProgramTags) {
@@ -65,6 +69,11 @@ exports.deleteProgram = (req, res) => {
                 res.status(500).send("Error in removing associated ProgramTags for the program");
                 return;
             }
+
+            if (resultsProgramTags.affectedRows === 0) {
+                console.log('No Record of program_id in ProgramTags Table');
+            }
+
             // 3: Delete itself
             db.query("DELETE FROM Programs WHERE program_id = ?", [programId], (errPrograms, resultsPrograms) => {
                 if (errPrograms) {
