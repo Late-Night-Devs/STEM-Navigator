@@ -16,8 +16,7 @@ router.get('/checkEmailExists', userController.checkEmailExists);
 
 router.delete('/removeUser/:userID', userController.removeUser);
 
-//  api/user/favorite 
-
+//  URL/user/favorite 
 router.get('/favorite', userFavoriteController.getAllFavorites);
 
 router.post('/favorite/addFavorite', userFavoriteController.addFavoriteProgram);
