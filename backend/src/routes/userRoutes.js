@@ -12,6 +12,8 @@ router.post('/addUser', userController.addUser);
 
 router.get('/findUserID', userController.findUserID);
 
+router.get('/checkEmailExists', userController.checkEmailExists);
+
 router.delete('/removeUser/:userID', userController.removeUser);
 
 //  api/user/favorite 

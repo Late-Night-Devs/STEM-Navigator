@@ -31,16 +31,29 @@ exports.findUserID = (req, res) => {
     });
 };
 
+exports.checkEmailExists = (req, res) => {
+    const { email } = req.query;
+
+    // Validate email format if needed
+
+    // Check if the email exists in the database
+    db.query('SELECT COUNT(*) AS count FROM Users WHERE email = ?', [email], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        const emailExists = results[0].count > 0;
+        return res.json({ exists: emailExists });
+    });
+};
 
 exports.addUser = (req, res) => {
     const { firstName, lastName, email, admin} = req.body;
     console.log("POST Req: login with user -  ", req.body);
-    // Validation: Check if both first and last names are empty
-    !firstName ? firstName = "nonFistName" : "";
-    !lastName ? lastName = "nonLastName" : "";
-
     // Validation: Check if the user already exists
     db.query('SELECT * FROM Users WHERE email = ?', [email], (selectErr, selectResults) => {
+        console.log("query data from post request in add user");
         if (selectErr) {
             console.error(selectErr);
             return res.status(500).send('Error in checking for existing user');
@@ -50,12 +63,11 @@ exports.addUser = (req, res) => {
             return res.status(400).json({ message: 'User with this email already exists' });
         }
 
-        // Assuming you have a Users table with columns: id, first_name, last_name, email
+        //  new user includes first, last, email, and admin role
         const newUser = {
             first_name: firstName,
             last_name: lastName,
             email: email,
-            // STILL bug here: keep showing null value when testing with postman for BE and DB
             admin: admin
         };
         // Insert the new user into the database
@@ -64,9 +76,8 @@ exports.addUser = (req, res) => {
                 console.error(insertErr);
                 return res.status(500).send('Error in adding a new user');
             }
-
-            const userId = insertResults.user_id; // Extract the inserted user ID
-
+            // get the userID from result set header for Post request. 
+            const userId = insertResults.insertId; 
             console.log("Return UserID from POST req: ", userId);
 
             // Include the user ID in the response

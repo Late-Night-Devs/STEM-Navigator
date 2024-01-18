@@ -4,10 +4,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import FilterByTag from "./FilterByTag";
 import Programs from "./Programs";
 import "../../CSS/ProgramTab.css";
+import Cookies from "js-cookie";
 
 function ProgramTab() {
   const [selectedTagIds, setSelectedTagIds] = useState(new Set());
-
+    console.log(
+      "checking userID stored or not in program tab: ",
+      Cookies.get("cookieUId")
+    );
   return (
     <Container fluid>
       <Row class="img-hero-welcome">

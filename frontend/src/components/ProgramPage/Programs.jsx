@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import { useAuth0 } from "@auth0/auth0-react";
+import Cookies from "js-cookie";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
@@ -81,24 +82,6 @@ const ProgramCard = ({program}) => {
   const [userID, setUserID] = useState(null);
   const { user, isAuthenticated } = useAuth0();
 
-  const fetchUserID = useCallback(async () => {
-    if (isAuthenticated && user?.email_verified) {
-      try {
-        const userResponse = await axios.get(`${backend_url}/user/findUserID`, {
-          params: { email: user.email },
-        });
-        setUserID(userResponse.data.userID);
-      } catch (error) {
-        console.error("Error fetching userID:", error);
-      }
-    }
-  }, [isAuthenticated, user?.email_verified, user?.email]);
-
-  useEffect(() => {
-    // Call the memoized fetchUserID function
-    fetchUserID();
-  }, []);
-  
   const toggleFavorite = async () => {
     // Add logic to check if user email is verified
     if (isAuthenticated && userID !== null) {
