@@ -12,6 +12,8 @@ router.post('/addUser', userController.addUser);
 
 router.get('/findUserID', userController.findUserID);
 
+router.delete('/removeUser/:userID', userController.removeUser);
+
 //  api/user/favorite 
 
 router.get('/favorite', userFavoriteController.getAllFavorites);

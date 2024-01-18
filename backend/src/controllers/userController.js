@@ -33,12 +33,11 @@ exports.findUserID = (req, res) => {
 
 
 exports.addUser = (req, res) => {
-    const { firstName, lastName, email } = req.body;
+    const { firstName, lastName, email, admin} = req.body;
     console.log("POST Req: login with user -  ", req.body);
     // Validation: Check if both first and last names are empty
-    if (!firstName && !lastName) {
-        return res.status(400).json({ message: 'At least one of first or last names is required' });
-    }
+    !firstName ? firstName = "nonFistName" : "";
+    !lastName ? lastName = "nonLastName" : "";
 
     // Validation: Check if the user already exists
     db.query('SELECT * FROM Users WHERE email = ?', [email], (selectErr, selectResults) => {
@@ -57,17 +56,41 @@ exports.addUser = (req, res) => {
             last_name: lastName,
             email: email,
             // STILL bug here: keep showing null value when testing with postman for BE and DB
-            admin: 'FALSE'
+            admin: admin
         };
-
         // Insert the new user into the database
-        db.query('INSERT INTO Users SET ?', newUser, (insertErr) => {
+        db.query('INSERT INTO Users SET ?', newUser, (insertErr, insertResults) => {
             if (insertErr) {
                 console.error(insertErr);
                 return res.status(500).send('Error in adding a new user');
             }
-            return res.json({ message: 'User added successfully', user: newUser });
+
+            const userId = insertResults.user_id; // Extract the inserted user ID
+
+            console.log("Return UserID from POST req: ", userId);
+
+            // Include the user ID in the response
+            return res.json({ message: 'User added successfully', user: { ...newUser, id: userId } });
         });
     });
 };
 
+exports.removeUser = (req, res) => {
+    const { userID } = req.params; // Assuming you send userID as a route parameter
+    console.log(`DELETE Req: remove user with ID - ${userID}`);
+
+    db.query("DELETE FROM Users WHERE user_id = ?", [userID], (err, results) => {
+        if (err) {
+            res.status(500).send("Error in removing user from Users");
+            return;
+        }
+
+        if (results.affectedRows === 0) {
+            // No user found with the given ID
+            res.status(404).json({ message: 'User not found with this ID' });
+            return;
+        }
+
+        res.json({ message: 'User removed successfully' });
+    });
+};

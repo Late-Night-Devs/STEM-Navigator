@@ -9,14 +9,14 @@ import ProgramTab from "./components/ProgramPage/ProgramTab.jsx";
 import Newsletter from "./components/Newsletter.jsx";
 import AdminPage from "./components/AdminPage/AdminPage.jsx";
 import Profile from "./components/Auth0/testingProfile.jsx";
-import NoticeMessage from "./components/Auth0/NoticeMessage.jsx";
+import LoginMessage from "./components/Auth0/LoginMessage.jsx";
 import "./App.css";
 
 function App() {
   return (
     <Router>
       <NavBar />
-      <NoticeMessage /> 
+      <LoginMessage /> 
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<Events />} />
