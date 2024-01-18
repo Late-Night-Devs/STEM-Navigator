@@ -32,7 +32,7 @@ const StickyColumn = styled(Col)`
   top: 50px;
   height: fit-content; // Adjust the height
   max-height: 100vh; // Limit the max height
-  overflow-y: auto; // Allow internal scrolling if content is too long
+  overflow-y: visible; // allow overflow to be visible
 `;
 
 const ErrorMessage = styled.div`

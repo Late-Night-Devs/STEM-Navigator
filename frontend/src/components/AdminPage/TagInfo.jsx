@@ -1,8 +1,7 @@
 import React from "react";
 import Select from "react-select";
 //import { usePostData } from "./useData"; // should be used to post data to the backend
-
-import { SelectContainer, StyledLabel } from "./sharedStyles.js";
+import { SelectContainer, StyledLabel, Container } from "./sharedStyles.js";
 
 export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
   const handleChange = (e) => {
@@ -25,7 +24,7 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
   };
 
   return (
-    <div className="text-center border border-dark rounded-5 p-2 m-3 flex-fill">
+    <Container>
       <h2>Tag Info</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -66,7 +65,7 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
           />
         </div>
       </form>
-    </div>
+    </Container>
   );
 };
 

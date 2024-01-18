@@ -25,6 +25,7 @@ export const ProgramInfo = ({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    /* we need to account for the case that programData might be null? */
     onProgramDataChange({
       ...programData,
       ProgramInfo: { ...programData.ProgramInfo, [name]: value },
