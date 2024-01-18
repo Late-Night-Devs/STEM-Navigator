@@ -214,10 +214,10 @@ function AdminPage() {
   };
 
   const handleAddTag = () => {
+    setSelectedTag({}); //  empty tag object
+    setSelectedTagInfo({ tag_id: "-1", tag_name: "", category: "" }); // structure of a tag
     setAddingTag(true);
     setAddingProgram(false);
-    setSelectedTag(null);
-    setSelectedTagInfo(null);
     setSelectedProgram(null);
     setSelectedProgramInfo(null);
   };
@@ -344,7 +344,7 @@ function AdminPage() {
             />
           )}
           {/* render the blank form for adding new tag */}
-          {addingTag && (
+          {addingTag && !showTagInfo && (
             <TagInfo
               tagData={{}}
               categories={formattedCategories}

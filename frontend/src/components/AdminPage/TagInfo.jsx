@@ -4,9 +4,17 @@ import Select from "react-select";
 import { SelectContainer, StyledLabel, Container } from "./sharedStyles.js";
 
 export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
+  /*
   const handleChange = (e) => {
     const { name, value } = e.target;
     onTagDataChange({ ...tagData, [name]: value }); // append or edit value
+  };
+  */
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    //console.log(`Before updating: `, tagData);
+    onTagDataChange({ ...tagData, [name]: value });
+    //console.log(`After updating: `, { ...tagData, [name]: value });
   };
 
   const handleSubmit = (e) => {
