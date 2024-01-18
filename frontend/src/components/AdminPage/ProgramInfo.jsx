@@ -2,15 +2,52 @@ import React from "react";
 import Select from "react-select";
 import styled from "styled-components";
 
+const Container = styled.div`
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 35px;
+`;
+
 const StyledLabel = styled.label`
-  padding: 0.5rem; // This is equivalent to 'p-2' in Bootstrap
   width: 100%;
+`;
+
+const StyledInput = styled.input`
+  padding: 0.5rem;
+  margin: 0.25rem 0;
+  width: 100%;
+`;
+
+const StyledTextArea = styled.textarea`
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0.25rem 0;
 `;
 
 const SelectContainer = styled.div`
   max-width: 500px;
   margin: auto;
-  padding: 0.5rem; // This is equivalent to 'p-2' in Bootstrap
+  padding: 0.25rem;
+`;
+
+const SubmitButton = styled.input`
+  background-color: green;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  margin-top: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darkgreen;
+  }
 `;
 
 export const ProgramInfo = ({
@@ -18,7 +55,6 @@ export const ProgramInfo = ({
   allProgramTags,
   onProgramDataChange,
 }) => {
-  // tags that this program has in the ProgramTags table
   const associatedTags = programData ? programData.AssociatedTags : null;
 
   const handleChange = (e) => {
@@ -30,14 +66,13 @@ export const ProgramInfo = ({
   };
 
   return (
-    <div className="text-center border border-dark rounded-5 p-2 m-3 flex-fill">
+    <Container>
       <h2>Program Info</h2>
       <form action="">
         <div>
           <StyledLabel htmlFor="ProgramName">Program Title</StyledLabel>
-          <input
+          <StyledInput
             type="text"
-            size="42"
             id="ProgramName"
             name="title"
             value={programData?.ProgramInfo?.title || ""}
@@ -46,9 +81,8 @@ export const ProgramInfo = ({
         </div>
         <div>
           <StyledLabel htmlFor="ProgramLeadContact">Lead Contact</StyledLabel>
-          <input
+          <StyledInput
             type="text"
-            size="42"
             id="ProgramLeadContact"
             name="lead_contact"
             value={programData?.ProgramInfo?.lead_contact || ""}
@@ -56,67 +90,48 @@ export const ProgramInfo = ({
           />
         </div>
         <div>
-          <StyledLabel>
-            Contact Email
-            <div>
-              <input
-                type="text"
-                size="42"
-                name="contact_email"
-                value={programData?.ProgramInfo?.contact_email || ""}
-                onChange={handleChange}
-                autoComplete="email"
-              />
-            </div>
-          </StyledLabel>
+          <StyledLabel htmlFor="ContactEmail">Contact Email</StyledLabel>
+          <StyledInput
+            type="text"
+            id="ContactEmail"
+            name="contact_email"
+            value={programData?.ProgramInfo?.contact_email || ""}
+            onChange={handleChange}
+            autoComplete="email"
+          />
         </div>
         <div>
           <StyledLabel htmlFor="LinkToWeb">Link To Page</StyledLabel>
-          <input
+          <StyledInput
             type="text"
-            size="42"
             id="LinkToWeb"
-            name="link_to_web" // Add a name attribute
+            name="link_to_web"
             value={programData?.ProgramInfo?.link_to_web || ""}
             onChange={handleChange}
           />
         </div>
-        <label className="p-2 align-top">
-          {/*<label htmlFor="LongDescription" className="p-2 align-top">*/}
-          Long Description
-          <div>
-            <textarea
-              cols="54"
-              rows="11"
-              //id="LongDescription"
-              name="long_description" // Add a name attribute
-              value={programData?.ProgramInfo?.long_description || ""}
-              onChange={handleChange}
-            ></textarea>
-          </div>
-        </label>
-        <SelectContainer>
-          {/*<label htmlFor="Select Tags" className="p-2">*/}
-          <StyledLabel>
-            Select Tags
-            <div>
-              <Select
-                defaultValue={associatedTags || []} // if null, empty array
-                options={allProgramTags}
-                isMulti
-              />
-            </div>
-          </StyledLabel>
-        </SelectContainer>
-        <div className="mt-3">
-          <input
-            type="submit"
-            className="btn btn-success p-2 m-2"
-            value="Submit"
+        <div>
+          <StyledLabel htmlFor="LongDescription">Long Description</StyledLabel>
+          <StyledTextArea
+            cols="44"
+            rows="7"
+            id="LongDescription"
+            name="long_description"
+            value={programData?.ProgramInfo?.long_description || ""}
+            onChange={handleChange}
           />
         </div>
+        <SelectContainer>
+          <StyledLabel>Select Tags</StyledLabel>
+          <Select
+            defaultValue={associatedTags || []}
+            options={allProgramTags}
+            isMulti
+          />
+        </SelectContainer>
+        <SubmitButton type="submit" value="Submit" />
       </form>
-    </div>
+    </Container>
   );
 };
 

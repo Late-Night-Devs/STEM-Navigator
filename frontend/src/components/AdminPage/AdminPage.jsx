@@ -12,6 +12,7 @@ const PageContainer = styled.div`
   margin: auto;
 `;
 
+/* currently unused
 const IntroSection = styled.section`
   padding: 2rem;
   text-align: center;
@@ -20,6 +21,7 @@ const IntroSection = styled.section`
     font-weight: bold;
   }
 `;
+*/
 
 const ProgramsAndTagsRow = styled(Row)`
   padding: 2rem;
@@ -275,6 +277,9 @@ function AdminPage() {
 
   return (
     <PageContainer>
+      {/*  not sure if this is introduction is necessary, 
+           but we might add something here later?
+
       <Row className="img-hero-welcome">
         <Col>
           <IntroSection>
@@ -286,6 +291,7 @@ function AdminPage() {
           </IntroSection>
         </Col>
       </Row>
+        */}
 
       <ProgramsAndTagsRow>
         <Col md={12} lg={6}>
