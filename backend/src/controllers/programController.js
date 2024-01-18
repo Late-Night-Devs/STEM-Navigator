@@ -45,3 +45,36 @@ exports.filterPrograms = (req, res) => {
         });
     }
 };
+
+// Delete program based on ID | delete from multiple associates -> itself
+exports.deleteProgram = (req, res) => {
+    const { programId } = req.params;
+    console.log(`DELETE Request: Remove program with ID - ${programId}`);
+
+    // 1: Delete associated entries in UserFavorites table
+    db.query("DELETE FROM UserFavorites WHERE program_id = ?", [programId], (errUserFavorites, resultsUserFavorites) => {
+        if (errUserFavorites) {
+            console.error("Error in removing associated UserFavorites for the program:", errUserFavorites);
+            res.status(500).send("Error in removing associated UserFavorites for the program");
+            return;
+        }
+        // 2: Delete in ProgramTags table
+        db.query("DELETE FROM ProgramTags WHERE program_id = ?", [programId], (errProgramTags, resultsProgramTags) => {
+            if (errProgramTags) {
+                console.error("Error in removing associated ProgramTags for the program:", errProgramTags);
+                res.status(500).send("Error in removing associated ProgramTags for the program");
+                return;
+            }
+            // 3: Delete itself
+            db.query("DELETE FROM Programs WHERE program_id = ?", [programId], (errPrograms, resultsPrograms) => {
+                if (errPrograms) {
+                    console.error("Error in removing program from Programs:", errPrograms);
+                    res.status(500).send("Error in removing program from Programs");
+                    return;
+                }
+                // FINAL result!!!!
+                res.json({ message: 'Program, UserFavorites, and ProgramTags removed successfully' });
+            });
+        });
+    });
+};
