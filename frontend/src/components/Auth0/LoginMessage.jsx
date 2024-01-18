@@ -10,23 +10,29 @@ Modal.setAppElement("#root");
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 const LoginCheckMessage = () => {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, isLoading } = useAuth0();
   const [showVerificationNotice, setShowVerificationNotice] = useState(false);
 
-  console.log("login check message running ...");
   useEffect(() => {
-    if (isAuthenticated) {
-      setShowVerificationNotice(false);
-    } else 
-       setShowVerificationNotice(true);
-  }, [isAuthenticated]);
+    if (!isLoading) {
+      setShowVerificationNotice(!isAuthenticated);
+    }
+  }, [isAuthenticated, isLoading]);
 
+  if (isLoading) {
+    // You can return a loading indicator or null while the authentication status is being determined
+    return null;
+  }
   return (
     <div
       style={{
+        position: "absolute",
+        width: "100%",
+        left: 0,
+        right: 0,
         height: showVerificationNotice ? "auto" : 0,
         overflow: "hidden",
-        transition: "height 2.5s ease, opacity 2.5s ease",
+        transition: "height 2.5s ease, opacity 3s ease",
         opacity: showVerificationNotice ? 1 : 0,
       }}
     >
@@ -47,7 +53,7 @@ const LoginCheckMessage = () => {
 };
 
 const VerifiedEmailLogin = () => {
-  const { isAuthenticated, user, logout } = useAuth0();
+  const { isAuthenticated, user, logout, isLoading } = useAuth0();
   const [countdown, setCountdown] = useState(30);
   const [modalIsOpen, setModalIsOpen] = useState(true);
   let interval;
@@ -105,7 +111,7 @@ const VerifiedEmailLogin = () => {
       return response.data.exists;
     } catch (error) {
       console.error("Error checking email existence:", error);
-      return false; 
+      return false;
     }
   };
 
@@ -150,7 +156,7 @@ const VerifiedEmailLogin = () => {
       clearInterval(interval);
     };
     // eslint-disable-next-line
-  }, []); 
+  }, []);
 
   const handleConfirm = () => {
     clearInterval(interval);
@@ -161,6 +167,16 @@ const VerifiedEmailLogin = () => {
     await setModalIsOpen(false);
     logout({ returnTo: window.location.origin });
   };
+
+  if (
+    isLoading ||
+    !isAuthenticated ||
+    (user && user.email_verified) ||
+    !modalIsOpen
+  ) {
+    // Return null or loading indicator while the authentication status is being determined
+    return null;
+  }
 
   return (
     <div>
@@ -226,10 +242,14 @@ const VerifiedEmailLogin = () => {
 };
 
 const LoginMessage = () => {
-  const { isAuthenticated } = useAuth0();
-  return (
-    <>{!isAuthenticated ? <LoginCheckMessage /> : <VerifiedEmailLogin />}</>
-  );
+  const { isAuthenticated, isLoading } = useAuth0();
+  if (isLoading) {
+    return null;
+  } 
+    
+  return !isAuthenticated ? <LoginCheckMessage /> : <VerifiedEmailLogin />;
+  
 };
+
 
 export default LoginMessage;
