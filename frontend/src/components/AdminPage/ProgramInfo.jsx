@@ -9,11 +9,24 @@ export const ProgramInfo = ({
   // Accept onProgramDataChange as a prop
 
   const associatedTags = programData ? programData.AssociatedTags : null;
+
+
   //const programInfo = programData ? programData.ProgramInfo : null;
+  /* INCORRECT STRUCTURE
   const handleChange = (e) => {
     const { name, value } = e.target;
     onProgramDataChange({ ...programData.ProgramInfo, [name]: value });
   };
+  */
+
+  const handleChange = (e) => {
+  const { name, value } = e.target;
+  onProgramDataChange({ 
+    ...programData, 
+    ProgramInfo: { ...programData.ProgramInfo, [name]: value }
+  });
+};
+
 
   return (
     <div className="text-center border border-dark rounded-5 p-2 m-3 flex-fill">

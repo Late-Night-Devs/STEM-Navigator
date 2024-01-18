@@ -1,11 +1,23 @@
 import React from "react";
 import Select from "react-select";
 //import { usePostData } from "./useData"; // should be used to post data to the backend
+import styled from "styled-components";
+
+const SelectContainer = styled.div`
+  max-width: 500px;
+  margin: auto;
+  padding: 0.5rem; // This is equivalent to 'p-2' in Bootstrap
+`;
+
+const StyledLabel = styled.label`
+  padding: 0.5rem; // This is equivalent to 'p-2' in Bootstrap
+  width: 100%;
+`;
 
 export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
-    onTagDataChange({ ...tagData, [name]: value }); // append or edit value
+    onTagDataChange({  ...tagData, [name]: value }); // append or edit value
   };
 
   const handleSubmit = (e) => {
@@ -39,10 +51,10 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
             onChange={handleChange}
           />
         </div>
-        <div style={{ maxWidth: "500px", margin: "auto" }} className="p-2">
-          <label className="p-2">
+        <SelectContainer>
+          <StyledLabel>
             Select Category
-            <div style={{ paddingLeft: "50px", paddingRight: "50px" }}>
+            <div>
               <Select
                 options={categories}
                 onChange={handleCategoryChange}
@@ -53,8 +65,8 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
                 }
               />
             </div>
-          </label>
-        </div>
+          </StyledLabel>
+        </SelectContainer>
 
         <div className="mt-3">
           <input

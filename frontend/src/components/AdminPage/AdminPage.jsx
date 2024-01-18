@@ -319,6 +319,7 @@ function AdminPage() {
               key={selectedProgram || "default-key"}
               programData={selectedProgramInfo}
               allProgramTags={formattedProgramTags}
+              onProgramDataChange={setSelectedProgramInfo}
             />
           )}
           {showTagInfo && (
@@ -333,6 +334,7 @@ function AdminPage() {
             <ProgramInfo
               programData={{}}
               allProgramTags={formattedProgramTags}
+              onProgramDataChange={setSelectedProgramInfo}
             />
           )}
           {/* render the blank form for adding new tag */}
