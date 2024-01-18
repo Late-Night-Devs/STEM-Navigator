@@ -17,7 +17,7 @@ const StyledLabel = styled.label`
 export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
-    onTagDataChange({  ...tagData, [name]: value }); // append or edit value
+    onTagDataChange({ ...tagData, [name]: value }); // append or edit value
   };
 
   const handleSubmit = (e) => {
