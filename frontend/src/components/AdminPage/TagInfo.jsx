@@ -1,18 +1,8 @@
 import React from "react";
 import Select from "react-select";
 //import { usePostData } from "./useData"; // should be used to post data to the backend
-import styled from "styled-components";
 
-const SelectContainer = styled.div`
-  max-width: 500px;
-  margin: auto;
-  padding: 0.5rem; // This is equivalent to 'p-2' in Bootstrap
-`;
-
-const StyledLabel = styled.label`
-  padding: 0.5rem; // This is equivalent to 'p-2' in Bootstrap
-  width: 100%;
-`;
+import { SelectContainer, StyledLabel } from "./sharedStyles.js";
 
 export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
   const handleChange = (e) => {
