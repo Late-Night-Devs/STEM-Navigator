@@ -207,8 +207,17 @@ function AdminPage() {
   const handleAddProgram = () => {
     setAddingProgram(true);
     setAddingTag(false);
-    setSelectedProgram(null);
-    setSelectedProgramInfo(null);
+    setSelectedProgram({}); // empty program object
+    setSelectedProgramInfo({
+      program_id: "-1",
+      title: "",
+      lead_contact: "",
+      contact_email: "",
+      link_to_web: "",
+      duration: "",
+      duration_unit: "",
+      long_description: "",
+    });
     setSelectedTag(null);
     setSelectedTagInfo(null);
   };
@@ -336,7 +345,7 @@ function AdminPage() {
             />
           )}
           {/* render the blank form for adding new program */}
-          {addingProgram && (
+          {addingProgram && !showProgramInfo && (
             <ProgramInfo
               programData={{}}
               allProgramTags={formattedProgramTags}
