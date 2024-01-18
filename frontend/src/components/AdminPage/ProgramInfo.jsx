@@ -77,6 +77,14 @@ export const ProgramInfo = ({
             onChange={handleChange}
           />
         </div>
+        <SelectContainer>
+          <StyledLabel>Select Tags</StyledLabel>
+          <Select
+            defaultValue={associatedTags || []}
+            options={allProgramTags}
+            isMulti
+          />
+        </SelectContainer>
         <div>
           <StyledLabel htmlFor="LongDescription">Long Description</StyledLabel>
           <StyledTextArea
@@ -88,14 +96,6 @@ export const ProgramInfo = ({
             onChange={handleChange}
           />
         </div>
-        <SelectContainer>
-          <StyledLabel>Select Tags</StyledLabel>
-          <Select
-            defaultValue={associatedTags || []}
-            options={allProgramTags}
-            isMulti
-          />
-        </SelectContainer>
         <SubmitButton type="submit" value="Submit" />
       </form>
     </Container>
