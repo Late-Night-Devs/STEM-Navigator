@@ -31,7 +31,7 @@ const Programs = ({ selectedTagIds }) => {
     <Row className="g-4">
       {programs.map((program, index) => (
         <Col key={index} md={4} className="mb-4">
-          <ProgramCard program={program} />
+          <ProgramCard program={program} className="w-100" />
         </Col>
       ))}
       {noProgramsAfterFilter && (
