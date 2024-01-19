@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Card, Row, Col, Button } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import Viking from "../../image/viking.png";
+import ProgramCard from "../ProgramCard";
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 const Programs = ({ selectedTagIds }) => {
@@ -30,29 +31,7 @@ const Programs = ({ selectedTagIds }) => {
     <Row className="g-4">
       {programs.map((program, index) => (
         <Col key={index} md={4} className="mb-4">
-          <Card className="w-100">
-            <Card.Body>
-              <Card.Title>{program.title}</Card.Title>
-              <Card.Text>
-                Lead Contact: {program.lead_contact}
-                <br />
-                Contact Email:{" "}
-                <a href={`mailto:${program.contact_email}`}>
-                  {program.contact_email}
-                </a>
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer className="text-center">
-              <Button
-                variant="primary"
-                href={program.link_to_web}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learn More
-              </Button>
-            </Card.Footer>
-          </Card>
+          <ProgramCard program={program} />
         </Col>
       ))}
       {noProgramsAfterFilter && (
