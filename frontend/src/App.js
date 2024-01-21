@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import NavBar from "./NavBar.jsx";
 import Home from "./components/Home.jsx";
 import Events from "./components/Events.jsx";
@@ -26,6 +26,8 @@ function App() {
         <Route path="/newsletter" element={<Newsletter />} />
         <Route path="/admin-modify-db" element={<AdminPage />} />
         <Route path="/profile-testing" element={<Profile />} />
+        {/* Add a route for the /logout path, re-route back to home page*/}
+        <Route path="/logout" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );

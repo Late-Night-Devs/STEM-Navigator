@@ -11,25 +11,25 @@ exports.getAllUsers = (req, res) => {
     });
 };
 
-exports.findUserID = (req, res) => {
-    const { email } = req.query;
-    console.log(`GET Req: find user ID for email - ${email}`);
+// exports.findUserID = (req, res) => {
+//     const { email } = req.query;
+//     console.log(`GET Req: find user ID for email - ${email}`);
 
-    db.query("SELECT user_id FROM Users WHERE email = ?", [email], (err, results) => {
-        if (err) {
-            res.status(500).send("Error in fetching user ID from Users");
-            return;
-        }
+//     db.query("SELECT user_id FROM Users WHERE email = ?", [email], (err, results) => {
+//         if (err) {
+//             res.status(500).send("Error in fetching user ID from Users");
+//             return;
+//         }
 
-        if (results.length === 0) {
-            res.status(404).json({ message: 'User not found with this email' });
-            return;
-        }
+//         if (results.length === 0) {
+//             res.status(404).json({ message: 'User not found with this email' });
+//             return;
+//         }
 
-        const userID = results[0].user_id;
-        res.json({ userID });
-    });
-};
+//         const userID = results[0].user_id;
+//         res.json({ userID });
+//     });
+// };
 
 exports.checkEmailExists = (req, res) => {
     const { email } = req.query;
@@ -37,16 +37,25 @@ exports.checkEmailExists = (req, res) => {
     // Validate email format if needed
 
     // Check if the email exists in the database
-    db.query('SELECT COUNT(*) AS count FROM Users WHERE email = ?', [email], (err, results) => {
+    db.query('SELECT user_id FROM Users WHERE email = ?', [email], (err, results) => {
         if (err) {
             console.error(err);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
 
-        const emailExists = results[0].count > 0;
-        return res.json({ exists: emailExists });
+        // Log the entire results array for inspection
+        console.log("Backend: results from check email: ", results);
+
+        // Check if there are any results
+        const userID = results.length > 0 ? results[0].user_id : null;
+
+        console.log("Backend: userID from check email: ", userID);
+
+        return res.json({ userID });
     });
 };
+
+
 
 exports.addUser = (req, res) => {
     const { firstName, lastName, email, admin} = req.body;

@@ -15,6 +15,13 @@ const LogInOutBtn = () => {
       .join("");
   };
 
+  // Function to clear all cookies
+  const clearAllCookies = () => {
+    const cookies = Cookies.get();
+    for (const cookie in cookies) {
+      Cookies.remove(cookie);
+    }
+  };
   return (
     <div className="nav-item">
       {/* User authentication section */}
@@ -68,7 +75,7 @@ const LogInOutBtn = () => {
             <Dropdown.Divider />
             <Dropdown.Item
               onClick={() => {
-                Cookies.set("addUserState", "undefined");
+                clearAllCookies();
                 logout({ returnTo: window.location.origin });
               }}
             >

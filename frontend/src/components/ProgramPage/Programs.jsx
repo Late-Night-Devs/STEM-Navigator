@@ -84,29 +84,30 @@ const ProgramCard = ({program}) => {
 
   const toggleFavorite = async () => {
     // Add logic to check if user email is verified
-    if (isAuthenticated && userID !== null) {
-      const favoriteRequest = isFavorite ? "removeFavorite" : "addFavorite";
-      const url = `${backend_url}/user/favorite/${favoriteRequest}`;
+    // if (isAuthenticated && userID !== null) {
+    //   const favoriteRequest = isFavorite ? "removeFavorite" : "addFavorite";
+    //   const url = `${backend_url}/user/favorite/${favoriteRequest}`;
 
-      const requestData = {
-        userID: userID,
-        programID: program.id,
-      };
+    //   const requestData = {
+    //     userID: userID,
+    //     programID: program.id,
+    //   };
 
-      console.log("this is programID for the request -- ", program.id);
-      try {
-        const response = await axios.post(url, requestData);
-        console.log(response.data);
-        setIsFavorite((prevIsFavorite) => !prevIsFavorite);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    } else {
-      console.log(
-        "User email is not verified. Please verify your email before using the bookmark."
-      );
-      return;
-    }
+    //   console.log("this is programID for the request -- ", program.id);
+    //   try {
+    //     const response = await axios.post(url, requestData);
+    //     console.log(response.data);
+    //     setIsFavorite((prevIsFavorite) => !prevIsFavorite);
+    //   } catch (error) {
+    //     console.error("Error:", error);
+    //   }
+    // } else {
+    //   console.log(
+    //     "User email is not verified. Please verify your email before using the bookmark."
+    //   );
+    //   return;
+    // }
+    return setIsFavorite(!isFavorite);
   };
   return (
     <Card className="w-100 position-relative">

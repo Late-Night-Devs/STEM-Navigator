@@ -10,7 +10,7 @@ router.get('/', userController.getAllUsers);
 
 router.post('/addUser', userController.addUser);
 
-router.get('/findUserID', userController.findUserID);
+// router.get('/findUserID', userController.findUserID);
 
 router.get('/checkEmailExists', userController.checkEmailExists);
 
