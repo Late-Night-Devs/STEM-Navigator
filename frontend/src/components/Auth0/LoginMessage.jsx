@@ -85,7 +85,7 @@ const VerifiedEmailLogin = () => {
       const isUserAdded = Cookies.get("addUserState");
       console.log(
         "email verified --- go next to add the user and store cookies!  :",
-        userIdFromCookie,
+        userIdFromCookie, "\nif added, it should be true:",
         isUserAdded
       );
 
@@ -106,7 +106,10 @@ const VerifiedEmailLogin = () => {
   const checkEmailExists = async (email) => {
     try {
       const response = await axios.get(
-        `${backend_url}/user/checkEmailExists?email=${email}`
+        `${backend_url}/user/checkEmailExists?email=${email}`,
+        {
+          withCredentials: true,
+        }
       );
       return response.data.exists;
     } catch (error) {
@@ -129,6 +132,7 @@ const VerifiedEmailLogin = () => {
           admin: "FALSE",
         },
         {
+          withCredentials: true, 
           headers: {
             "Content-Type": "application/json",
           },

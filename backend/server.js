@@ -7,10 +7,15 @@ const cors = require('cors');
 const path = require('path');
 const routes = require('./src/routes');
 
+// Allow requests from http://localhost:5000 (frontend)
+app.use(cors({
+    origin: 'http://localhost:5000',
+    optionsSuccessStatus: 200,
+    credentials: true
+}));
 
 const port = process.env.PORT || 3000;
 
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
