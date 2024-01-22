@@ -9,7 +9,7 @@ import Cookies from "js-cookie";
 function ProgramTab() {
   const [selectedTagIds, setSelectedTagIds] = useState(new Set());
     console.log(
-      "checking userID stored or not in program tab: ",
+      "\n >>>>> userID stored in COOKIE or not at the program tab: ",
       Cookies.get("cookieUId")
     );
   return (

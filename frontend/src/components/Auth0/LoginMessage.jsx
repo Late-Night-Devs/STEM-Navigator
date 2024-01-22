@@ -78,7 +78,7 @@ const VerifiedEmailLogin = () => {
         "1/ email verified --- Initial userID from cookie:",
         userIdFromCookie
       );
-        debugger
+        
       if (!userIdFromCookie) {
         const emailExists = await checkEmailExists(user.email);
         console.log("3/ checking the email exists or not:  ", emailExists);
@@ -104,6 +104,7 @@ const VerifiedEmailLogin = () => {
 
   const checkEmailExists = async (email) => {
     try {
+ 
       console.log(
         "\n\n==========Loading... Check Email Exists or Not !======== \n"
       );
@@ -113,7 +114,7 @@ const VerifiedEmailLogin = () => {
           withCredentials: true,
         }
       );
-
+ 
       const foundEmail_userID = response.data.userID;
       // Check if response.data.userID exists
       // console.log("Response from checking email: ", response.data);
@@ -127,6 +128,9 @@ const VerifiedEmailLogin = () => {
           foundEmail_userID
         );
         Cookies.set("cookieUId", foundEmail_userID);
+        // if we found it, that means the user is already added
+        // avoid doing post req again.
+        addUserTracking.current = true;
         return true;
       }
       return false;
