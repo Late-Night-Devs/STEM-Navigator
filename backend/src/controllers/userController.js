@@ -49,7 +49,7 @@ exports.checkEmailExists = (req, res) => {
         // Check if there are any results
         const userID = results.length > 0 ? results[0].user_id : null;
 
-        console.log("Backend: userID from check email: ", userID);
+        // console.log("Backend: userID from check email: ", userID);
 
         return res.json({ userID });
     });

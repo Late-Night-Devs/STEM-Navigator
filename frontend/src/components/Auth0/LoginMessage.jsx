@@ -54,7 +54,7 @@ const LoginCheckMessage = () => {
 
 const VerifiedEmailLogin = () => {
   const { isAuthenticated, user, logout, isLoading } = useAuth0();
-  // const [countdown, setCountdown] = useState(30);
+  const [countdown, setCountdown] = useState(30);
   const [modalIsOpen, setModalIsOpen] = useState(true);
   let interval;
   const userIdFromCookie = Cookies.get("cookieUId");
@@ -63,14 +63,13 @@ const VerifiedEmailLogin = () => {
 
   const checkEmailVerification = async () => {
     if (isAuthenticated && user && !user.email_verified) {
-      // interval = setInterval(() => {
-      //   setCountdown((prevCountdown) => prevCountdown - 1);
-      // }, 1000);
-
+      interval = setInterval(() => {
+        setCountdown((prevCountdown) => prevCountdown - 1);
+      }, 1000);
       // Countdown for automatic logout
-      // if (countdown === 1) {
-      //   logout({ returnTo: window.location.origin });
-      // }
+      if (countdown === 1) {
+        logout({ returnTo: window.location.origin });
+      }
     } else if (user.email_verified) {
       // if email is verified. modal won't open. add user to the database
       // store userID to a cookie
@@ -81,27 +80,22 @@ const VerifiedEmailLogin = () => {
       );
 
       if (!userIdFromCookie) {
-
         const emailExists = await checkEmailExists(user.email);
         console.log("3/ checking the email exists or not:  ", emailExists);
-        if (emailExists) {
-           addUserTracking.current = true;
-          console.log("add userID to cookie: ", emailExists);
-        } else {
-          console.log("addUserTracking:  ", addUserTracking);
-          if (addUserTracking.current === false) {
-            // add a new user to database;
-            // store the return userID to cookie
-            const getUserID = await AddUserToDatabase(user);
-            console.log(
-              "User added to the database successfully with ID:",
-              getUserID
-            );
-            if (getUserID) {
-              addUserTracking.current = true; // Set the ref to true to prevent future calls
-              // Store the userId in a cookie
-              Cookies.set("cookieUId", getUserID);
-            }
+
+        console.log("addUserTracking:  ", addUserTracking.current);
+        if (!addUserTracking.current) {
+          // add a new user to database;
+          // store the return userID to cookie
+          addUserTracking.current = true; // Set the ref to true to prevent future calls
+          const getUserID = await AddUserToDatabase(user);
+          console.log(
+            "User added to the database successfully with ID:",
+            getUserID
+          );
+          if (getUserID) {
+            // Store the userId in a cookie
+            Cookies.set("cookieUId", getUserID);
           }
         }
       }
@@ -110,6 +104,9 @@ const VerifiedEmailLogin = () => {
 
   const checkEmailExists = async (email) => {
     try {
+      console.log(
+        "\n\n==========Loading... Check Email Exists or Not !======== \n"
+      );
       const response = await axios.get(
         `${backend_url}/user/checkEmailExists?email=${email}`,
         {
@@ -119,19 +116,20 @@ const VerifiedEmailLogin = () => {
 
       const foundEmail_userID = response.data.userID;
       // Check if response.data.userID exists
-      console.log("Response from checking email: ", response.data);
-           console.log(
-             "Response from checking email - userID: ",
-             response.data.userID
-           );
+      // console.log("Response from checking email: ", response.data);
+      // console.log(
+      //   "Response from checking email - userID: ",
+      //   response.data.userID
+      // );
       if (foundEmail_userID) {
         console.log(
           "checkEmailExists - ADDED userID to Cookies:  ",
           foundEmail_userID
         );
         Cookies.set("cookieUId", foundEmail_userID);
-        return foundEmail_userID;
+        return true;
       }
+      return false;
     } catch (error) {
       console.error("Error checking email existence:", error);
       return false;
@@ -140,6 +138,9 @@ const VerifiedEmailLogin = () => {
 
   const AddUserToDatabase = async (user) => {
     try {
+      console.log(
+        "\n\n =========== Loading Add User to Database! \n=================="
+      );
       if (!user.given_name) user.given_name = "nonFirstName";
       if (!user.family_name) user.family_name = "nonLastName";
       // Add user data to the database
@@ -158,7 +159,13 @@ const VerifiedEmailLogin = () => {
           },
         }
       );
-      debugger;
+
+      console.log(
+        "Result from add user to DB: ",
+        response.data.user.id,
+        "++++",
+        addUserTracking.current
+      );
       return response.data.user.id;
     } catch (error) {
       console.error("Error adding user to the database:", error);
@@ -168,6 +175,7 @@ const VerifiedEmailLogin = () => {
   };
 
   useEffect(() => {
+    console.log("Use Effect calling .... \n");
     checkEmailVerification();
     // Clear the intervals on unmount or when the user confirms
     return () => {
