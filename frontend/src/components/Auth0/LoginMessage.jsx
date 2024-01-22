@@ -54,7 +54,7 @@ const LoginCheckMessage = () => {
 
 const VerifiedEmailLogin = () => {
   const { isAuthenticated, user, logout, isLoading } = useAuth0();
-  const [countdown, setCountdown] = useState(30);
+  // const [countdown, setCountdown] = useState(30);
   const [modalIsOpen, setModalIsOpen] = useState(true);
   let interval;
   const userIdFromCookie = Cookies.get("cookieUId");
@@ -63,16 +63,14 @@ const VerifiedEmailLogin = () => {
 
   const checkEmailVerification = async () => {
     if (isAuthenticated && user && !user.email_verified) {
-      setModalIsOpen(true);
-
-      interval = setInterval(() => {
-        setCountdown((prevCountdown) => prevCountdown - 1);
-      }, 1000);
+      // interval = setInterval(() => {
+      //   setCountdown((prevCountdown) => prevCountdown - 1);
+      // }, 1000);
 
       // Countdown for automatic logout
-      if (countdown === 1) {
-        logout({ returnTo: window.location.origin });
-      }
+      // if (countdown === 1) {
+      //   logout({ returnTo: window.location.origin });
+      // }
     } else if (user.email_verified) {
       // if email is verified. modal won't open. add user to the database
       // store userID to a cookie
@@ -83,6 +81,7 @@ const VerifiedEmailLogin = () => {
       );
 
       if (!userIdFromCookie) {
+
         const emailExists = await checkEmailExists(user.email);
         console.log("3/ checking the email exists or not:  ", emailExists);
         if (emailExists) {
@@ -117,6 +116,7 @@ const VerifiedEmailLogin = () => {
           withCredentials: true,
         }
       );
+
       const foundEmail_userID = response.data.userID;
       // Check if response.data.userID exists
       console.log("Response from checking email: ", response.data);
@@ -158,7 +158,7 @@ const VerifiedEmailLogin = () => {
           },
         }
       );
-
+      debugger;
       return response.data.user.id;
     } catch (error) {
       console.error("Error adding user to the database:", error);
@@ -250,7 +250,8 @@ const VerifiedEmailLogin = () => {
               className="btn btn-secondary"
               onClick={handleLogout}
             >
-              Logout in {countdown}s
+              {/* Logout in {countdown}s */}
+              Logout
             </button>
           </div>
         </div>
