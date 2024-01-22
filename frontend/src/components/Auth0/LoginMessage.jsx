@@ -78,7 +78,7 @@ const VerifiedEmailLogin = () => {
         "1/ email verified --- Initial userID from cookie:",
         userIdFromCookie
       );
-
+        debugger
       if (!userIdFromCookie) {
         const emailExists = await checkEmailExists(user.email);
         console.log("3/ checking the email exists or not:  ", emailExists);
@@ -178,9 +178,9 @@ const VerifiedEmailLogin = () => {
     console.log("Use Effect calling .... \n");
     checkEmailVerification();
     // Clear the intervals on unmount or when the user confirms
-    return () => {
-      clearInterval(interval);
-    };
+    // return () => {
+    //   clearInterval(interval);
+    // };
     // eslint-disable-next-line
   }, []);
 
