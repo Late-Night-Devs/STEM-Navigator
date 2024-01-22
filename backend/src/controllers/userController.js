@@ -34,7 +34,7 @@ exports.findUserID = (req, res) => {
 exports.checkEmailExists = (req, res) => {
     const { email } = req.params; 
     // Validate email format if needed
-
+    console.log("\nchecking email input: ", email);
     // Check if the email exists in the database
     db.query('SELECT user_id FROM Users WHERE email = ?', [email], (err, results) => {
         if (err) {
@@ -48,7 +48,7 @@ exports.checkEmailExists = (req, res) => {
         // Check if there are any results
         const userID = results.length > 0 ? results[0].user_id : null;
 
-        // console.log("Backend: userID from check email: ", userID);
+        console.log("Backend: userID from check email: ", userID);
 
         return res.json({ userID });
     });

@@ -80,6 +80,7 @@ const VerifiedEmailLogin = () => {
       );
         
       if (!userIdFromCookie) {
+        console.log("\n\n\n\======= checking input for user.email: ", user.email);
         const emailExists = await checkEmailExists(user.email);
         console.log("3/ checking the email exists or not:  ", emailExists);
 
@@ -106,10 +107,10 @@ const VerifiedEmailLogin = () => {
     try {
  
       console.log(
-        "\n\n==========Loading... Check Email Exists or Not !======== \n"
+        "\n\n==========Loading... Check Email Exists or Not !======== \n", email
       );
       const response = await axios.get(
-        `${backend_url}/user/checkEmailExists?email=${email}`,
+        `${backend_url}/user/findUserID?email=${email}`,
         {
           withCredentials: true,
         }
