@@ -280,11 +280,14 @@ function AdminPage() {
   };
 
   const handleAddTag = () => {
-    setSelectedTag({}); //  empty tag object
-    setSelectedTagInfo({ tag_id: "-1", tag_name: "", category: "" }); // structure of a tag
+    setSelectionState((prevState) => ({
+      ...prevState,
+      selectedTag: null,
+      selectedProgram: null,
+    }));
+    setSelectedTagInfo(null);
     setAddingTag(true);
     setAddingProgram(false);
-    setSelectedProgram(null);
     setSelectedProgramInfo(null);
   };
 
