@@ -192,6 +192,9 @@ function AdminPage() {
   const isTagSelected = (tagId) => tagId === selectionState.selectedTag;
 
   const handleTagClick = (tag) => {
+    if (addingProgram) {
+      setAddingProgram(false);
+    }
     if (selectionState.selectedProgram !== null) {
       setSelectionState((prevState) => ({
         ...prevState,
@@ -205,12 +208,11 @@ function AdminPage() {
     }
     // if clicking a selected tag, deselect it
     if (tag.id === selectionState.selectedTag) {
-      setSelectionState({
-        selectedProgram: null,
+      setSelectionState((prevState) => ({
+        ...prevState,
         selectedTag: null,
-        showProgramInfo: false,
         showTagInfo: false,
-      });
+      }));
     } else {
       const tagInfo = tags.find((t) => t.tag_id === tag.id);
       setSelectionState({
@@ -255,9 +257,15 @@ function AdminPage() {
   };
 
   const handleAddProgram = () => {
+    setSelectionState((prevState) => ({
+      selectedProgram: null,
+      selectedTag: null,
+      showProgramInfo: false,
+      showTagInfo: false,
+    }));
+
     setAddingProgram(true);
     setAddingTag(false);
-    setSelectedProgram({}); // empty program object
     setSelectedProgramInfo({
       program_id: "-1",
       title: "",
@@ -268,7 +276,6 @@ function AdminPage() {
       duration_unit: "",
       long_description: "",
     });
-    setSelectedTag(null);
     setSelectedTagInfo(null);
   };
 
