@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { Card, Row, Col, Button } from "react-bootstrap";
+import Collapse from 'react-bootstrap/Collapse';
 import Viking from "../../image/viking.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
@@ -44,9 +45,7 @@ const Programs = ({ selectedTagIds }) => {
     <>
       <Row className="g-4">
         {currentItems.map((program) => (
-          <Col key={program.id} md={4} className="mb-4">
-            <ProgramCard program={program} />
-          </Col>
+          <ProgramColumn program={program}/>
         ))}
         {noProgramsAfterFilter && (
           <Col xs={12} className="text-center mt-3">
@@ -77,9 +76,34 @@ const Programs = ({ selectedTagIds }) => {
   );
 };
 
-const ProgramCard = ({ program }) => {
+const ProgramColumn = ({program}) => {
+  const [mdValue, setMdValue] = useState(4);
+ 
+  const changeMdValue = () => {
+    if (mdValue === 4) {
+      setMdValue(12);
+    } else {
+      setMdValue(4);
+    }
+  };
+ 
+  return (
+    <Col key={program.id} md={mdValue} className="mb-4">
+      <ProgramCard program={program} changeColumnWidth={changeMdValue}/>
+    </Col>
+  );
+};
+ 
+const ProgramCard = ({program, changeColumnWidth}) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const { isAuthenticated } = useAuth0();
+
+  const [isCollapsed, toggleIsCollapsed] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+    const toggleText = () => {
+      setIsExpanded(!isExpanded);
+  };
+ 
   // Fetch the user ID from the cookie
   const cookieUserID = Cookies.get("cookieUId");
   console.log("\ncookieUID:  ", cookieUserID);
@@ -167,22 +191,45 @@ const ProgramCard = ({ program }) => {
           <a href={`mailto:${program.contact_email}`}>
             {program.contact_email}
           </a>
+          <Collapse in={isCollapsed}>
+          <div id="collapse-text">
+            Web Link:{" "}
+            <a href={program.link_to_web}>
+              {program.link_to_web}
+            </a>
+            <br />
+            Program Duration: {program.duration}{" "}{program.duration_unit}
+            <br />
+            <br />
+            {program.long_description}
+            <br />
+            <br />
+            {"(Work in Progress)"}
+          </div>
+          </Collapse>
         </Card.Text>
       </Card.Body>
       <Card.Footer className="text-center">
         <Button
-          variant="primary"
-          href={program.link_to_web}
-          target="_blank"
-          rel="noopener noreferrer"
+          onClick={() => { changeColumnWidth(); toggleIsCollapsed(!isCollapsed); toggleText(); }}
+          aria-controls="collapse-text"
+          aria-expanded={isCollapsed}
         >
-          Learn More
+          <ShowMoreShowLess isExpanded={isExpanded}/>
         </Button>
       </Card.Footer>
     </Card>
   );
 };
 
+const ShowMoreShowLess = ({isExpanded}) => {
+  return (
+    <>
+      {isExpanded ? 'Show Less' : 'Show More'}
+    </>
+  );
+ }
+ 
 const Pagination = ({ itemsPerPage, totalItems, paginate }) => {
   const pageNumbers = [];
 
