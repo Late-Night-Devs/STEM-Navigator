@@ -80,7 +80,7 @@ const VerifiedEmailLogin = () => {
       );
         
       if (!userIdFromCookie) {
-        console.log("\n\n\n\======= checking input for user.email: ", user.email);
+        console.log("\n\n\n======= checking input for user.email: ", user.email);
         const emailExists = await checkEmailExists(user.email);
         console.log("3/ checking the email exists or not:  ", emailExists);
 
