@@ -78,12 +78,14 @@ export const ProgramInfo = ({
           />
         </div>
         <SelectContainer>
-          <StyledLabel>Select Tags</StyledLabel>
-          <Select
-            defaultValue={associatedTags || []}
-            options={allProgramTags}
-            isMulti
-          />
+          <StyledLabel>
+            Select Tags
+            <Select
+              defaultValue={associatedTags || []}
+              options={allProgramTags}
+              isMulti
+            />
+          </StyledLabel>
         </SelectContainer>
         <div>
           <StyledLabel htmlFor="LongDescription">Long Description</StyledLabel>
