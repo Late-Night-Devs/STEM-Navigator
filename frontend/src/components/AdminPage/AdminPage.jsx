@@ -55,8 +55,6 @@ function AdminPage() {
   const [selectionState, setSelectionState] = useState({
     selectedProgram: null, // the id of the currently selected Program
     selectedTag: null, // the id of the currently selected Tag
-    showProgramInfo: false,
-    showTagInfo: false,
     addingProgram: false, // becomes true when the user presses the add btn on the ProgramsButtonList
     addingTag: false, // becomes true when the user presses the add btn Tags ButtonList
   });
@@ -106,7 +104,6 @@ function AdminPage() {
       setSelectionState((prevState) => ({
         ...prevState,
         selectedTag: null,
-        showTagInfo: false,
         addingProgram: false,
         addingTag: false,
       }));
@@ -117,8 +114,6 @@ function AdminPage() {
       setSelectionState({
         selectedProgram: null,
         selectedTag: null,
-        showProgramInfo: false,
-        showTagInfo: false,
       });
       setSelectedProgramInfo(null);
     } else {
@@ -139,8 +134,6 @@ function AdminPage() {
       setSelectionState({
         selectedProgram: program.id,
         selectedTag: null,
-        showProgramInfo: true,
-        showTagInfo: false,
       });
       setSelectedProgramInfo({
         ProgramInfo: programInfo,
@@ -185,7 +178,6 @@ function AdminPage() {
       setSelectionState((prevState) => ({
         ...prevState,
         selectedProgram: null,
-        showProgramInfo: false,
         addingProgram: false,
         addingTag: false,
       }));
@@ -196,15 +188,12 @@ function AdminPage() {
       setSelectionState((prevState) => ({
         ...prevState,
         selectedTag: null,
-        showTagInfo: false,
       }));
     } else {
       const tagInfo = tags.find((t) => t.tag_id === tag.id);
       setSelectionState({
         selectedProgram: null,
         selectedTag: tag.id,
-        showProgramInfo: false,
-        showTagInfo: true,
       });
       setSelectedTagInfo(tagInfo);
       setSelectedProgramInfo(null);
@@ -243,8 +232,6 @@ function AdminPage() {
     setSelectionState((prevState) => ({
       selectedProgram: null,
       selectedTag: null,
-      showProgramInfo: false,
-      showTagInfo: false,
       addingProgram: true,
       addingTag: false,
     }));
@@ -337,7 +324,7 @@ function AdminPage() {
         </Col>
 
         <StickyColumn md={12} lg={6}>
-          {selectionState.showProgramInfo && (
+          {selectionState.selectedProgram != null && (
             <ProgramInfo
               // using a 'key' prop forces a re-render when the key changes.
               key={selectionState.selectedProgram || "default-key"}
@@ -346,7 +333,7 @@ function AdminPage() {
               onProgramDataChange={setSelectedProgramInfo}
             />
           )}
-          {selectionState.showTagInfo && (
+          {selectionState.selectedTag != null && (
             <TagInfo
               tagData={selectedTagInfo}
               categories={formattedCategories}
@@ -354,15 +341,16 @@ function AdminPage() {
             />
           )}
           {/* render the blank form for adding new program */}
-          {selectionState.addingProgram && !selectionState.showProgramInfo && (
-            <ProgramInfo
-              programData={{}}
-              allProgramTags={formattedTags}
-              onProgramDataChange={setSelectedProgramInfo}
-            />
-          )}
+          {selectionState.addingProgram &&
+            selectionState.selectedProgram == null && (
+              <ProgramInfo
+                programData={{}}
+                allProgramTags={formattedTags}
+                onProgramDataChange={setSelectedProgramInfo}
+              />
+            )}
           {/* render the blank form for adding new tag */}
-          {selectionState.addingTag && !selectionState.showTagInfo && (
+          {selectionState.addingTag && selectionState.selectedTag == null && (
             <TagInfo
               tagData={{}}
               categories={formattedCategories}
@@ -370,8 +358,8 @@ function AdminPage() {
             />
           )}
 
-          {!selectionState.showTagInfo &&
-            !selectionState.showProgramInfo &&
+          {selectionState.selectedTag == null &&
+            selectionState.selectedProgram == null &&
             !selectionState.addingProgram &&
             !selectionState.addingTag && (
               <DefaultMessage>
