@@ -53,8 +53,8 @@ function AdminPage() {
 
   // a way to organize related state values?
   const [selectionState, setSelectionState] = useState({
-    selectedProgram: null, // is a program selected
-    selectedTag: null, // is a tag selected
+    selectedProgram: null, // the id of the currently selected Program
+    selectedTag: null, // the id of the currently selected Tag
     showProgramInfo: false,
     showTagInfo: false,
     addingProgram: false, // becomes true when the user presses the add btn on the ProgramsButtonList
@@ -69,7 +69,7 @@ function AdminPage() {
   const [selectedProgramInfo, setSelectedProgramInfo] = useState(null);
   const [selectedTagInfo, setSelectedTagInfo] = useState(null);
 
-  // button list items
+  // button list items, transformed from programs and tags
   const [programItems, setProgramItems] = useState([]);
   const [tagItems, setTagItems] = useState([]);
 
@@ -274,6 +274,7 @@ function AdminPage() {
     setSelectedProgramInfo(null);
   };
 
+  // not fully implemented yet
   const handleRemoveTag = () => {
     if (selectionState.selectedTag == null) {
       console.log("no selected tag to remove");
@@ -295,16 +296,6 @@ function AdminPage() {
       onError
     );
   };
-
-  useEffect(() => {
-    // This block will be executed after the component has re-rendered
-    // when the selectedProgram changes state, update the visibility of ProgramInfo
-    setSelectionState((prevState) => ({
-      ...prevState,
-      showProgramInfo: selectionState.selectedProgram !== null,
-      showTagInfo: selectionState.selectedTag !== null,
-    }));
-  }, [selectionState.selectedProgram, selectionState.selectedTag]);
 
   if (isLoading) {
     return null; // Render nothing while loading
