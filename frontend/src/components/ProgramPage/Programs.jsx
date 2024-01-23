@@ -117,14 +117,15 @@ const ProgramCard = ({ program }) => {
 
 
   const toggleFavorite = async () => {
-    console.log("programID in toggle: ", program.program_id, cookieUserID)
+    console.log("programID in toggle: ", program.program_id, cookieUserID);
     try {
       // Check if the user is authenticated
       if (!isAuthenticated) {
-        console.log("User is not authenticated. Please log in.");
-        return;
+         alert(
+           "Oops! It looks like you're not logged in. Please log in to unlock this feature!"
+         );
+         return;
       }
-
       const favoriteRequest = isFavorite ? "removeFavorite" : "addFavorite";
       const url = `${backend_url}/user/favorite/${favoriteRequest}`;
 
