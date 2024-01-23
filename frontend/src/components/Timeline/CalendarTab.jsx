@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Container } from "react-bootstrap";
 import FavoritesBank from "./FavoritesBank";
+import Timeline from "./TimelineRow";
 import { DragDropContext } from "react-beautiful-dnd";
 
 const testPgrms = [
@@ -28,7 +29,7 @@ function onDragEnd(result) {
   const {dest, src} = result;
 
   if (!dest) return;
-  if (dest.droppableId === src.droppableId && dest.index === src.index)
+  if (dest.droppableId === src.droppableId)
     return;
 
   
@@ -42,9 +43,9 @@ function CalendarTab() {
     <Container fluid>
       <DragDropContext onDragEnd={onDragEnd}>
         <FavoritesBank favoritesList={favoritesList} />
+
+        <Timeline />
       </DragDropContext>
-
-
     </Container>
   );
 }
