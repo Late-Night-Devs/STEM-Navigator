@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
+
 const Programs = ({ selectedTagIds }) => {
   const [programs, setPrograms] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -76,39 +77,76 @@ const Programs = ({ selectedTagIds }) => {
   );
 };
 
-
-const ProgramCard = ({program}) => {
+const ProgramCard = ({ program }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [userID, setUserID] = useState(null);
   const { user, isAuthenticated } = useAuth0();
+  // Fetch the user ID from the cookie
+  const cookieUserID = Cookies.get("cookieUId");
+  console.log("\ncookieUID:  ", cookieUserID);
+  console.log("\nprogramID: ", program.program_id);
+  useEffect(() => {
+    const checkFavoriteDatabase = async () => {
+      if (!isAuthenticated) {
+        console.log("User is not authenticated. Please log in.");
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          `${backend_url}/user/favorite/checkFavorite/${cookieUserID}/${program.program_id}`,
+          {
+            withCredentials: true,
+          }
+        );
+         
+        const isFavoriteInDatabase = response.data.isFavorite;
+         console.log("checking from fav : ", isFavoriteInDatabase);
+        setIsFavorite(isFavoriteInDatabase);
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          // Handle 404 (Not Found) by returning false
+          setIsFavorite(false);
+        } else if (error.response && error.response.status === 500) {
+          console.error("Internal Server Error:", error);
+        }
+      }
+    };
+
+    checkFavoriteDatabase();
+  }, [isAuthenticated, cookieUserID, program.program_id]);
+
 
   const toggleFavorite = async () => {
-    // Add logic to check if user email is verified
-    // if (isAuthenticated && userID !== null) {
-    //   const favoriteRequest = isFavorite ? "removeFavorite" : "addFavorite";
-    //   const url = `${backend_url}/user/favorite/${favoriteRequest}`;
+    console.log("programID in toggle: ", program.program_id, cookieUserID)
+    try {
+      // Check if the user is authenticated
+      if (!isAuthenticated) {
+        console.log("User is not authenticated. Please log in.");
+        return;
+      }
 
-    //   const requestData = {
-    //     userID: userID,
-    //     programID: program.id,
-    //   };
+      const favoriteRequest = isFavorite ? "removeFavorite" : "addFavorite";
+      const url = `${backend_url}/user/favorite/${favoriteRequest}`;
 
-    //   console.log("this is programID for the request -- ", program.id);
-    //   try {
-    //     const response = await axios.post(url, requestData);
-    //     console.log(response.data);
-    //     setIsFavorite((prevIsFavorite) => !prevIsFavorite);
-    //   } catch (error) {
-    //     console.error("Error:", error);
-    //   }
-    // } else {
-    //   console.log(
-    //     "User email is not verified. Please verify your email before using the bookmark."
-    //   );
-    //   return;
-    // }
-    return setIsFavorite(!isFavorite);
+      const requestData = {
+        userID: cookieUserID,
+        programID: program.program_id,
+      };
+
+      const response = await axios.post(url, requestData, {
+        withCredentials: true,
+      });
+
+      console.log(response.data);
+
+      // Toggle the local state after successful request
+      setIsFavorite((prevIsFavorite) => !prevIsFavorite);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
+
   return (
     <Card className="w-100 position-relative">
       <FontAwesomeIcon

@@ -11,6 +11,29 @@ exports.getAllFavorites = (req, res) => {
     });
 };
 
+exports.checkFavorite = (req, res) => {
+    const { userID, programID } = req.params;
+
+    // Validate userID and programID if needed
+
+    db.query(
+        "SELECT * FROM UserFavorites WHERE user_id = ? AND program_id = ?",
+        [userID, programID],
+        (err, results) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ error: "Internal Server Error" });
+            }
+
+            // Check if there are any matching records
+            const isFavorite = results.length > 0;
+
+            // Respond with the result
+            res.json({ isFavorite });
+        }
+    );
+};
+
 exports.addFavoriteProgram = (req, res) => {
     const { userID, programID } = req.body;
     console.log("Adding Favorite Program for a UserID and programID:", userID, programID);
