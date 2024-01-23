@@ -79,8 +79,7 @@ const Programs = ({ selectedTagIds }) => {
 
 const ProgramCard = ({ program }) => {
   const [isFavorite, setIsFavorite] = useState(false);
-  const [userID, setUserID] = useState(null);
-  const { user, isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useAuth0();
   // Fetch the user ID from the cookie
   const cookieUserID = Cookies.get("cookieUId");
   console.log("\ncookieUID:  ", cookieUserID);
@@ -101,7 +100,7 @@ const ProgramCard = ({ program }) => {
         );
          
         const isFavoriteInDatabase = response.data.isFavorite;
-         console.log("checking from fav : ", isFavoriteInDatabase);
+        //  console.log("checking the return from fav : ", isFavoriteInDatabase);
         setIsFavorite(isFavoriteInDatabase);
       } catch (error) {
         if (error.response && error.response.status === 404) {
