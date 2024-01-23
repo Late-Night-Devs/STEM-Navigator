@@ -55,22 +55,19 @@ function AdminPage() {
   const [selectionState, setSelectionState] = useState({
     selectedProgram: null, // is a program selected
     selectedTag: null, // is a tag selected
-    showProgramInfo: false, 
+    showProgramInfo: false,
     showTagInfo: false,
+    addingProgram: false, // becomes true when the user presses the add btn on the ProgramsButtonList
+    addingTag: false, // becomes true when the user presses the add btn Tags ButtonList
   });
 
   /* formattedProgramTags uses Tags and formats them for use by the Select <Select options={}>*/
   const [formattedTags, setFormattedTags] = useState(null);
   const [formattedCategories, setFormattedCategories] = useState([]);
 
-
   // object state values representing information about the currently selected program or tag
   const [selectedProgramInfo, setSelectedProgramInfo] = useState(null);
   const [selectedTagInfo, setSelectedTagInfo] = useState(null);
-
-  // handle add btn press
-  const [addingProgram, setAddingProgram] = useState(false);
-  const [addingTag, setAddingTag] = useState(false);
 
   // button list items
   const [programItems, setProgramItems] = useState([]);
@@ -110,11 +107,11 @@ function AdminPage() {
         ...prevState,
         selectedTag: null,
         showTagInfo: false,
+        addingProgram: false,
+        addingTag: false,
       }));
       setSelectedTagInfo(null);
     }
-    setAddingProgram(false);
-    setAddingTag(false);
     // if clicking a selected program, deselect it
     if (program.id === selectionState.selectedProgram) {
       setSelectionState({
@@ -181,18 +178,18 @@ function AdminPage() {
   const isTagSelected = (tagId) => tagId === selectionState.selectedTag;
 
   const handleTagClick = (tag) => {
-    if (addingProgram) {
-      setAddingProgram(false);
+    if (selectionState.addingProgram) {
+      selectionState.addingProgram = false;
     }
     if (selectionState.selectedProgram !== null) {
       setSelectionState((prevState) => ({
         ...prevState,
         selectedProgram: null,
         showProgramInfo: false,
+        addingProgram: false,
+        addingTag: false,
       }));
       setSelectedProgramInfo(null);
-      setAddingProgram(false);
-      setAddingTag(false);
     }
     // if clicking a selected tag, deselect it
     if (tag.id === selectionState.selectedTag) {
@@ -248,10 +245,10 @@ function AdminPage() {
       selectedTag: null,
       showProgramInfo: false,
       showTagInfo: false,
+      addingProgram: true,
+      addingTag: false,
     }));
 
-    setAddingProgram(true);
-    setAddingTag(false);
     setSelectedProgramInfo({
       program_id: "-1",
       title: "",
@@ -270,10 +267,10 @@ function AdminPage() {
       ...prevState,
       selectedTag: null,
       selectedProgram: null,
+      addingTag: true,
+      addingProgram: false,
     }));
     setSelectedTagInfo(null);
-    setAddingTag(true);
-    setAddingProgram(false);
     setSelectedProgramInfo(null);
   };
 
@@ -366,7 +363,7 @@ function AdminPage() {
             />
           )}
           {/* render the blank form for adding new program */}
-          {addingProgram && !selectionState.showProgramInfo && (
+          {selectionState.addingProgram && !selectionState.showProgramInfo && (
             <ProgramInfo
               programData={{}}
               allProgramTags={formattedTags}
@@ -374,7 +371,7 @@ function AdminPage() {
             />
           )}
           {/* render the blank form for adding new tag */}
-          {addingTag && !selectionState.showTagInfo && (
+          {selectionState.addingTag && !selectionState.showTagInfo && (
             <TagInfo
               tagData={{}}
               categories={formattedCategories}
@@ -384,8 +381,8 @@ function AdminPage() {
 
           {!selectionState.showTagInfo &&
             !selectionState.showProgramInfo &&
-            !addingProgram &&
-            !addingTag && (
+            !selectionState.addingProgram &&
+            !selectionState.addingTag && (
               <DefaultMessage>
                 <p>Click on a Program or Tag to show information here.</p>
               </DefaultMessage>
