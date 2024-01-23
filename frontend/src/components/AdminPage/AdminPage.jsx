@@ -53,9 +53,9 @@ function AdminPage() {
 
   // a way to organize related state values?
   const [selectionState, setSelectionState] = useState({
-    selectedProgram: null,
-    selectedTag: null,
-    showProgramInfo: false,
+    selectedProgram: null, // is a program selected
+    selectedTag: null, // is a tag selected
+    showProgramInfo: false, 
     showTagInfo: false,
   });
 
@@ -63,14 +63,6 @@ function AdminPage() {
   const [formattedTags, setFormattedTags] = useState(null);
   const [formattedCategories, setFormattedCategories] = useState([]);
 
-  // state values representing the selected program or tag (represented by a yellow button)
-  // just a number representing the id of the program or tag
-  const [selectedProgram, setSelectedProgram] = useState(null);
-  const [selectedTag, setSelectedTag] = useState(null);
-
-  // boolean state values representing the visibility of the Program Info or Tag Info
-  //const [showProgramInfo, setShowProgramInfo] = useState(false);
-  //const [showTagInfo, setShowTagInfo] = useState(false);
 
   // object state values representing information about the currently selected program or tag
   const [selectedProgramInfo, setSelectedProgramInfo] = useState(null);
@@ -119,7 +111,6 @@ function AdminPage() {
         selectedTag: null,
         showTagInfo: false,
       }));
-      setSelectedTag(null);
       setSelectedTagInfo(null);
     }
     setAddingProgram(false);
@@ -132,7 +123,6 @@ function AdminPage() {
         showProgramInfo: false,
         showTagInfo: false,
       });
-      setSelectedProgram(null);
       setSelectedProgramInfo(null);
     } else {
       // we selected a new program
@@ -155,7 +145,6 @@ function AdminPage() {
         showProgramInfo: true,
         showTagInfo: false,
       });
-      setSelectedProgram(program.id);
       setSelectedProgramInfo({
         ProgramInfo: programInfo,
         AssociatedTags: associatedTags,
@@ -201,7 +190,6 @@ function AdminPage() {
         selectedProgram: null,
         showProgramInfo: false,
       }));
-      setSelectedProgram(null);
       setSelectedProgramInfo(null);
       setAddingProgram(false);
       setAddingTag(false);
@@ -221,16 +209,14 @@ function AdminPage() {
         showProgramInfo: false,
         showTagInfo: true,
       });
-      setSelectedTag(tag.id);
       setSelectedTagInfo(tagInfo);
-      setSelectedProgram(null);
       setSelectedProgramInfo(null);
     }
   };
 
   const handleRemoveProgram = () => {
     // remove the selected program (if there is one)
-    if (selectedProgram == null) {
+    if (selectionState.selectedProgram == null) {
       console.log("no selected program to remove");
       return;
     }
@@ -249,7 +235,7 @@ function AdminPage() {
     };
     handleDelete(
       "programs",
-      selectedProgram,
+      selectionState.selectedProgram,
       "are you sure you want to delete the selected program?",
       onError,
       onSuccess
@@ -292,7 +278,7 @@ function AdminPage() {
   };
 
   const handleRemoveTag = () => {
-    if (selectedTag == null) {
+    if (selectionState.selectedTag == null) {
       console.log("no selected tag to remove");
       return;
     }
@@ -306,7 +292,7 @@ function AdminPage() {
     };
     handleDelete(
       "tags",
-      selectedTag,
+      selectionState.selectedTag,
       "are you sure you want to delete the selected tag?",
       onSuccess,
       onError
@@ -366,7 +352,7 @@ function AdminPage() {
           {selectionState.showProgramInfo && (
             <ProgramInfo
               // using a 'key' prop forces a re-render when the key changes.
-              key={selectedProgram || "default-key"}
+              key={selectionState.selectedProgram || "default-key"}
               programData={selectedProgramInfo}
               allProgramTags={formattedTags}
               onProgramDataChange={setSelectedProgramInfo}
