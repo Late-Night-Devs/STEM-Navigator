@@ -12,17 +12,6 @@ const PageContainer = styled.div`
   margin: auto;
 `;
 
-/* currently unused
-const IntroSection = styled.section`
-  padding: 2rem;
-  text-align: center;
-
-  h1 {
-    font-weight: bold;
-  }
-`;
-*/
-
 const ProgramsAndTagsRow = styled(Row)`
   padding: 2rem;
 `;
@@ -58,16 +47,12 @@ function AdminPage() {
   const { data: programs, error: programsError } = useFetchData("programs");
   // fetch the tags data from the backend
   const { data: tags, error: tagsError } = useFetchData("tags");
-  // currently unused
-  /*
-    pre-populate the Tags Selection on the Program edit form with 
-    any program-tags entries which have the selected program id.
-  */
+  // fetch the relationship data between tags and programs
   const { data: programTags, error: programTagsError } =
     useFetchData("program-tags");
 
   /* formattedProgramTags uses Tags and formats them for use by the Select <Select options={}>*/
-  const [formattedProgramTags, setFormattedProgramTags] = useState(null);
+  const [formattedTags, setFormattedTags] = useState(null);
   const [formattedCategories, setFormattedCategories] = useState([]);
 
   // state values representing the selected program or tag (represented by a yellow button)
@@ -78,6 +63,7 @@ function AdminPage() {
   const [showProgramInfo, setShowProgramInfo] = useState(false);
   const [showTagInfo, setShowTagInfo] = useState(false);
 
+  // object state values representing information about the currently selected program or tag
   const [selectedProgramInfo, setSelectedProgramInfo] = useState(null);
   const [selectedTagInfo, setSelectedTagInfo] = useState(null);
 
@@ -85,24 +71,37 @@ function AdminPage() {
   const [addingProgram, setAddingProgram] = useState(false);
   const [addingTag, setAddingTag] = useState(false);
 
-  // Transform programs data for ButtonList
-  const programItems = programs
-    .map((program) => ({
-      key: program.program_id,
-      id: program.program_id,
-      name: program.title,
-    }))
-    .sort((a, b) => a.name.localeCompare(b.name));
+  // button list items
+  const [programItems, setProgramItems] = useState([]);
+  const [tagItems, setTagItems] = useState([]);
 
-  // Transform tags data for TagsList
-  const tagItems = tags
-    .map((tag) => ({
-      key: tag.tag_id,
-      id: tag.tag_id,
-      name: tag.tag_name,
-      category: tag.category.trim(),
-    }))
-    .sort((a, b) => a.name.localeCompare(b.name));
+  useEffect(() => {
+    if (programs) {
+      console.log("programs re-loaded");
+      const transformedPrograms = programs
+        .map((program) => ({
+          key: program.program_id,
+          id: program.program_id,
+          name: program.title,
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      setProgramItems(transformedPrograms);
+    }
+  }, [programs]); // Recalculate when programs data changes
+
+  useEffect(() => {
+    if (tags) {
+      const transformedTags = tags
+        .map((tag) => ({
+          key: tag.tag_id,
+          id: tag.tag_id,
+          name: tag.tag_name,
+          category: tag.category.trim(),
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      setTagItems(transformedTags);
+    }
+  }, [tags]); // Recalculate when tags data changes
 
   const handleProgramClick = (program) => {
     setAddingProgram(false);
@@ -123,7 +122,6 @@ function AdminPage() {
             : null;
         })
         .filter((tag) => tag !== null);
-      //console.log("Associated Tags:", associatedTags);
 
       // find a program with the same id as the selected program
       const programInfo = programs.find((p) => p.program_id === program.id);
@@ -156,7 +154,7 @@ function AdminPage() {
         const tagInfo = tags.find((tag) => tag.tag_id === pt.tag_id);
         return { value: tagInfo.tag_id.toString(), label: tagInfo.tag_name };
       });
-      setFormattedProgramTags(formattedTags);
+      setFormattedTags(formattedTags);
     }
   }, [tags]); // Depend on tags and programTags
 
@@ -187,13 +185,18 @@ function AdminPage() {
       console.log("no selected program to remove");
       return;
     }
+
     const onSuccess = (response_data) => {
       // Handle successful deletion
-      console.log(response_data);
+      // update the ButtonList for Programs
+      // update the Form to be empty
+      //setSelectedProgram(null);
+      //setSelectedProgramInfo(null);
     };
     const onError = (error) => {
       // Handle error
-      console.log(error);
+      //console.log(error);
+      console.log("backend returned error: " + error);
     };
     handleDelete(
       "programs",
@@ -286,22 +289,6 @@ function AdminPage() {
 
   return (
     <PageContainer>
-      {/*  not sure if this is introduction is necessary, 
-           but we might add something here later?
-
-      <Row className="img-hero-welcome">
-        <Col>
-          <IntroSection>
-            <h1 className="intro">Admin Tools</h1>
-            <p>
-              Select a Program or Tag by clicking on it. You can only select one
-              at a time!
-            </p>
-          </IntroSection>
-        </Col>
-      </Row>
-        */}
-
       <ProgramsAndTagsRow>
         <Col md={12} lg={6}>
           {(programsError || tagsError || programTagsError) && (
@@ -333,7 +320,7 @@ function AdminPage() {
               // using a 'key' prop forces a re-render when the key changes.
               key={selectedProgram || "default-key"}
               programData={selectedProgramInfo}
-              allProgramTags={formattedProgramTags}
+              allProgramTags={formattedTags}
               onProgramDataChange={setSelectedProgramInfo}
             />
           )}
@@ -348,7 +335,7 @@ function AdminPage() {
           {addingProgram && !showProgramInfo && (
             <ProgramInfo
               programData={{}}
-              allProgramTags={formattedProgramTags}
+              allProgramTags={formattedTags}
               onProgramDataChange={setSelectedProgramInfo}
             />
           )}

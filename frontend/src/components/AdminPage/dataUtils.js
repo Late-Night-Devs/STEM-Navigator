@@ -51,7 +51,7 @@ const usepostdata = (endpoint, payload) => {
 export const handleDelete = (
   resourceType,
   resourceId,
-  confirmMessage, 
+  confirmMessage,
   onSuccess,
   onError
 ) => {
