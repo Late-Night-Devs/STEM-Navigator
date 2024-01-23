@@ -51,17 +51,26 @@ function AdminPage() {
   const { data: programTags, error: programTagsError } =
     useFetchData("program-tags");
 
+  // a way to organize related state values?
+  const [selectionState, setSelectionState] = useState({
+    selectedProgram: null,
+    selectedTag: null,
+    showProgramInfo: false,
+    showTagInfo: false,
+  });
+
   /* formattedProgramTags uses Tags and formats them for use by the Select <Select options={}>*/
   const [formattedTags, setFormattedTags] = useState(null);
   const [formattedCategories, setFormattedCategories] = useState([]);
 
   // state values representing the selected program or tag (represented by a yellow button)
+  // just a number representing the id of the program or tag
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [selectedTag, setSelectedTag] = useState(null);
 
   // boolean state values representing the visibility of the Program Info or Tag Info
-  const [showProgramInfo, setShowProgramInfo] = useState(false);
-  const [showTagInfo, setShowTagInfo] = useState(false);
+  //const [showProgramInfo, setShowProgramInfo] = useState(false);
+  //const [showTagInfo, setShowTagInfo] = useState(false);
 
   // object state values representing information about the currently selected program or tag
   const [selectedProgramInfo, setSelectedProgramInfo] = useState(null);
@@ -104,10 +113,25 @@ function AdminPage() {
   }, [tags]); // Recalculate when tags data changes
 
   const handleProgramClick = (program) => {
+    if (selectionState.selectedTag !== null) {
+      setSelectionState((prevState) => ({
+        ...prevState,
+        selectedTag: null,
+        showTagInfo: false,
+      }));
+      setSelectedTag(null);
+      setSelectedTagInfo(null);
+    }
     setAddingProgram(false);
     setAddingTag(false);
     // if clicking a selected program, deselect it
-    if (program.id === selectedProgram) {
+    if (program.id === selectionState.selectedProgram) {
+      setSelectionState({
+        selectedProgram: null,
+        selectedTag: null,
+        showProgramInfo: false,
+        showTagInfo: false,
+      });
       setSelectedProgram(null);
       setSelectedProgramInfo(null);
     } else {
@@ -125,13 +149,17 @@ function AdminPage() {
 
       // find a program with the same id as the selected program
       const programInfo = programs.find((p) => p.program_id === program.id);
+      setSelectionState({
+        selectedProgram: program.id,
+        selectedTag: null,
+        showProgramInfo: true,
+        showTagInfo: false,
+      });
       setSelectedProgram(program.id);
       setSelectedProgramInfo({
         ProgramInfo: programInfo,
         AssociatedTags: associatedTags,
       });
-      setSelectedTag(null);
-      setShowTagInfo(false);
     }
   };
 
@@ -159,19 +187,38 @@ function AdminPage() {
   }, [tags]); // Depend on tags and programTags
 
   // utility to determine if a program or tag is currently selected
-  const isProgramSelected = (programId) => programId === selectedProgram;
-  const isTagSelected = (tagId) => tagId === selectedTag;
+  const isProgramSelected = (programId) =>
+    programId === selectionState.selectedProgram;
+  const isTagSelected = (tagId) => tagId === selectionState.selectedTag;
 
   const handleTagClick = (tag) => {
+    if (selectionState.selectedProgram !== null) {
+      setSelectionState((prevState) => ({
+        ...prevState,
+        selectedProgram: null,
+        showProgramInfo: false,
+      }));
+      setSelectedProgram(null);
+      setSelectedProgramInfo(null);
+      setAddingProgram(false);
+      setAddingTag(false);
+    }
     // if clicking a selected tag, deselect it
-    setAddingProgram(false);
-    setAddingTag(false);
-
-    if (tag.id === selectedTag) {
-      setSelectedTag(null);
-      setSelectedTagInfo(null);
+    if (tag.id === selectionState.selectedTag) {
+      setSelectionState({
+        selectedProgram: null,
+        selectedTag: null,
+        showProgramInfo: false,
+        showTagInfo: false,
+      });
     } else {
       const tagInfo = tags.find((t) => t.tag_id === tag.id);
+      setSelectionState({
+        selectedProgram: null,
+        selectedTag: tag.id,
+        showProgramInfo: false,
+        showTagInfo: true,
+      });
       setSelectedTag(tag.id);
       setSelectedTagInfo(tagInfo);
       setSelectedProgram(null);
@@ -259,21 +306,12 @@ function AdminPage() {
   useEffect(() => {
     // This block will be executed after the component has re-rendered
     // when the selectedProgram changes state, update the visibility of ProgramInfo
-    if (selectedProgram === null) {
-      setShowProgramInfo(false);
-    } else {
-      setShowProgramInfo(true);
-    }
-  }, [selectedProgram]);
-
-  useEffect(() => {
-    // when the selectedTag changes state, update the visibility of TagInfo
-    if (selectedTag === null) {
-      setShowTagInfo(false);
-    } else {
-      setShowTagInfo(true);
-    }
-  }, [selectedTag]);
+    setSelectionState((prevState) => ({
+      ...prevState,
+      showProgramInfo: selectionState.selectedProgram !== null,
+      showTagInfo: selectionState.selectedTag !== null,
+    }));
+  }, [selectionState.selectedProgram, selectionState.selectedTag]);
 
   if (isLoading) {
     return null; // Render nothing while loading
@@ -315,7 +353,7 @@ function AdminPage() {
         </Col>
 
         <StickyColumn md={12} lg={6}>
-          {showProgramInfo && (
+          {selectionState.showProgramInfo && (
             <ProgramInfo
               // using a 'key' prop forces a re-render when the key changes.
               key={selectedProgram || "default-key"}
@@ -324,7 +362,7 @@ function AdminPage() {
               onProgramDataChange={setSelectedProgramInfo}
             />
           )}
-          {showTagInfo && (
+          {selectionState.showTagInfo && (
             <TagInfo
               tagData={selectedTagInfo}
               categories={formattedCategories}
@@ -332,7 +370,7 @@ function AdminPage() {
             />
           )}
           {/* render the blank form for adding new program */}
-          {addingProgram && !showProgramInfo && (
+          {addingProgram && !selectionState.showProgramInfo && (
             <ProgramInfo
               programData={{}}
               allProgramTags={formattedTags}
@@ -340,7 +378,7 @@ function AdminPage() {
             />
           )}
           {/* render the blank form for adding new tag */}
-          {addingTag && !showTagInfo && (
+          {addingTag && !selectionState.showTagInfo && (
             <TagInfo
               tagData={{}}
               categories={formattedCategories}
@@ -348,11 +386,14 @@ function AdminPage() {
             />
           )}
 
-          {!showTagInfo && !showProgramInfo && !addingProgram && !addingTag && (
-            <DefaultMessage>
-              <p>Click on a Program or Tag to show information here.</p>
-            </DefaultMessage>
-          )}
+          {!selectionState.showTagInfo &&
+            !selectionState.showProgramInfo &&
+            !addingProgram &&
+            !addingTag && (
+              <DefaultMessage>
+                <p>Click on a Program or Tag to show information here.</p>
+              </DefaultMessage>
+            )}
         </StickyColumn>
       </ProgramsAndTagsRow>
     </PageContainer>
