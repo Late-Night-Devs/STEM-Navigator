@@ -1,8 +1,9 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Card, Row, Col, Button } from "react-bootstrap";
-import Collapse from 'react-bootstrap/Collapse';
+import Collapse from "react-bootstrap/Collapse";
 import Viking from "../../image/viking.png";
+import SearchByProgram from "./SearchByProgram";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
@@ -11,11 +12,11 @@ import Cookies from "js-cookie";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
-
 const Programs = ({ selectedTagIds }) => {
   const [programs, setPrograms] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(9);
+  const [storePrograms, setStorePrograms] = useState([]);
 
   useEffect(() => {
     const fetchPrograms = async () => {
@@ -24,7 +25,9 @@ const Programs = ({ selectedTagIds }) => {
         const response = await axios.post(`${backend_url}/programs/filter`, {
           tagIds: tagIdsArray,
         });
+
         setPrograms(response.data);
+        setStorePrograms(response.data);
       } catch (error) {
         console.error("Error fetching programs:", error);
       }
@@ -41,11 +44,27 @@ const Programs = ({ selectedTagIds }) => {
 
   const noProgramsAfterFilter = currentItems.length === 0;
 
+  // Handle search program by title
+  const handleSearchByProgram = (key) => {
+    let myResult = filterProgramsByTitle(storePrograms, key);
+    setPrograms(myResult);
+  };
+
+  function filterProgramsByTitle(data, key) {
+    let filteredPrograms;
+    filteredPrograms = data.filter((program) => {
+      const lowercaseTitle = program.title.toLowerCase();
+      return lowercaseTitle.includes(key.toLowerCase());
+    });
+
+    return filteredPrograms;
+  }
   return (
     <>
       <Row className="g-4">
+        <SearchByProgram handleSearchByProgram={handleSearchByProgram} />
         {currentItems.map((program) => (
-          <ProgramColumn program={program}/>
+          <ProgramColumn program={program} />
         ))}
         {noProgramsAfterFilter && (
           <Col xs={12} className="text-center mt-3">
@@ -76,9 +95,9 @@ const Programs = ({ selectedTagIds }) => {
   );
 };
 
-const ProgramColumn = ({program}) => {
+const ProgramColumn = ({ program }) => {
   const [mdValue, setMdValue] = useState(4);
- 
+
   const changeMdValue = () => {
     if (mdValue === 4) {
       setMdValue(12);
@@ -86,24 +105,24 @@ const ProgramColumn = ({program}) => {
       setMdValue(4);
     }
   };
- 
+
   return (
     <Col key={program.id} md={mdValue} className="mb-4">
-      <ProgramCard program={program} changeColumnWidth={changeMdValue}/>
+      <ProgramCard program={program} changeColumnWidth={changeMdValue} />
     </Col>
   );
 };
- 
-const ProgramCard = ({program, changeColumnWidth}) => {
+
+const ProgramCard = ({ program, changeColumnWidth }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const { isAuthenticated } = useAuth0();
 
   const [isCollapsed, toggleIsCollapsed] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-    const toggleText = () => {
-      setIsExpanded(!isExpanded);
+  const toggleText = () => {
+    setIsExpanded(!isExpanded);
   };
- 
+
   // Fetch the user ID from the cookie
   const cookieUserID = Cookies.get("cookieUId");
   console.log("\ncookieUID:  ", cookieUserID);
@@ -122,7 +141,7 @@ const ProgramCard = ({program, changeColumnWidth}) => {
             withCredentials: true,
           }
         );
-         
+
         const isFavoriteInDatabase = response.data.isFavorite;
         //  console.log("checking the return from fav : ", isFavoriteInDatabase);
         setIsFavorite(isFavoriteInDatabase);
@@ -139,16 +158,15 @@ const ProgramCard = ({program, changeColumnWidth}) => {
     checkFavoriteDatabase();
   }, [isAuthenticated, cookieUserID, program.program_id]);
 
-
   const toggleFavorite = async () => {
     console.log("programID in toggle: ", program.program_id, cookieUserID);
     try {
       // Check if the user is authenticated
       if (!isAuthenticated) {
-         alert(
-           "Oops! It looks like you're not logged in. Please log in to unlock this feature!"
-         );
-         return;
+        alert(
+          "Oops! It looks like you're not logged in. Please log in to unlock this feature!"
+        );
+        return;
       }
       const favoriteRequest = isFavorite ? "removeFavorite" : "addFavorite";
       const url = `${backend_url}/user/favorite/${favoriteRequest}`;
@@ -192,44 +210,41 @@ const ProgramCard = ({program, changeColumnWidth}) => {
             {program.contact_email}
           </a>
           <Collapse in={isCollapsed}>
-          <div id="collapse-text">
-            Web Link:{" "}
-            <a href={program.link_to_web}>
-              {program.link_to_web}
-            </a>
-            <br />
-            Program Duration: {program.duration}{" "}{program.duration_unit}
-            <br />
-            <br />
-            {program.long_description}
-            <br />
-            <br />
-            {"(Work in Progress)"}
-          </div>
+            <div id="collapse-text">
+              Web Link: <a href={program.link_to_web}>{program.link_to_web}</a>
+              <br />
+              Program Duration: {program.duration} {program.duration_unit}
+              <br />
+              <br />
+              {program.long_description}
+              <br />
+              <br />
+              {"(Work in Progress)"}
+            </div>
           </Collapse>
         </Card.Text>
       </Card.Body>
       <Card.Footer className="text-center">
         <Button
-          onClick={() => { changeColumnWidth(); toggleIsCollapsed(!isCollapsed); toggleText(); }}
+          onClick={() => {
+            changeColumnWidth();
+            toggleIsCollapsed(!isCollapsed);
+            toggleText();
+          }}
           aria-controls="collapse-text"
           aria-expanded={isCollapsed}
         >
-          <ShowMoreShowLess isExpanded={isExpanded}/>
+          <ShowMoreShowLess isExpanded={isExpanded} />
         </Button>
       </Card.Footer>
     </Card>
   );
 };
 
-const ShowMoreShowLess = ({isExpanded}) => {
-  return (
-    <>
-      {isExpanded ? 'Show Less' : 'Show More'}
-    </>
-  );
- }
- 
+const ShowMoreShowLess = ({ isExpanded }) => {
+  return <>{isExpanded ? "Show Less" : "Show More"}</>;
+};
+
 const Pagination = ({ itemsPerPage, totalItems, paginate }) => {
   const pageNumbers = [];
 
