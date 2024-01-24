@@ -213,13 +213,10 @@ const ProgramCard = ({ program, changeColumnWidth }) => {
             <div id="collapse-text">
               Web Link: <a href={program.link_to_web}>{program.link_to_web}</a>
               <br />
-              Program Duration: {program.duration} {program.duration_unit}
+              <ProgramDuration program={program} />
               <br />
               <br />
               {program.long_description}
-              <br />
-              <br />
-              {"(Work in Progress)"}
             </div>
           </Collapse>
         </Card.Text>
@@ -240,6 +237,12 @@ const ProgramCard = ({ program, changeColumnWidth }) => {
     </Card>
   );
 };
+
+const ProgramDuration = ({ program }) => {
+  return <>{program.duration ?
+    "Program Duration: " + program.duration + " " + program.duration_unit :
+    "Program Duration: Varies"}</>;
+}
 
 const ShowMoreShowLess = ({ isExpanded }) => {
   return <>{isExpanded ? "Show Less" : "Show More"}</>;
