@@ -31,7 +31,7 @@ camps, courses, and other similar offerings all from within one web application.
 ## Database ( db-dump )
 
 - Running the docker app first
-- Build n run the docker compose file: `docker compose up -d`
+- Build n run the docker compose file: Build n run the docker compose file: `docker compose up -d`
 - Create tables and feed data: `docker exec -i db mysql -uroot -pmy-secret db < stem_navigator.sql`
 
 # Database (windows)
@@ -41,3 +41,4 @@ camps, courses, and other similar offerings all from within one web application.
 - `docker cp stem_navigator.sql db:/var/lib/mysql/stem_navigator.sql`
 - execute the file with docker to create tables and feed data:
 - `docker exec -i db cat /var/lib/mysql/stem_navigator.sql | docker exec -i db mysql -uroot -pmy-secret db`
+- Create tables and feed data: `docker exec -i db mysql -uroot -pmy-secret db < stem_navigator.sql`
