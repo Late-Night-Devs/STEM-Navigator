@@ -1,0 +1,23 @@
+# get the most current data from the backend
+# currently on page load / refresh, we fetch the data
+useFetchData -> programs
+useFetchData -> tags
+useFetchData -> programTags
+
+# transform the tag data as needed 
+tags -> formattedProgramTags  # gives the tag 'value' and 'label' attributes to be used by Select
+tags -> formattedCategories  # finds unique categories by searching all tags
+
+# these are used for the button lists
+programs -> programItems
+tags -> tagItems
+
+
+#selected program or tag
+
+selectedProgramInfo
+
+
+
+
+

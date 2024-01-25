@@ -27,6 +27,17 @@ SET time_zone = "+00:00";
 -- Table structure for table `Programs`
 --
 
+-- we are making the db from scratch here. 
+-- if we have existing database data, 
+-- those data should be removed
+-- otherwise you might get an error like 'table already exists'
+-- and 'table cannot be dropped due to dependencies'
+DROP DATABASE IF EXISTS db;
+CREATE DATABASE db;
+USE db;
+
+
+
 CREATE TABLE `Programs` (
   `program_id` bigint(20) UNSIGNED NOT NULL,
   `title` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,

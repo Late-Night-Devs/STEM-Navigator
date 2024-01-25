@@ -1,10 +1,10 @@
+/* unused, example of multi-select
 import React from "react";
 import Select from "react-select";
 //import makeAnimated from 'react-select/animated';
 
 export default class MultiSelectExample extends React.Component {
   render() {
-    /*
     const options = [
       { value: "chocolate", label: "Chocolate" },
       { value: "strawberry", label: "Strawberry" },
@@ -21,7 +21,6 @@ export default class MultiSelectExample extends React.Component {
       { value: "coconut", label: "Coconut" },
       { value: "birthday-cake", label: "Birthday Cake" },
     ];
-    */
 
     return (
       <div>
@@ -30,3 +29,4 @@ export default class MultiSelectExample extends React.Component {
     );
   }
 }
+*/

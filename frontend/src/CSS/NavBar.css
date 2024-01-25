@@ -1,6 +1,19 @@
 .navbar {
-    background-color: rgba(109,139,39,1);
+  background-color: rgba(109, 139, 39, 1);
 }
-.nav-link{
-    font-weight: bolder;
+.nav-link {
+  font-weight: bolder;
+}
+.navbar-nav .nav-item {
+  display: block;
+}
+.nav-item {
+  padding: 10px;
+  font-weight: bold;
+  font-size: larger;
+  margin-left: 1px;
+  display: block;
+}
+.nav-item a {
+  color: #121111;
 }
