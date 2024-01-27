@@ -42,7 +42,7 @@ export const ProgramInfo = ({
             type="text"
             id="ProgramName"
             name="title"
-            value={programData?.ProgramInfo?.title || ""}
+            value={programData?.ProgramInfo?.title}
             onChange={handleChange}
           />
         </div>
@@ -52,7 +52,7 @@ export const ProgramInfo = ({
             type="text"
             id="ProgramLeadContact"
             name="lead_contact"
-            value={programData?.ProgramInfo?.lead_contact || ""}
+            value={programData?.ProgramInfo?.lead_contact}
             onChange={handleChange}
           />
         </div>
@@ -62,7 +62,7 @@ export const ProgramInfo = ({
             type="text"
             id="ContactEmail"
             name="contact_email"
-            value={programData?.ProgramInfo?.contact_email || ""}
+            value={programData?.ProgramInfo?.contact_email}
             onChange={handleChange}
             autoComplete="email"
           />
@@ -73,7 +73,7 @@ export const ProgramInfo = ({
             type="text"
             id="LinkToWeb"
             name="link_to_web"
-            value={programData?.ProgramInfo?.link_to_web || ""}
+            value={programData?.ProgramInfo?.link_to_web}
             onChange={handleChange}
           />
         </div>
@@ -94,7 +94,7 @@ export const ProgramInfo = ({
             rows="7"
             id="LongDescription"
             name="long_description"
-            value={programData?.ProgramInfo?.long_description || ""}
+            value={programData?.ProgramInfo?.long_description}
             onChange={handleChange}
           />
         </div>

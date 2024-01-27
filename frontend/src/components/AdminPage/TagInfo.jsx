@@ -44,7 +44,7 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
             size="42"
             id="TagName"
             name="tag_name"
-            value={tagData?.tag_name || ""}
+            value={tagData?.tag_name}
             onChange={handleChange}
           />
         </div>
