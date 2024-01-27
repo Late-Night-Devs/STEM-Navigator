@@ -1,6 +1,6 @@
 import React from "react";
 import Select from "react-select";
-//import { usePostData } from "./useData"; // should be used to post data to the backend
+import { postData } from "./dataUtils.js"; // should be used to post data to the backend
 import { SelectContainer, StyledLabel, Container } from "./sharedStyles.js";
 
 export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
@@ -19,9 +19,19 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     // handle form submission here
     // gather the payload data
     // post to the backend
+    function useResponse(response) {
+      console.log("response from Backend: " + response);
+    }
+
+    function setError(e) {
+      console.log("Backend returned error: " + e);
+    }
+
+    postData("admin/admin-modify-db/tag-form-submit", {payload: "/// SAMPLE PAYLOAD ///"}, useResponse, setError)
     console.log("Submitting form to backend");
   };
 
