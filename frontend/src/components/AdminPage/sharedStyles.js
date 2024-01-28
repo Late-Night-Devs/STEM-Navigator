@@ -20,13 +20,13 @@ export const StyledLabel = styled.label`
 
 export const StyledInput = styled.input`
   padding: 0.5rem;
-  margin: 0.25rem 0;
+  margin: 0.5rem 0;
   width: 100%;
 `;
 
 export const SelectContainer = styled.div`
   max-width: 500px;
-  margin: auto;
+  margin: 1rem 0;
   padding: 0.25rem;
 `;
 

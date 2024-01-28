@@ -2,6 +2,7 @@ import React from "react";
 import Select from "react-select";
 import styled from "styled-components";
 import {postData} from "./dataUtils.js"
+import { Row, Col } from "react-bootstrap"; 
 
 import {
   Container,
@@ -14,8 +15,16 @@ import {
 const StyledTextArea = styled.textarea`
   width: 100%;
   padding: 0.5rem;
-  margin: 0.5rem 0;
+  margin: 1rem 0;
 `;
+
+const StyledRow = styled(Row)`
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: center;
+margin: 0.25rem 0;
+`
 
   const durationUnitOptions = [
   { value: 'Weeks', label: 'Weeks' },
@@ -89,7 +98,6 @@ export const ProgramInfo = ({
   };
 
   const handleSelectChange = (selectedOptions) => {
-    //console.log(selectedOptions);
     onProgramDataChange(prevData => ({
       ...prevData,
       AssociatedTags: selectedOptions || []
@@ -152,28 +160,33 @@ export const ProgramInfo = ({
             onChange={handleChange}
           />
         </div>
-        <div>
-        <StyledLabel htmlFor="DurationNumber">Duration Number</StyledLabel>
-        <StyledInput
-          type="number"
-          id="DurationNumber"
-          name="number"
-          min="1" // duration can't be zero or negative
-          value={programData?.ProgramInfo?.duration}
-          onChange={handleChange}
-        />
-        </div>
-        <SelectContainer>
-          <StyledLabel>
-            Duration Unit
-            <Select
-              //options={[{ value: 'Weeks', label: 'Weeks' }, { value: 'Months', label: 'Months' }, { value: 'Terms', label: 'Terms' },{ value: 'Years', label: 'Years' }]}
-              options={durationUnitOptions}
-              defaultValue={durationUnitOptions.find(option => option.value === programData?.ProgramInfo?.duration_unit) || ""}
-              onChange={handleDurationUnitChange}
-            />
-          </StyledLabel>
-        </SelectContainer>
+        <span>Duration</span>
+        <Container>
+          <StyledRow>
+            <Col xs={6}>
+              <label htmlFor="DurationNumber">Number</label>
+              <input
+                type="number"
+                id="DurationNumber"
+                name="number"
+                min="1" // duration can't be zero or negative
+                value={programData?.ProgramInfo?.duration}
+                onChange={handleChange}
+                style={{width: "75px"}}
+              />
+            </Col>
+            <Col xs={6}>
+            <label>
+              Unit
+              <Select
+                options={durationUnitOptions}
+                defaultValue={durationUnitOptions.find(option => option.value === programData?.ProgramInfo?.duration_unit) || ""}
+                onChange={handleDurationUnitChange}
+              />
+            </label>
+            </Col>
+          </StyledRow>
+        </Container>
         <SelectContainer>
           <StyledLabel>
             Select Tags
@@ -185,6 +198,7 @@ export const ProgramInfo = ({
             />
           </StyledLabel>
         </SelectContainer>
+
         <div>
           <StyledLabel htmlFor="LongDescription">Long Description</StyledLabel>
           <StyledTextArea
