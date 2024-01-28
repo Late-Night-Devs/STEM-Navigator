@@ -254,7 +254,6 @@ function AdminPage() {
       contact_email: "",
       link_to_web: "",
       long_description: "",
-      // possible refactor to encapsulate DURATION {number, unit}
       duration: "",
       duration_unit: "",
       },

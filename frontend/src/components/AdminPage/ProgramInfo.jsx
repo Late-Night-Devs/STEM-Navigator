@@ -167,7 +167,8 @@ export const ProgramInfo = ({
           <StyledLabel>
             Duration Unit
             <Select
-              options={[{ value: 'Weeks', label: 'Weeks' }, { value: 'Months', label: 'Months' }, { value: 'Terms', label: 'Terms' },{ value: 'Years', label: 'Years' }]}
+              //options={[{ value: 'Weeks', label: 'Weeks' }, { value: 'Months', label: 'Months' }, { value: 'Terms', label: 'Terms' },{ value: 'Years', label: 'Years' }]}
+              options={durationUnitOptions}
               defaultValue={durationUnitOptions.find(option => option.value === programData?.ProgramInfo?.duration_unit) || ""}
               onChange={handleDurationUnitChange}
             />
