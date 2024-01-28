@@ -31,6 +31,14 @@ export const ProgramInfo = ({
     }))
   };
 
+  const handleSelectChange = (selectedOptions) => {
+    //console.log(selectedOptions);
+    onProgramDataChange(prevData => ({
+      ...prevData,
+      AssociatedTags: selectedOptions || []
+    }));
+  }
+
   return (
     <Container>
       <h2>Program Info</h2>
@@ -83,6 +91,7 @@ export const ProgramInfo = ({
               defaultValue={associatedTags || []}
               options={allProgramTags}
               isMulti
+              onChange={handleSelectChange}
             />
           </StyledLabel>
         </SelectContainer>
