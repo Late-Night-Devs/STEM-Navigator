@@ -71,9 +71,14 @@ function AdminPage() {
   const [programItems, setProgramItems] = useState([]);
   const [tagItems, setTagItems] = useState([]);
 
+  // for debugging 
   useEffect(() => {
     console.log("updated tag info: ", selectedTagInfo);
   }, [selectedTagInfo])
+
+  useEffect(() => {
+    console.log("updated program info: ", selectedProgramInfo);
+  }, [selectedProgramInfo])
 
   useEffect(() => {
     if (programs) {
