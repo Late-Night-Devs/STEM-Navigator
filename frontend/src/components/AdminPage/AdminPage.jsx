@@ -239,13 +239,14 @@ function AdminPage() {
 
   const handleAddProgram = () => {
     setSelectionState((prevState) => ({
-      selectedProgram: null,
+      selectedProgram: -1, // -1 is an available temporary Program ID
       selectedTag: null,
       addingProgram: true,
       addingTag: false,
     }));
 
     setSelectedProgramInfo({
+      ProgramInfo: {
       program_id: "-1",
       title: "",
       lead_contact: "",
@@ -254,6 +255,8 @@ function AdminPage() {
       duration: "",
       duration_unit: "",
       long_description: "",
+      },
+      AssociatedTags: null
     });
     setSelectedTagInfo(null);
   };

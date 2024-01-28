@@ -25,11 +25,10 @@ export const ProgramInfo = ({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    /* we need to account for the case that programData might be null? */
-    onProgramDataChange({
-      ...programData,
-      ProgramInfo: { ...programData.ProgramInfo, [name]: value },
-    });
+    onProgramDataChange(prevData => ({
+      ...prevData,
+      ProgramInfo: {...prevData.ProgramInfo, [name]: value}
+    }))
   };
 
   return (
@@ -42,7 +41,7 @@ export const ProgramInfo = ({
             type="text"
             id="ProgramName"
             name="title"
-            value={programData?.ProgramInfo?.title}
+            value={programData?.ProgramInfo?.title || ""}
             onChange={handleChange}
           />
         </div>
