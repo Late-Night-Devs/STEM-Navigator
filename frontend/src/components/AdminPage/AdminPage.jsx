@@ -256,7 +256,7 @@ function AdminPage() {
   const handleAddTag = () => {
     setSelectionState((prevState) => ({
       ...prevState,
-      selectedTag: null,
+      selectedTag: -1,
       selectedProgram: null,
       addingTag: true,
       addingProgram: false,

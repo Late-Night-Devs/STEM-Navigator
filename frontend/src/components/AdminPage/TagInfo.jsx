@@ -4,17 +4,17 @@ import { postData } from "./dataUtils.js"; // should be used to post data to the
 import { SelectContainer, StyledLabel, Container } from "./sharedStyles.js";
 
 export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
-  /*
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    onTagDataChange({ ...tagData, [name]: value }); // append or edit value
-  };
-  */
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    console.log(`Before updating: `, tagData);
-    onTagDataChange({ ...tagData, [name]: value });
-    console.log(`After updating: `, { ...tagData, [name]: value });
+    const initialTagData = {
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing
+      // nullish coalescing operator
+      tag_id: tagData?.tag_id??-1, 
+      tag_name: tagData?.tag_name??"", 
+      category: tagData?.category?? ""
+    };
+    onTagDataChange({ ...initialTagData, [name]: value });
   };
 
   const handleSubmit = (e) => {
