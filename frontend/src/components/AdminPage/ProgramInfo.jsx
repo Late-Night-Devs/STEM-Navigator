@@ -14,8 +14,16 @@ import {
 const StyledTextArea = styled.textarea`
   width: 100%;
   padding: 0.5rem;
-  margin: 0.25rem 0;
+  margin: 0.5rem 0;
 `;
+
+  const durationUnitOptions = [
+  { value: 'Weeks', label: 'Weeks' },
+  { value: 'Months', label: 'Months' },
+  { value: 'Terms', label: 'Terms' },
+  { value: 'Years', label: 'Years' }
+  // ... add more options as needed here
+];
 
 export const ProgramInfo = ({
   programData,
@@ -64,10 +72,20 @@ export const ProgramInfo = ({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    onProgramDataChange(prevData => ({
-      ...prevData,
-      ProgramInfo: {...prevData.ProgramInfo, [name]: value}
-    }))
+    if (name === "number") {
+      onProgramDataChange(prevData => ({
+        ...prevData,
+        ProgramInfo: {
+          ...prevData.ProgramInfo,
+          duration: value
+        }
+      }));
+    } else {
+      onProgramDataChange(prevData => ({
+        ...prevData,
+        ProgramInfo: {...prevData.ProgramInfo, [name]: value}
+      }))
+    }
   };
 
   const handleSelectChange = (selectedOptions) => {
@@ -77,6 +95,17 @@ export const ProgramInfo = ({
       AssociatedTags: selectedOptions || []
     }));
   }
+
+  const handleDurationUnitChange = (selectedOptions) => {
+    onProgramDataChange(prevData => ({
+      ...prevData,
+      ProgramInfo: {
+        ...prevData.ProgramInfo,
+        duration_unit: selectedOptions.value
+      }
+    }))
+  }
+
 
   return (
     <Container>
@@ -88,7 +117,7 @@ export const ProgramInfo = ({
             type="text"
             id="ProgramName"
             name="title"
-            value={programData?.ProgramInfo?.title || ""}
+            value={programData?.ProgramInfo?.title}
             onChange={handleChange}
           />
         </div>
@@ -123,6 +152,27 @@ export const ProgramInfo = ({
             onChange={handleChange}
           />
         </div>
+        <div>
+        <StyledLabel htmlFor="DurationNumber">Duration Number</StyledLabel>
+        <StyledInput
+          type="number"
+          id="DurationNumber"
+          name="number"
+          min="1" // duration can't be zero or negative
+          value={programData?.ProgramInfo?.duration}
+          onChange={handleChange}
+        />
+        </div>
+        <SelectContainer>
+          <StyledLabel>
+            Duration Unit
+            <Select
+              options={[{ value: 'Weeks', label: 'Weeks' }, { value: 'Months', label: 'Months' }, { value: 'Terms', label: 'Terms' },{ value: 'Years', label: 'Years' }]}
+              defaultValue={durationUnitOptions.find(option => option.value === programData?.ProgramInfo?.duration_unit) || ""}
+              onChange={handleDurationUnitChange}
+            />
+          </StyledLabel>
+        </SelectContainer>
         <SelectContainer>
           <StyledLabel>
             Select Tags
@@ -138,7 +188,7 @@ export const ProgramInfo = ({
           <StyledLabel htmlFor="LongDescription">Long Description</StyledLabel>
           <StyledTextArea
             cols="44"
-            rows="7"
+            rows="12"
             id="LongDescription"
             name="long_description"
             value={programData?.ProgramInfo?.long_description}

@@ -109,6 +109,7 @@ function AdminPage() {
   }, [tags]); // Recalculate when tags data changes
 
   const handleProgramClick = (program) => {
+    // handle previously selected tag
     if (selectionState.selectedTag !== null) {
       setSelectionState((prevState) => ({
         ...prevState,
@@ -252,9 +253,10 @@ function AdminPage() {
       lead_contact: "",
       contact_email: "",
       link_to_web: "",
+      long_description: "",
+      // possible refactor to encapsulate DURATION {number, unit}
       duration: "",
       duration_unit: "",
-      long_description: "",
       },
       AssociatedTags: null
     });
