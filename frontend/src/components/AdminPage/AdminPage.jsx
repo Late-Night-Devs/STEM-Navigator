@@ -72,6 +72,10 @@ function AdminPage() {
   const [tagItems, setTagItems] = useState([]);
 
   useEffect(() => {
+    console.log("updated tag info: ", selectedTagInfo);
+  }, [selectedTagInfo])
+
+  useEffect(() => {
     if (programs) {
       console.log("programs re-loaded");
       const transformedPrograms = programs
@@ -257,7 +261,7 @@ function AdminPage() {
       addingTag: true,
       addingProgram: false,
     }));
-    setSelectedTagInfo(null);
+    setSelectedTagInfo({tag_id: -1, tag_name: "", category:""});
     setSelectedProgramInfo(null);
   };
 

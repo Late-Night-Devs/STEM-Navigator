@@ -12,9 +12,9 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
   */
   const handleChange = (e) => {
     const { name, value } = e.target;
-    //console.log(`Before updating: `, tagData);
+    console.log(`Before updating: `, tagData);
     onTagDataChange({ ...tagData, [name]: value });
-    //console.log(`After updating: `, { ...tagData, [name]: value });
+    console.log(`After updating: `, { ...tagData, [name]: value });
   };
 
   const handleSubmit = (e) => {
