@@ -19,6 +19,8 @@ router.delete('/removeUser/:userID', userController.removeUser);
 //  URL/user/favorite 
 router.get('/favorite', userFavoriteController.getAllFavorites);
 
+router.get('/favorite/getFavoritePrograms/:userID', userFavoriteController.getFavoritePrograms);
+
 // Define the route for checking favorites
 router.get('/favorite/checkFavorite/:userID/:programID', userFavoriteController.checkFavorite);
 

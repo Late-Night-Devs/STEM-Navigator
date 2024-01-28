@@ -13,21 +13,71 @@ exports.getPrograms = (req, res) => {
     });
 };
 
+// exports.filterPrograms = (req, res) => {
+//     const tagIds = req.body.tagIds || [];
+//     console.log("filterPrograms - Request Body:", req.body);
+
+//     if (tagIds.length > 0) {
+//         const placeholders = tagIds.map(() => "?").join(",");
+//         const sqlQuery = `
+//       SELECT p.* FROM Programs p
+//       JOIN ProgramTags pt ON p.program_id = pt.program_id
+//       WHERE pt.tag_id IN (${placeholders})
+//       GROUP BY p.program_id
+//       HAVING COUNT(DISTINCT pt.tag_id) = ?  -- Ensure all selected tags are present
+//     `;
+
+//         db.query(sqlQuery, [...tagIds, tagIds.length], (err, results) => {
+//             if (err) {
+//                 res.status(500).send("Error in fetching filtered programs");
+//                 return;
+//             }
+//             res.json(results);
+//         });
+//     } else {
+//         // If no tag IDs are provided, return all programs
+//         db.query("SELECT * FROM Programs", (err, results) => {
+//             if (err) {
+//                 res.status(500).send("Error in fetching programs");
+//                 return;
+//             }
+//             res.json(results);
+//         });
+//     }
+// };
+const fetchFavoritePrograms = async (userID) => {
+    return new Promise((resolve, reject) => {
+        const sqlQuery = 'SELECT program_id FROM UserFavorites WHERE user_id = ?'; 
+        db.query(sqlQuery, [userID], (err, results) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            const favoritePrograms = results.map(result => result.program_id);
+            resolve(favoritePrograms);
+        });
+    });
+};
+// filter by tagIDs
+// also checking if their favorite is favorite or not to mark 0 or 1
 exports.filterPrograms = (req, res) => {
     const tagIds = req.body.tagIds || [];
+    const userID = req.body.userID; // Assuming you pass userID in the request body
     console.log("filterPrograms - Request Body:", req.body);
-
+    
     if (tagIds.length > 0) {
         const placeholders = tagIds.map(() => "?").join(",");
         const sqlQuery = `
-      SELECT p.* FROM Programs p
-      JOIN ProgramTags pt ON p.program_id = pt.program_id
-      WHERE pt.tag_id IN (${placeholders})
-      GROUP BY p.program_id
-      HAVING COUNT(DISTINCT pt.tag_id) = ?  -- Ensure all selected tags are present
-    `;
+            SELECT p.*, (uf.program_id IS NOT NULL) AS isFavorite FROM Programs p
+            LEFT JOIN UserFavorites uf ON p.program_id = uf.program_id AND uf.user_id = ?
+            JOIN ProgramTags pt ON p.program_id = pt.program_id
+            WHERE pt.tag_id IN (${placeholders})
+            GROUP BY p.program_id
+            HAVING COUNT(DISTINCT pt.tag_id) = ?  -- Ensure all selected tags are present
+            `;
 
-        db.query(sqlQuery, [...tagIds, tagIds.length], (err, results) => {
+        db.query(sqlQuery, [userID, ...tagIds, tagIds.length], (err, results) => {
             if (err) {
                 res.status(500).send("Error in fetching filtered programs");
                 return;
@@ -35,8 +85,12 @@ exports.filterPrograms = (req, res) => {
             res.json(results);
         });
     } else {
-        // If no tag IDs are provided, return all programs
-        db.query("SELECT * FROM Programs", (err, results) => {
+        // If no tag IDs are provided, return all programs with isFavorite column
+        const sqlQuery = `
+            SELECT p.*, (uf.program_id IS NOT NULL) AS isFavorite FROM Programs p
+            LEFT JOIN UserFavorites uf ON p.program_id = uf.program_id AND uf.user_id = ?
+            `;
+        db.query(sqlQuery, [userID], (err, results) => {
             if (err) {
                 res.status(500).send("Error in fetching programs");
                 return;
@@ -46,6 +100,75 @@ exports.filterPrograms = (req, res) => {
     }
 };
 
+// exports.filterPrograms = async (req, res) => {
+//     try {
+//         let favoritePrograms = [];
+//         const tagIds = req.body.tagIds || [];
+//         const userID = req.body.userID;
+//         console.log(req.body);
+//         // Fetch favorite program IDs based on the userID
+    
+        
+//         console.log("filterPrograms - Request Body:", req.body);
+
+//         favoritePrograms = await fetchFavoritePrograms(userID);
+//         console.log("favoritePrograms:  ", favoritePrograms)
+      
+      
+
+//         if (tagIds.length > 0) {
+//             const placeholders = tagIds.map(() => "?").join(",");
+//             const sqlQuery = `
+//         SELECT p.* FROM Programs p
+//         JOIN ProgramTags pt ON p.program_id = pt.program_id
+//         WHERE pt.tag_id IN (${placeholders})
+//         GROUP BY p.program_id
+//         HAVING COUNT(DISTINCT pt.tag_id) = ?
+//       `;
+
+//             db.query(sqlQuery, [...tagIds, tagIds.length], (err, filteredPrograms) => {
+//                 if (err) {
+//                     res.status(500).send("Error in fetching filtered programs");
+//                     return;
+//                 }
+
+//                 // Combine favorite and filtered programs with favorites appearing first
+//                 const combinedPrograms = [...favoritePrograms, ...filteredPrograms];
+//                 res.json(combinedPrograms);
+//             });
+//         } else {
+//             // If no tag IDs are provided, return all programs with favorites first
+//             if (favoritePrograms.length > 0) {
+//                 const placeholders = favoritePrograms.map(() => "?").join(",");
+//                 const sqlQuery = `SELECT * FROM Programs WHERE program_id IN (${placeholders})`;
+
+//                 db.query(sqlQuery, favoritePrograms, (err, allPrograms) => {
+//                     if (err) {
+//                         res.status(500).send("Error in fetching all programs");
+//                         return;
+//                     }
+
+//                     // Combine favorite and all programs with favorites appearing first
+//                     const combinedPrograms = [...favoritePrograms, ...allPrograms];
+//                     res.json(combinedPrograms);
+//                 });
+//             } else {
+//                 // If no favorite programs, simply return all programs
+//                 db.query("SELECT * FROM Programs", (err, allPrograms) => {
+//                     if (err) {
+//                         res.status(500).send("Error in fetching all programs");
+//                         return;
+//                     }
+
+//                     res.json(allPrograms);
+//                 });
+//             }
+//         }
+//     } catch (error) {
+//         console.error('Error in fetching favorite programs:', error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// };
 // Delete program based on IDs | delete from multiple associates -> itself
 exports.deleteProgram = (req, res) => {
     const { programIDs } = req.params;

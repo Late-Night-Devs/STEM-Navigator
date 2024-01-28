@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Card, Row, Col, Button } from "react-bootstrap";
 import Collapse from 'react-bootstrap/Collapse';
@@ -8,7 +8,8 @@ import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import { useAuth0 } from "@auth0/auth0-react";
 import Cookies from "js-cookie";
-
+  // Fetch the user ID from the cookie
+const cookieUserID = Cookies.get("cookieUId");
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 
@@ -17,21 +18,71 @@ const Programs = ({ selectedTagIds }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(9);
 
-  useEffect(() => {
-    const fetchPrograms = async () => {
-      try {
-        const tagIdsArray = Array.from(selectedTagIds);
-        const response = await axios.post(`${backend_url}/programs/filter`, {
-          tagIds: tagIdsArray,
-        });
-        setPrograms(response.data);
-      } catch (error) {
-        console.error("Error fetching programs:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchPrograms = async () => {
+  //     try {
+  //       const tagIdsArray = Array.from(selectedTagIds);
+  //       const response = await axios.post(`${backend_url}/programs/filter`, {
+  //         tagIds: tagIdsArray,
+  //       });
+  //       setPrograms(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching programs:", error);
+  //     }
+  //   };
 
-    fetchPrograms();
-  }, [selectedTagIds]);
+  //   fetchPrograms();
+  // }, [selectedTagIds]);
+const fetchProgramsBySelectingTagsID = async () => {
+  try {
+    // if (selectedTagIds.length === 0) {
+    console.log("Display all the programs - no filter\n", cookieUserID);
+
+    // If no tags are selected, fetch all programs
+    const allProgramsResponse = await axios.post(
+      `${backend_url}/programs/filter`,
+      {
+        tagIds: [],
+        userID: cookieUserID, // Make sure to include the userID
+      }
+    );
+
+    console.log(
+      "allProgramsResponse: ",
+      allProgramsResponse     
+    );
+
+    console.log(
+      " allProgramsResponse.data.isFavorite:  ",
+      allProgramsResponse.data.isFavorite
+    );
+
+    // Ensure that the response includes the isFavorite property
+    // copy favorite object.
+    const favoritePrograms = allProgramsResponse.data.filter(
+      (program) => program.isFavorite === 1
+    );
+
+    const nonFavoritePrograms = allProgramsResponse.data.filter(
+      (program) => program.isFavorite === 0
+    );
+    console.log("Favorite Programs: ", favoritePrograms);
+    console.log("NON Favorite Programs: ", nonFavoritePrograms);
+
+    setPrograms([...favoritePrograms, ...nonFavoritePrograms]);
+    // }
+  } catch (error) {
+    console.error("Error fetching programs:", error);
+  }
+};
+
+// Fetch programs based on selected tags or all programs if no tags are selected
+useEffect(() => {
+  fetchProgramsBySelectingTagsID();
+}, [selectedTagIds, cookieUserID]);
+
+
+
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -104,12 +155,12 @@ const ProgramCard = ({program, changeColumnWidth}) => {
       setIsExpanded(!isExpanded);
   };
  
-  // Fetch the user ID from the cookie
-  const cookieUserID = Cookies.get("cookieUId");
-  console.log("\ncookieUID:  ", cookieUserID);
-  console.log("\nprogramID: ", program.program_id);
+  // console.log("check auth0  :  ", isAuthenticated);
+  // console.log("\ncookieUID:  ", cookieUserID);
+  // console.log("\nprogramID: ", program.program_id);
   useEffect(() => {
     const checkFavoriteDatabase = async () => {
+      //  console.log("22222check auth0  :  ", isAuthenticated);
       if (!isAuthenticated) {
         console.log("User is not authenticated. Please log in.");
         return;
@@ -137,7 +188,7 @@ const ProgramCard = ({program, changeColumnWidth}) => {
     };
 
     checkFavoriteDatabase();
-  }, [isAuthenticated, cookieUserID, program.program_id]);
+  }, [isAuthenticated, program.program_id]);
 
 
   const toggleFavorite = async () => {
@@ -166,9 +217,12 @@ const ProgramCard = ({program, changeColumnWidth}) => {
 
       // Toggle the local state after successful request
       setIsFavorite((prevIsFavorite) => !prevIsFavorite);
+      
     } catch (error) {
       console.error("Error:", error);
     }
+
+   
   };
 
   return (

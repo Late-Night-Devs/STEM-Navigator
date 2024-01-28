@@ -85,7 +85,10 @@ const LogInOutBtn = () => {
         </Dropdown>
       ) : (
         // If not authenticated, show login button
-        <Button onClick={loginWithRedirect} variant="dark">
+            <Button onClick={() => {
+              clearAllCookies();              
+              loginWithRedirect();
+            }} variant="dark">
           Log In
         </Button>
       )}
