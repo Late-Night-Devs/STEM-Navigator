@@ -37,12 +37,12 @@ const fetchProgramsBySelectingTagsID = async () => {
   try {
     // if (selectedTagIds.length === 0) {
     console.log("Display all the programs - no filter\n", cookieUserID);
-
+    const tagIdsArray = Array.from(selectedTagIds);
     // If no tags are selected, fetch all programs
     const allProgramsResponse = await axios.post(
       `${backend_url}/programs/filter`,
       {
-        tagIds: [],
+        tagIds: tagIdsArray,
         userID: cookieUserID, // Make sure to include the userID
       }
     );
