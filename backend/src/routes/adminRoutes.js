@@ -7,8 +7,9 @@ router.get("/admin-modify-db", checkAdminEmail, (req, res) => {
 });
 
 router.post("/admin-modify-db/tag-form-submit", (req, res) => {
-  console.log(req.body);
-  res.send("backend recieved post");
+  console.log("backend recieved post: ", req.body);
+  // if tag_id == -1 then the user wants to ADD a tag
+  // for any other tag id, the user wants to EDIT the tag
 })
 
 

@@ -8,8 +8,8 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     const initialTagData = {
-      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing
       // nullish coalescing operator
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing
       tag_id: tagData?.tag_id??-1, 
       tag_name: tagData?.tag_name??"", 
       category: tagData?.category?? ""
@@ -19,6 +19,24 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // don't add a tag without a name
+    if (!tagData || !tagData.tag_name || tagData.tag_name === "") {
+      console.log("You must NAME your tag before submitting");
+      return;
+    }
+
+    // don't add a tag without a category
+    if (!tagData.category || tagData.category === "") {
+      console.log("The tag must have a CATEGORY before submitting");
+      return;
+    }
+
+    // TODO don't add a tag if the name already matches an existing tag name
+    // if (tagMatchesExisting) {
+    // console.log("You must pick a UNIQUE NAME for the tag.")
+    // return; 
+    // }
 
     // handle form submission here
     // gather the payload data
@@ -31,7 +49,9 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
       console.log("Backend returned error: " + e);
     }
 
-    postData("admin/admin-modify-db/tag-form-submit", {payload: "/// SAMPLE PAYLOAD ///"}, useResponse, setError)
+    // at this point we have ensured the tag data is valid for submission
+    const payload = tagData;
+    postData("admin/admin-modify-db/tag-form-submit", payload, useResponse, setError)
     console.log("Submitting form to backend");
   };
 
