@@ -1,6 +1,7 @@
 import React from "react";
 import Select from "react-select";
 import styled from "styled-components";
+import {postData} from "./dataUtils.js"
 
 import {
   Container,
@@ -23,6 +24,44 @@ export const ProgramInfo = ({
 }) => {
   const associatedTags = programData ? programData.AssociatedTags : null;
 
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Check if essential fields are filled
+    if (!programData?.ProgramInfo?.title ||
+      !programData?.ProgramInfo?.lead_contact ||
+      !programData?.ProgramInfo?.contact_email ||
+      !programData?.ProgramInfo?.link_to_web || 
+      !programData?.ProgramInfo?.long_description) { 
+      //( || programData?.ProgramInfo?.long_description?.length <= 50)) { // can add later if needed
+      console.log("Please ensure all program fields are properly filled out.");
+      return;
+    }
+
+    // TODO don't add a program if the name already matches an existing tag name
+    // if (programMatchesExisting) {
+    // console.log("You must pick a UNIQUE NAME for the tag.")
+    // return; 
+    // }
+
+    function useResponse(response) {
+      console.log("response from Backend: ",response);
+    }
+
+    function setError(e) {
+      console.log("Backend returned error: ", e);
+    }
+
+    // at this point we have ensured the tag data is valid for submission
+    const payload = programData;
+    // post to the backend
+    console.log("submitting form to backend");
+    postData("admin/admin-modify-db/program-form-submit", payload, useResponse, setError)
+  };
+ 
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     onProgramDataChange(prevData => ({
@@ -42,7 +81,7 @@ export const ProgramInfo = ({
   return (
     <Container>
       <h2>Program Info</h2>
-      <form action="">
+      <form onSubmit={handleSubmit}>
         <div>
           <StyledLabel htmlFor="ProgramName">Program Title</StyledLabel>
           <StyledInput
