@@ -71,8 +71,8 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
           </label>
           <input
             type="text"
-            size="42"
             id="TagName"
+            size="30"
             name="tag_name"
             value={tagData?.tag_name}
             onChange={handleChange}
