@@ -1,88 +1,66 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Card, Row, Col, Button } from "react-bootstrap";
-import Collapse from 'react-bootstrap/Collapse';
+import Collapse from "react-bootstrap/Collapse";
 import Viking from "../../image/viking.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import { useAuth0 } from "@auth0/auth0-react";
 import Cookies from "js-cookie";
-  // Fetch the user ID from the cookie
+// Fetch the user ID from the cookie
 const cookieUserID = Cookies.get("cookieUId");
 const backend_url = process.env.REACT_APP_BACKEND_URL;
-
 
 const Programs = ({ selectedTagIds }) => {
   const [programs, setPrograms] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(9);
 
-  // useEffect(() => {
-  //   const fetchPrograms = async () => {
-  //     try {
-  //       const tagIdsArray = Array.from(selectedTagIds);
-  //       const response = await axios.post(`${backend_url}/programs/filter`, {
-  //         tagIds: tagIdsArray,
-  //       });
-  //       setPrograms(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching programs:", error);
-  //     }
-  //   };
+  const fetchProgramsBySelectingTagsID = async () => {
+    try {
+      // if (selectedTagIds.length === 0) {
+      console.log("Display all the programs - no filter\n", cookieUserID);
+      const tagIdsArray = Array.from(selectedTagIds);
+      // If no tags are selected, fetch all programs
+      const allProgramsResponse = await axios.post(
+        `${backend_url}/programs/filter`,
+        {
+          tagIds: tagIdsArray,
+          userID: cookieUserID, // Make sure to include the userID
+        }
+      );
 
-  //   fetchPrograms();
-  // }, [selectedTagIds]);
-const fetchProgramsBySelectingTagsID = async () => {
-  try {
-    // if (selectedTagIds.length === 0) {
-    console.log("Display all the programs - no filter\n", cookieUserID);
-    const tagIdsArray = Array.from(selectedTagIds);
-    // If no tags are selected, fetch all programs
-    const allProgramsResponse = await axios.post(
-      `${backend_url}/programs/filter`,
-      {
-        tagIds: tagIdsArray,
-        userID: cookieUserID, // Make sure to include the userID
-      }
-    );
+      console.log("allProgramsResponse: ", allProgramsResponse);
 
-    console.log(
-      "allProgramsResponse: ",
-      allProgramsResponse     
-    );
+      console.log(
+        " allProgramsResponse.data.isFavorite:  ",
+        allProgramsResponse.data.isFavorite
+      );
 
-    console.log(
-      " allProgramsResponse.data.isFavorite:  ",
-      allProgramsResponse.data.isFavorite
-    );
+      const sortedPrograms = allProgramsResponse.data.sort((a, b) => {
+        // Compare the isFavorite property of program a and program b
+        if (a.isFavorite === b.isFavorite) {
+          // If they have the same isFavorite value, compare by title alphabetically
+          return a.title.localeCompare(b.title);
+        } else {
+          // If they have different isFavorite values, prioritize the one with isFavorite: true
+          return a.isFavorite ? -1 : 1;
+        }
+      });
 
-    // Ensure that the response includes the isFavorite property
-    // copy favorite object.
-    const favoritePrograms = allProgramsResponse.data.filter(
-      (program) => program.isFavorite === 1
-    );
+      console.log("Sorted Programs: ", sortedPrograms);
 
-    const nonFavoritePrograms = allProgramsResponse.data.filter(
-      (program) => program.isFavorite === 0
-    );
-    console.log("Favorite Programs: ", favoritePrograms);
-    console.log("NON Favorite Programs: ", nonFavoritePrograms);
+      setPrograms(sortedPrograms);
+    } catch (error) {
+      console.error("Error fetching programs:", error);
+    }
+  };
 
-    setPrograms([...favoritePrograms, ...nonFavoritePrograms]);
-    // }
-  } catch (error) {
-    console.error("Error fetching programs:", error);
-  }
-};
-
-// Fetch programs based on selected tags or all programs if no tags are selected
-useEffect(() => {
-  fetchProgramsBySelectingTagsID();
-}, [selectedTagIds, cookieUserID]);
-
-
-
+  // Fetch programs based on selected tags or all programs if no tags are selected
+  useEffect(() => {
+    fetchProgramsBySelectingTagsID();
+  }, [selectedTagIds, cookieUserID]);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -96,7 +74,7 @@ useEffect(() => {
     <>
       <Row className="g-4">
         {currentItems.map((program) => (
-          <ProgramColumn program={program}/>
+          <ProgramColumn program={program} />
         ))}
         {noProgramsAfterFilter && (
           <Col xs={12} className="text-center mt-3">
@@ -127,9 +105,9 @@ useEffect(() => {
   );
 };
 
-const ProgramColumn = ({program}) => {
+const ProgramColumn = ({ program }) => {
   const [mdValue, setMdValue] = useState(4);
- 
+
   const changeMdValue = () => {
     if (mdValue === 4) {
       setMdValue(12);
@@ -137,24 +115,24 @@ const ProgramColumn = ({program}) => {
       setMdValue(4);
     }
   };
- 
+
   return (
     <Col key={program.id} md={mdValue} className="mb-4">
-      <ProgramCard program={program} changeColumnWidth={changeMdValue}/>
+      <ProgramCard program={program} changeColumnWidth={changeMdValue} />
     </Col>
   );
 };
- 
-const ProgramCard = ({program, changeColumnWidth}) => {
+
+const ProgramCard = ({ program, changeColumnWidth }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const { isAuthenticated } = useAuth0();
 
   const [isCollapsed, toggleIsCollapsed] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-    const toggleText = () => {
-      setIsExpanded(!isExpanded);
+  const toggleText = () => {
+    setIsExpanded(!isExpanded);
   };
- 
+
   // console.log("check auth0  :  ", isAuthenticated);
   // console.log("\ncookieUID:  ", cookieUserID);
   // console.log("\nprogramID: ", program.program_id);
@@ -173,7 +151,7 @@ const ProgramCard = ({program, changeColumnWidth}) => {
             withCredentials: true,
           }
         );
-         
+
         const isFavoriteInDatabase = response.data.isFavorite;
         //  console.log("checking the return from fav : ", isFavoriteInDatabase);
         setIsFavorite(isFavoriteInDatabase);
@@ -190,16 +168,15 @@ const ProgramCard = ({program, changeColumnWidth}) => {
     checkFavoriteDatabase();
   }, [isAuthenticated, program.program_id]);
 
-
   const toggleFavorite = async () => {
     console.log("programID in toggle: ", program.program_id, cookieUserID);
     try {
       // Check if the user is authenticated
       if (!isAuthenticated) {
-         alert(
-           "Oops! It looks like you're not logged in. Please log in to unlock this feature!"
-         );
-         return;
+        alert(
+          "Oops! It looks like you're not logged in. Please log in to unlock this feature!"
+        );
+        return;
       }
       const favoriteRequest = isFavorite ? "removeFavorite" : "addFavorite";
       const url = `${backend_url}/user/favorite/${favoriteRequest}`;
@@ -217,12 +194,9 @@ const ProgramCard = ({program, changeColumnWidth}) => {
 
       // Toggle the local state after successful request
       setIsFavorite((prevIsFavorite) => !prevIsFavorite);
-      
     } catch (error) {
       console.error("Error:", error);
     }
-
-   
   };
 
   return (
@@ -246,44 +220,41 @@ const ProgramCard = ({program, changeColumnWidth}) => {
             {program.contact_email}
           </a>
           <Collapse in={isCollapsed}>
-          <div id="collapse-text">
-            Web Link:{" "}
-            <a href={program.link_to_web}>
-              {program.link_to_web}
-            </a>
-            <br />
-            Program Duration: {program.duration}{" "}{program.duration_unit}
-            <br />
-            <br />
-            {program.long_description}
-            <br />
-            <br />
-            {"(Work in Progress)"}
-          </div>
+            <div id="collapse-text">
+              Web Link: <a href={program.link_to_web}>{program.link_to_web}</a>
+              <br />
+              Program Duration: {program.duration} {program.duration_unit}
+              <br />
+              <br />
+              {program.long_description}
+              <br />
+              <br />
+              {"(Work in Progress)"}
+            </div>
           </Collapse>
         </Card.Text>
       </Card.Body>
       <Card.Footer className="text-center">
         <Button
-          onClick={() => { changeColumnWidth(); toggleIsCollapsed(!isCollapsed); toggleText(); }}
+          onClick={() => {
+            changeColumnWidth();
+            toggleIsCollapsed(!isCollapsed);
+            toggleText();
+          }}
           aria-controls="collapse-text"
           aria-expanded={isCollapsed}
         >
-          <ShowMoreShowLess isExpanded={isExpanded}/>
+          <ShowMoreShowLess isExpanded={isExpanded} />
         </Button>
       </Card.Footer>
     </Card>
   );
 };
 
-const ShowMoreShowLess = ({isExpanded}) => {
-  return (
-    <>
-      {isExpanded ? 'Show Less' : 'Show More'}
-    </>
-  );
- }
- 
+const ShowMoreShowLess = ({ isExpanded }) => {
+  return <>{isExpanded ? "Show Less" : "Show More"}</>;
+};
+
 const Pagination = ({ itemsPerPage, totalItems, paginate }) => {
   const pageNumbers = [];
 
