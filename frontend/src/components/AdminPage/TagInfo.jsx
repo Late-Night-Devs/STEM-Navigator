@@ -21,14 +21,16 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
 
     // don't add a tag without a name
     if (!tagData || !tagData.tag_name || tagData.tag_name === "") {
-      console.log("You must NAME your tag before submitting");
+      window.alert("You must name your tag before submitting!")
+      //console.log("You must NAME your tag before submitting");
       e.preventDefault();
       return;
     }
 
     // don't add a tag without a category
     if (!tagData.category || tagData.category === "") {
-      console.log("The tag must have a CATEGORY before submitting");
+      window.alert("You must categorize your tag before submitting!")
+      //console.log("The tag must have a CATEGORY before submitting");
       e.preventDefault();
       return;
     }

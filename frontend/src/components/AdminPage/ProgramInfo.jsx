@@ -53,7 +53,8 @@ export const ProgramInfo = ({
       !programData?.ProgramInfo?.long_description) { 
       //( || programData?.ProgramInfo?.long_description?.length <= 50)) { // can add later if needed
       e.preventDefault();
-      console.log("Please ensure all program fields are properly filled out.");
+      window.alert("Please ensure all program fields are properly filled out.");
+      //console.log("Please ensure all program fields are properly filled out.");
       return;
     }
 
@@ -62,6 +63,7 @@ export const ProgramInfo = ({
     // console.log("You must pick a UNIQUE NAME for the tag.")
     // return; 
     // }
+
 
     function useResponse(response) {
       console.log("response from Backend: ",response);
