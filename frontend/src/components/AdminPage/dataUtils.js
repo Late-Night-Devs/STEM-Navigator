@@ -49,6 +49,7 @@ export const handleDelete = (
         .delete(`${backend_url}/${resourceType}/${resourceId}`)
         .then((response) => {
           if (onSuccess) onSuccess(response.data);
+          window.location.reload();
         })
         .catch((error) => {
           console.error(`Error deleting ${resourceType}:`, error);

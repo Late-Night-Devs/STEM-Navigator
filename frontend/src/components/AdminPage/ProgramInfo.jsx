@@ -44,7 +44,6 @@ export const ProgramInfo = ({
 
 
   const handleSubmit = (e) => {
-    e.preventDefault();
 
     // Check if essential fields are filled
     if (!programData?.ProgramInfo?.title ||
@@ -53,6 +52,7 @@ export const ProgramInfo = ({
       !programData?.ProgramInfo?.link_to_web || 
       !programData?.ProgramInfo?.long_description) { 
       //( || programData?.ProgramInfo?.long_description?.length <= 50)) { // can add later if needed
+      e.preventDefault();
       console.log("Please ensure all program fields are properly filled out.");
       return;
     }
