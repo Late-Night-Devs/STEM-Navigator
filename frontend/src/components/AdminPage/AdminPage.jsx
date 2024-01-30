@@ -71,6 +71,13 @@ function AdminPage() {
   const [programItems, setProgramItems] = useState([]);
   const [tagItems, setTagItems] = useState([]);
 
+  // iterate over the tags to find a tag with matching name
+  function isUniqueTagName(newTagName) {
+    // if is unique, there is not some tag in the tags which has a matching name 
+  return !tags.some(tag => tag.tag_name.toLowerCase() === newTagName.toLowerCase());
+}
+
+
   // for debugging 
   useEffect(() => {
     console.log("updated tag info: ", selectedTagInfo);
@@ -212,8 +219,9 @@ function AdminPage() {
 
   const handleRemoveProgram = () => {
     // remove the selected program (if there is one)
-    if (selectionState.selectedProgram == null) {
-      console.log("no selected program to remove");
+    // -1 used for temporary program id of 'adding' program
+    if (selectionState.selectedProgram == null || selectionState.selectedProgram === -1) {
+      window.alert("No currently selected program to remove!")
       return;
     }
 
@@ -277,8 +285,9 @@ function AdminPage() {
 
   // not fully implemented yet
   const handleRemoveTag = () => {
-    if (selectionState.selectedTag == null) {
-      console.log("no selected tag to remove");
+    // -1 used for temporary program id of 'adding' tag
+    if (selectionState.selectedTag == null || selectionState.selectedTag === -1) {
+      window.alert("No currently selected tag to remove!");
       return;
     }
     const onSuccess = (response_data) => {
@@ -352,6 +361,7 @@ function AdminPage() {
               tagData={selectedTagInfo}
               categories={formattedCategories}
               onTagDataChange={setSelectedTagInfo}
+              isUniqueName={isUniqueTagName}
             />
           )}
           {/* render the blank form for adding new program */}

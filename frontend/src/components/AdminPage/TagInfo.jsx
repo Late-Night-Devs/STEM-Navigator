@@ -3,7 +3,7 @@ import Select from "react-select";
 import { postData } from "./dataUtils.js"; // should be used to post data to the backend
 import { SelectContainer, StyledLabel, Container } from "./sharedStyles.js";
 
-export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
+export const TagInfo = ({ tagData, onTagDataChange, categories, isUniqueName }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,6 +27,13 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
       return;
     }
 
+    // ensure unique name
+    if (!isUniqueName(tagData.tag_name)) {
+      window.alert("Your chosen tag name is already in use!") 
+      e.preventDefault();
+      return;
+    }
+
     // don't add a tag without a category
     if (!tagData.category || tagData.category === "") {
       window.alert("You must categorize your tag before submitting!")
@@ -34,6 +41,7 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
       e.preventDefault();
       return;
     }
+
 
     // TODO don't add a tag if the name already matches an existing tag name
     // if (tagMatchesExisting) {
