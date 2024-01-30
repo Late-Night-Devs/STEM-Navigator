@@ -69,13 +69,6 @@ export const ProgramInfo = ({
       return;
     }
 
-    // TODO don't add a program if the name already matches an existing tag name
-    // if (programMatchesExisting) {
-    // console.log("You must pick a UNIQUE NAME for the tag.")
-    // return; 
-    // }
-
-
     function useResponse(response) {
       console.log("response from Backend: ",response);
     }
