@@ -140,6 +140,7 @@ export const ProgramInfo = ({
             name="title"
             value={programData?.ProgramInfo?.title}
             onChange={handleChange}
+            required
           />
         </div>
         <div>

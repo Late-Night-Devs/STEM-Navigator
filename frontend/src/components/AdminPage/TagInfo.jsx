@@ -19,35 +19,12 @@ export const TagInfo = ({ tagData, onTagDataChange, categories, isUniqueName }) 
 
   const handleSubmit = (e) => {
 
-    // don't add a tag without a name
-    if (!tagData || !tagData.tag_name || tagData.tag_name === "") {
-      window.alert("You must name your tag before submitting!")
-      //console.log("You must NAME your tag before submitting");
-      e.preventDefault();
-      return;
-    }
-
     // ensure unique name
     if (tagData?.tag_id === -1 && !isUniqueName(tagData.tag_name)) {
       window.alert("Your chosen tag name is already in use!") 
       e.preventDefault();
       return;
     }
-
-    // don't add a tag without a category
-    if (!tagData.category || tagData.category === "") {
-      window.alert("You must categorize your tag before submitting!")
-      //console.log("The tag must have a CATEGORY before submitting");
-      e.preventDefault();
-      return;
-    }
-
-
-    // TODO don't add a tag if the name already matches an existing tag name
-    // if (tagMatchesExisting) {
-    // console.log("You must pick a UNIQUE NAME for the tag.")
-    // return; 
-    // }
 
     // handle form submission here
     // gather the payload data
@@ -87,6 +64,7 @@ export const TagInfo = ({ tagData, onTagDataChange, categories, isUniqueName }) 
             name="tag_name"
             value={tagData?.tag_name}
             onChange={handleChange}
+            required
           />
         </div>
         <SelectContainer>
@@ -101,6 +79,7 @@ export const TagInfo = ({ tagData, onTagDataChange, categories, isUniqueName }) 
                     ? categories.find(c => c.value === tagData?.category)
                     : null
                 }
+                required
               />
             </div>
           </StyledLabel>
