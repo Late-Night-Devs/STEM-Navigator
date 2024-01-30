@@ -89,8 +89,8 @@ export const TagInfo = ({ tagData, onTagDataChange, categories }) => {
                 options={categories}
                 onChange={handleCategoryChange}
                 value={
-                  tagData
-                    ? categories.find((c) => c.value === tagData.category)
+                  tagData && tagData.category
+                    ? categories.find(c => c.value === tagData?.category)
                     : null
                 }
               />

@@ -223,6 +223,7 @@ function AdminPage() {
       // update the Form to be empty
       //setSelectedProgram(null);
       //setSelectedProgramInfo(null);
+
     };
     const onError = (error) => {
       // Handle error
@@ -270,7 +271,7 @@ function AdminPage() {
       addingTag: true,
       addingProgram: false,
     }));
-    setSelectedTagInfo({tag_id: -1, tag_name: "", category:""});
+    setSelectedTagInfo({tag_id: -1, tag_name: "", category:null});
     setSelectedProgramInfo(null);
   };
 
