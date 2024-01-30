@@ -3,6 +3,7 @@ import axios from "axios";
 import { Card, Row, Col, Button } from "react-bootstrap";
 import Collapse from "react-bootstrap/Collapse";
 import Viking from "../../image/viking.png";
+import SearchByProgram from "./SearchByProgram";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
@@ -16,6 +17,7 @@ const Programs = ({ selectedTagIds }) => {
   const [programs, setPrograms] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(9);
+  const [storePrograms, setStorePrograms] = useState([]);
 
   const fetchProgramsBySelectingTagsID = async () => {
     try {
@@ -70,9 +72,25 @@ const Programs = ({ selectedTagIds }) => {
 
   const noProgramsAfterFilter = currentItems.length === 0;
 
+  // Handle search program by title
+  const handleSearchByProgram = (key) => {
+    let myResult = filterProgramsByTitle(storePrograms, key);
+    setPrograms(myResult);
+  };
+
+  function filterProgramsByTitle(data, key) {
+    let filteredPrograms;
+    filteredPrograms = data.filter((program) => {
+      const lowercaseTitle = program.title.toLowerCase();
+      return lowercaseTitle.includes(key.toLowerCase());
+    });
+
+    return filteredPrograms;
+  }
   return (
     <>
       <Row className="g-4">
+        <SearchByProgram handleSearchByProgram={handleSearchByProgram} />
         {currentItems.map((program) => (
           <ProgramColumn program={program} />
         ))}
@@ -166,7 +184,7 @@ const ProgramCard = ({ program, changeColumnWidth }) => {
     };
 
     checkFavoriteDatabase();
-  }, [isAuthenticated, program.program_id]);
+  }, [isAuthenticated, cookieUserID, program.program_id]);
 
   const toggleFavorite = async () => {
     console.log("programID in toggle: ", program.program_id, cookieUserID);
@@ -223,13 +241,10 @@ const ProgramCard = ({ program, changeColumnWidth }) => {
             <div id="collapse-text">
               Web Link: <a href={program.link_to_web}>{program.link_to_web}</a>
               <br />
-              Program Duration: {program.duration} {program.duration_unit}
+              <ProgramDuration program={program} />
               <br />
               <br />
               {program.long_description}
-              <br />
-              <br />
-              {"(Work in Progress)"}
             </div>
           </Collapse>
         </Card.Text>
@@ -250,6 +265,12 @@ const ProgramCard = ({ program, changeColumnWidth }) => {
     </Card>
   );
 };
+
+const ProgramDuration = ({ program }) => {
+  return <>{program.duration ?
+    "Program Duration: " + program.duration + " " + program.duration_unit :
+    "Program Duration: Varies"}</>;
+}
 
 const ShowMoreShowLess = ({ isExpanded }) => {
   return <>{isExpanded ? "Show Less" : "Show More"}</>;
