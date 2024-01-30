@@ -183,7 +183,7 @@ export const ProgramInfo = ({
               Unit
               <Select
                 options={durationUnitOptions}
-                defaultValue={durationUnitOptions.find(option => option.value === programData?.ProgramInfo?.duration_unit) || "None"}
+                value={durationUnitOptions.find(option => option.value === programData?.ProgramInfo?.duration_unit) || "None"}
                 onChange={handleDurationUnitChange}
               />
             </label>
@@ -194,7 +194,7 @@ export const ProgramInfo = ({
           <StyledLabel>
             Select Tags
             <Select
-              defaultValue={associatedTags || []}
+              value={associatedTags || []}
               options={allProgramTags}
               isMulti
               onChange={handleSelectChange}
