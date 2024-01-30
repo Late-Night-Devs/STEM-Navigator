@@ -39,12 +39,21 @@ export const ProgramInfo = ({
   programData,
   allProgramTags,
   onProgramDataChange,
+  isUniqueName
 }) => {
   const associatedTags = programData ? programData.AssociatedTags : null;
 
 
 
   const handleSubmit = (e) => {
+
+    // handle non-unique name on new program 
+    if (programData?.ProgramInfo?.program_id === "-1" && !isUniqueName(programData?.ProgramInfo?.title))
+    {
+      e.preventDefault();
+      window.alert("Your chosen program name is already in use!");
+      return;
+    }
 
     // Check if essential fields are filled
     if (!programData?.ProgramInfo?.title ||

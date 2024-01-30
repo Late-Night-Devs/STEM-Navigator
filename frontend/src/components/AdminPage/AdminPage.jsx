@@ -74,8 +74,14 @@ function AdminPage() {
   // iterate over the tags to find a tag with matching name
   function isUniqueTagName(newTagName) {
     // if is unique, there is not some tag in the tags which has a matching name 
-  return !tags.some(tag => tag.tag_name.toLowerCase() === newTagName.toLowerCase());
-}
+    return !tags.some(tag => tag.tag_name.toLowerCase() === newTagName.toLowerCase());
+  }
+
+  // iterate over the programs to find a program with matching name
+  function isUniqueProgramName(newProgramName) {
+    // if is unique, there is not some tag in the tags which has a matching name 
+    return !programs.some(program => program.title.toLowerCase() === newProgramName.toLowerCase());
+  }
 
 
   // for debugging 
@@ -354,6 +360,7 @@ function AdminPage() {
               programData={selectedProgramInfo}
               allProgramTags={formattedTags}
               onProgramDataChange={setSelectedProgramInfo}
+              isUniqueName={isUniqueProgramName}
             />
           )}
           {selectionState.selectedTag != null && (

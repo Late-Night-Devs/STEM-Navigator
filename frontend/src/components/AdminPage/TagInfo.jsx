@@ -28,7 +28,7 @@ export const TagInfo = ({ tagData, onTagDataChange, categories, isUniqueName }) 
     }
 
     // ensure unique name
-    if (!isUniqueName(tagData.tag_name)) {
+    if (tagData?.tag_id === -1 && !isUniqueName(tagData.tag_name)) {
       window.alert("Your chosen tag name is already in use!") 
       e.preventDefault();
       return;
