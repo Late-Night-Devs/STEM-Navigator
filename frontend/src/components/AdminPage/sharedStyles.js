@@ -25,7 +25,7 @@ export const StyledInput = styled.input`
 `;
 
 export const SelectContainer = styled.div`
-  max-width: 500px;
+  max-width: 600px;
   margin: 1rem 0;
   padding: 0.25rem;
 `;

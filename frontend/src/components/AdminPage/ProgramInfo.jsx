@@ -51,7 +51,8 @@ export const ProgramInfo = ({
       !programData?.ProgramInfo?.lead_contact ||
       !programData?.ProgramInfo?.contact_email ||
       !programData?.ProgramInfo?.link_to_web || 
-      !programData?.ProgramInfo?.long_description) { 
+      !programData?.ProgramInfo?.long_description ||
+      (programData?.ProgramInfo?.duration && !programData?.ProgramInfo?.duration_unit)) { 
       //( || programData?.ProgramInfo?.long_description?.length <= 50)) { // can add later if needed
       e.preventDefault();
       window.alert("Please ensure all program fields are properly filled out.");
