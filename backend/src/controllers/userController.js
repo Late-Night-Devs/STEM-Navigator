@@ -38,30 +38,6 @@ exports.findUserID = (req, res) => {
   );
 };
 
-// exports.isAdmin = (req, res) => {
-//   const { email } = req.query;
-//   console.log(`GET Req: check if user is admin for email - ${email}`);
-
-//   db.query(
-//     "SELECT admin FROM Users WHERE email = ?",
-//     [email],
-//     (err, results) => {
-//       if (err) {
-//         res.status(500).send("Error in fetching admin status");
-//         return;
-//       }
-
-//       if (results.length === 0) {
-//         res.status(404).json({ message: "User not found" });
-//         return;
-//       }
-
-//       const isAdmin = results[0].admin === "TRUE"; // Assuming admin field is a string 'TRUE' or 'FALSE'
-//       res.json({ isAdmin });
-//     }
-//   );
-// };
-
 exports.checkEmailExists = (req, res) => {
   const { email } = req.params;
   // Validate email format if needed

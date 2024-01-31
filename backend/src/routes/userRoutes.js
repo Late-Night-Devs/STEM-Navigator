@@ -12,8 +12,6 @@ router.post("/addUser", userController.addUser);
 
 router.get("/findUserID", userController.findUserID);
 
-// router.get("/isAdmin", userController.isAdmin);
-
 router.get("/checkEmailExists", userController.checkEmailExists);
 
 router.delete("/removeUser/:userID", userController.removeUser);
@@ -21,7 +19,10 @@ router.delete("/removeUser/:userID", userController.removeUser);
 //  URL/user/favorite
 router.get("/favorite", userFavoriteController.getAllFavorites);
 
-router.get('/favorite/getFavoritePrograms/:userID', userFavoriteController.getFavoritePrograms);
+router.get(
+  "/favorite/getFavoritePrograms/:userID",
+  userFavoriteController.getFavoritePrograms
+);
 
 // Define the route for checking favorites
 router.get(

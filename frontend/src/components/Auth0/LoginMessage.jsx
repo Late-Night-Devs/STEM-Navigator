@@ -61,22 +61,6 @@ const VerifiedEmailLogin = ({ handleAdminStatusChange }) => {
   // useRef to store the state of whether the user is added
   const addUserTracking = useRef(false);
 
-  // const checkAndSetAdminStatus = async (email) => {
-  //   try {
-  //     const response = await axios.get(
-  //       `${backend_url}/user/isAdmin?email=${email}`,
-  //       {
-  //         withCredentials: true,
-  //       }
-  //     );
-  //     const isAdmin = response.data.isAdmin;
-  //     Cookies.set("isAdmin", isAdmin); // Storing admin status in the cookie
-  //     console.log("Admin status set in cookie:", isAdmin);
-  //   } catch (error) {
-  //     console.error("Error checking and setting admin status:", error);
-  //   }
-  // };
-
   const checkEmailVerification = async () => {
     if (isAuthenticated && user && !user.email_verified) {
       interval = setInterval(() => {
