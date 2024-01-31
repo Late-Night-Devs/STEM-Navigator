@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import { useAuth0 } from "@auth0/auth0-react";
-import Cookies from "js-cookie";
+
 // Fetch the user ID from the cookie
 // const cookieUserID = Cookies.get("cookieUId");
 const backend_url = process.env.REACT_APP_BACKEND_URL;
@@ -88,10 +88,14 @@ const Programs = ({ selectedTagIds, cookieUID }) => {
   }
   return (
     <>
-      <Row className="g-4">
+      <Row className="g-4" key="searchAndPrograms">
         <SearchByProgram handleSearchByProgram={handleSearchByProgram} />
         {currentItems.map((program) => (
-          <ProgramColumn program={program} cookieUID={cookieUID} />
+          <ProgramColumn
+            key={program.id}
+            program={program}
+            cookieUID={cookieUID}
+          />
         ))}
         {noProgramsAfterFilter && (
           <Col xs={12} className="text-center mt-3">
@@ -189,7 +193,7 @@ const ProgramCard = ({ program, changeColumnWidth, cookieUID }) => {
     };
 
     checkFavoriteDatabase();
-  }, [isAuthenticated, program.program_id]);
+  }, [isAuthenticated, cookieUID, program.program_id]);
 
   const toggleFavorite = async () => {
     console.log("programID in toggle: ", program.program_id, "UID in cookie:  ", cookieUID);

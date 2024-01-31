@@ -6,6 +6,7 @@ import { TagInfo } from "./TagInfo";
 import useFetchData, { handleDelete } from "./dataUtils";
 import { useAuth0 } from "@auth0/auth0-react"; // Import the Auth0 hook
 import styled from "styled-components";
+import Cookies from "js-cookie";
 
 // styled components
 const PageContainer = styled.div`
@@ -42,7 +43,7 @@ const DefaultMessage = styled.div`
 `;
 
 function AdminPage() {
-  const { user, isAuthenticated, isLoading } = useAuth0(); // Get user information
+  const { isAuthenticated, isLoading } = useAuth0(); // Get user information
   // fetch the programs data from the backend
   const { data: programs, error: programsError } = useFetchData("programs");
   // fetch the tags data from the backend
@@ -50,6 +51,8 @@ function AdminPage() {
   // fetch the relationship data between tags and programs
   const { data: programTags, error: programTagsError } =
     useFetchData("program-tags");
+  // Check if the user is an admin from the cookie
+  const isAdmin = Cookies.get("isAdmin") === "true";
 
   // a way to organize related state values?
   const [selectionState, setSelectionState] = useState({
@@ -318,10 +321,7 @@ function AdminPage() {
   }
 
   // Redirect or show an error if the user is not authenticated or not the specific user
-  if (
-    !isAuthenticated ||
-    (user && user.email !== "latenightdevsfw23@gmail.com")
-  ) {
+  if (!isAuthenticated || !isAdmin) {
     return <p>Access Denied</p>;
   }
 

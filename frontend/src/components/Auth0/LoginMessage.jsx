@@ -52,14 +52,30 @@ const LoginCheckMessage = () => {
   );
 };
 
-const VerifiedEmailLogin = () => {
+const VerifiedEmailLogin = ({ handleAdminStatusChange }) => {
   const { isAuthenticated, user, logout, isLoading } = useAuth0();
   const [countdown, setCountdown] = useState(30);
   const [modalIsOpen, setModalIsOpen] = useState(true);
-  let interval;
+  let interval = useRef();
   const userIdFromCookie = Cookies.get("cookieUId");
   // useRef to store the state of whether the user is added
   const addUserTracking = useRef(false);
+
+  // const checkAndSetAdminStatus = async (email) => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${backend_url}/user/isAdmin?email=${email}`,
+  //       {
+  //         withCredentials: true,
+  //       }
+  //     );
+  //     const isAdmin = response.data.isAdmin;
+  //     Cookies.set("isAdmin", isAdmin); // Storing admin status in the cookie
+  //     console.log("Admin status set in cookie:", isAdmin);
+  //   } catch (error) {
+  //     console.error("Error checking and setting admin status:", error);
+  //   }
+  // };
 
   const checkEmailVerification = async () => {
     if (isAuthenticated && user && !user.email_verified) {
@@ -78,10 +94,13 @@ const VerifiedEmailLogin = () => {
         "1/ email verified --- Initial userID from cookie:",
         userIdFromCookie
       );
-        
+
       if (!userIdFromCookie) {
-        console.log("\n\n\n======= checking input for user.email: ", user.email);
-        const emailExists = await checkEmailExists(user.email);
+        console.log(
+          "\n\n\n======= checking input for user.email: ",
+          user.email
+        );
+        const emailExists = await checkEmailExists(user.email.toLowerCase());
         console.log("3/ checking the email exists or not:  ", emailExists);
 
         console.log("addUserTracking:  ", addUserTracking.current);
@@ -95,19 +114,19 @@ const VerifiedEmailLogin = () => {
             getUserID
           );
           if (getUserID) {
-            // Store the userId in a cookie
             Cookies.set("cookieUId", getUserID);
           }
         }
       }
+      // await checkAndSetAdminStatus(user.email);
     }
   };
 
   const checkEmailExists = async (email) => {
     try {
- 
       console.log(
-        "\n\n==========Loading... Check Email Exists or Not !======== \n", email
+        "\n\n==========Loading... Check Email Exists or Not !======== \n",
+        email
       );
       const response = await axios.get(
         `${backend_url}/user/findUserID?email=${email}`,
@@ -115,23 +134,22 @@ const VerifiedEmailLogin = () => {
           withCredentials: true,
         }
       );
- 
+
       const foundEmail_userID = response.data.userID;
-      // Check if response.data.userID exists
-      // console.log("Response from checking email: ", response.data);
-      // console.log(
-      //   "Response from checking email - userID: ",
-      //   response.data.userID
-      // );
+      const isAdmin = response.data.isAdmin;
+
       if (foundEmail_userID) {
         console.log(
           "checkEmailExists - ADDED userID to Cookies:  ",
           foundEmail_userID
         );
         Cookies.set("cookieUId", foundEmail_userID);
+        Cookies.set("isAdmin", isAdmin); // Storing admin status in the cookie
         // if we found it, that means the user is already added
         // avoid doing post req again.
         addUserTracking.current = true;
+        //make the navbar re-renders to display the admin tools
+        handleAdminStatusChange(isAdmin);
         return true;
       }
       return false;
@@ -171,6 +189,12 @@ const VerifiedEmailLogin = () => {
         "++++",
         addUserTracking.current
       );
+
+      // handle to add a new user who also has an "admin" role.
+      if (user.admin) {
+        Cookies.set("isAdmin", user.admin);
+        handleAdminStatusChange(user.admin);
+      }
       return response.data.user.id;
     } catch (error) {
       console.error("Error adding user to the database:", error);
@@ -182,10 +206,6 @@ const VerifiedEmailLogin = () => {
   useEffect(() => {
     console.log("Use Effect calling .... \n");
     checkEmailVerification();
-    // Clear the intervals on unmount or when the user confirms
-    // return () => {
-    //   clearInterval(interval);
-    // };
     // eslint-disable-next-line
   }, []);
 
@@ -205,8 +225,7 @@ const VerifiedEmailLogin = () => {
     (user && user.email_verified) ||
     !modalIsOpen
   ) {
-    // Return null or loading indicator while the authentication status is being determined
-    return null;
+    return;
   }
 
   return (
@@ -273,7 +292,7 @@ const VerifiedEmailLogin = () => {
   );
 };
 
-const LoginMessage = (NavBarProps) => {
+const LoginMessage = ({ handleAdminStatusChange }) => {
   const { isAuthenticated, isLoading } = useAuth0();
   if (isLoading) {
     return null;
@@ -282,7 +301,7 @@ const LoginMessage = (NavBarProps) => {
   return !isAuthenticated ? (
     <LoginCheckMessage />
   ) : (
-    <VerifiedEmailLogin/>
+    <VerifiedEmailLogin handleAdminStatusChange={handleAdminStatusChange} />
   );
 };
 

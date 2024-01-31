@@ -1,19 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import logo from "./image/PSU_logo.png";
 import "./CSS/NavBar.css";
 import LogInOutBtn from "./components/Auth0/logInOutBtn";
 import { useAuth0 } from "@auth0/auth0-react"; // Import the Auth0 hook
 import LoginMessage from "./components/Auth0/LoginMessage.jsx";
-
-// testing 
-import Cookies from "js-cookie";
+import Cookies from "js-cookie"; // Import Cookies
 
 const NavBar = () => {
-  const { user, isAuthenticated } = useAuth0(); // Get user information
+  const { isAuthenticated } = useAuth0(); // Get user information
+  const [isAdmin, setIsAdmin] = useState(false);
+  const getCookieAdmin = Cookies.get("isAdmin");
   const activeLink = "bg-light text-dark rounded p-1";
   const normalLink = "";
 
+  // reload site once if the admin role is true to display the admin tools.
+  const handleAdminStatusChange = (newAdminValue) => {
+    setIsAdmin(newAdminValue);
+  };
+  if (!isAdmin && getCookieAdmin) setIsAdmin(getCookieAdmin);
   return (
     <>
       <nav className="navbar navbar-expand-lg ">
@@ -29,9 +34,6 @@ const NavBar = () => {
 
           <ul className="nav">
             <li className="nav-item custom-list">
-              {/* <a className="nav-link" href="/">
-              Home
-            </a> */}
               <NavLink
                 exact
                 to="/"
@@ -41,13 +43,9 @@ const NavBar = () => {
                 style={{ textDecoration: "none" }}
               >
                 Home
-                {/* <li className="testing-css">Home</li> */}
               </NavLink>
             </li>
             <li className="nav-item">
-              {/* <a className="nav-link" href="/events">
-              Events
-            </a> */}
               <NavLink
                 exact
                 to="/events"
@@ -60,9 +58,6 @@ const NavBar = () => {
               </NavLink>
             </li>
             <li className="nav-item">
-              {/* <a className="nav-link" href="/scholarship">
-              Scholarship
-            </a> */}
               <NavLink
                 exact
                 to="/scholarship"
@@ -75,9 +70,6 @@ const NavBar = () => {
               </NavLink>
             </li>
             <li className="nav-item">
-              {/* <a className="nav-link" href="/calender">
-              Calender
-            </a> */}
               <NavLink
                 exact
                 to="/calender"
@@ -90,9 +82,6 @@ const NavBar = () => {
               </NavLink>
             </li>
             <li className="nav-item">
-              {/* <a className="nav-link" href="/program">
-              Program
-            </a> */}
               <NavLink
                 exact
                 to="/program"
@@ -105,9 +94,6 @@ const NavBar = () => {
               </NavLink>
             </li>
             <li className="nav-item">
-              {/* <a className="nav-link" href="/newsletter">
-              Newsletter
-            </a> */}
               <NavLink
                 exact
                 to="/newsletter"
@@ -120,9 +106,6 @@ const NavBar = () => {
               </NavLink>
             </li>
             <li className="nav-item">
-              {/* <a className="nav-link" href="/newsletter">
-              Newsletter
-            </a> */}
               <NavLink
                 exact
                 to="/contact"
@@ -134,33 +117,26 @@ const NavBar = () => {
                 Contact
               </NavLink>
             </li>
-
-            {/* Conditionally render the Admin Tools link */}
-            {isAuthenticated &&
-              user &&
-              user.email === "latenightdevsfw23@gmail.com" && (
-                <li className="nav-item">
-                  {/* <a className="nav-link" href="/admin-modify-db">
+            {isAuthenticated && isAdmin && (
+              <li className="nav-item">
+                <NavLink
+                  exact
+                  to="/admin-modify-db"
+                  className={({ isActive }) =>
+                    `linkStyle ${isActive ? activeLink : normalLink}`
+                  }
+                  style={{ textDecoration: "none" }}
+                >
                   Admin Tools
-                </a> */}
-                  <NavLink
-                    exact
-                    to="/admin-modify-db"
-                    className={({ isActive }) =>
-                      `linkStyle ${isActive ? activeLink : normalLink}`
-                    }
-                    style={{ textDecoration: "none" }}
-                  >
-                    Admin Tools
-                  </NavLink>
-                </li>
-              )}
+                </NavLink>
+              </li>
+            )}
           </ul>
 
           <LogInOutBtn />
         </div>
       </nav>
-      <LoginMessage />
+      <LoginMessage handleAdminStatusChange={handleAdminStatusChange} />
     </>
   );
 };
