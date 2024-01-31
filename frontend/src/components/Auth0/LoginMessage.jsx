@@ -273,13 +273,17 @@ const VerifiedEmailLogin = () => {
   );
 };
 
-const LoginMessage = () => {
+const LoginMessage = (NavBarProps) => {
   const { isAuthenticated, isLoading } = useAuth0();
   if (isLoading) {
     return null;
   }
 
-  return !isAuthenticated ? <LoginCheckMessage /> : <VerifiedEmailLogin />;
+  return !isAuthenticated ? (
+    <LoginCheckMessage />
+  ) : (
+    <VerifiedEmailLogin/>
+  );
 };
 
 export default LoginMessage;

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import FilterByTag from "./FilterByTag";
@@ -10,10 +9,12 @@ import Cookies from "js-cookie";
 function ProgramTab() {
   
   const [selectedTagIds, setSelectedTagIds] = useState(new Set());
+    const cookieUID = Cookies.get("cookieUId");
     console.log(
       "\n >>>>> userID stored in COOKIE or not at the program tab: ",
-      Cookies.get("cookieUId")
+      cookieUID
     );
+
   return (
     <Container fluid>
       <Row class="img-hero-welcome">
@@ -26,7 +27,10 @@ function ProgramTab() {
       </Row>
       <Row className="mt-5">
         <Col md={12} lg={6} className="border-end">
-          <FilterByTag setSelectedTagIds={setSelectedTagIds} />
+          <FilterByTag
+            setSelectedTagIds={setSelectedTagIds}
+            cookieUID={cookieUID}
+          />
         </Col>
         <Col
           md={12}
@@ -36,9 +40,9 @@ function ProgramTab() {
         >
           <div className="testing">
             {selectedTagIds.size > 0 ? (
-              <Programs selectedTagIds={selectedTagIds} />
+              <Programs selectedTagIds={selectedTagIds} cookieUID={cookieUID} />
             ) : (
-              <Programs selectedTagIds={new Set()} />
+              <Programs selectedTagIds={new Set()} cookieUID={cookieUID} />
             )}
           </div>
         </Col>

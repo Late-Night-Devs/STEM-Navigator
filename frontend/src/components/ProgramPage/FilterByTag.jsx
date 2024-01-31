@@ -6,11 +6,11 @@ import SearchByCategory from "./SearchByCategory";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
-const FilterByTag = ({ setSelectedTagIds }) => {
+const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
   const [categories, setCategories] = useState({});
   const [store, setStore] = useState({});
   const [tagIdMapping, setTagIdMapping] = useState({}); // Map tag names to IDs
-
+  console.log("\t\n Filter By Tag - CookieUID:  ", cookieUID);
   useEffect(() => {
     axios
       .get(`${backend_url}/tags`)

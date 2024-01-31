@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import logo from "./image/PSU_logo.png";
 import "./CSS/NavBar.css";
 import LogInOutBtn from "./components/Auth0/logInOutBtn";
 import { useAuth0 } from "@auth0/auth0-react"; // Import the Auth0 hook
 import LoginMessage from "./components/Auth0/LoginMessage.jsx";
+
+// testing 
+import Cookies from "js-cookie";
+
 const NavBar = () => {
   const { user, isAuthenticated } = useAuth0(); // Get user information
   const activeLink = "bg-light text-dark rounded p-1";
