@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import FavoritesBank from "./FavoritesBank";
 import Timeline from "./TimelineRow";
+import emptyTimeline from "./EmptyTimeline";
 import { DragDropContext } from "react-beautiful-dnd";
 
 const testPgrms = [
@@ -25,26 +26,43 @@ const testPgrms = [
   },
 ];
 
-function onDragEnd(result) {
-  const {dest, src} = result;
 
-  if (!dest) return;
-  if (dest.droppableId === src.droppableId)
-    return;
-
-  
-}
 
 function CalendarTab() {
   const [favoritesList, setFavoritesList] = useState(testPgrms);
-  const [timeline, setTimeline] = useState([]);
+  const [timeline, setTimeline] = useState(emptyTimeline);
+
+  function onDragEnd(result) {
+    const {source, destination} = result;
+  
+    if (!destination) return;
+    if (destination.droppableId === source.droppableId)
+      return;
+
+    const month = timeline[destination.droppableId];
+    const newProgramList = Array.from(month.programIds);
+    const program = testPgrms[source.index];
+    newProgramList.push(program);
+
+    const updatedTimeline = {
+      ...timeline,
+      [month.title]: {
+        ...month,
+        programIds: newProgramList
+      },
+    }
+
+    setTimeline(updatedTimeline);
+    
+  }
+  useEffect(() => {console.log(timeline['January'])});
 
   return (
     <Container fluid>
       <DragDropContext onDragEnd={onDragEnd}>
         <FavoritesBank favoritesList={favoritesList} />
 
-        <Timeline />
+        <Timeline timelineData={timeline} programOptions={favoritesList} />
       </DragDropContext>
     </Container>
   );

@@ -6,10 +6,10 @@ import ProgramCard from "../ProgramCard";
 
 function FavoritesBank({favoritesList}) {
   return (
-    <Row id="bank" className="my-2 mx-1">
-      <h3>Favorited Programs</h3>
-      <Droppable droppableId="bankDroppable" direction="horizontal" isDropDisabled={true}>
-        { provided => (
+    <Row id="bank" className="my-3 mx-1 p-2">
+      <h3 className="mt-1">Favorited Programs</h3>
+      <Droppable droppableId="bankDroppable" direction="horizontal">
+        {(provided) => (
           <Row {...provided.droppableProps} ref={provided.innerRef}>
             {favoritesList.map((program, index) => (
               <BankProgram program={program} index={index} key={program.title} />
@@ -28,11 +28,11 @@ function BankProgram({program, index}) {
       {(provided, snapshot) => (
         <Col md={4} className="w-25">
           {/* 
-            For some reason, putting draggable & dragHandle on ProgramCard makes it
-            unable to find drag handle. Putting innerRef on the div makes it think
-            there is no ref.
+            For some reason, putting draggable & dragHandle on ProgramCard
+            makes it unable to find drag handle. Putting innerRef on the
+            div makes it think there is no ref.
           */}
-          <div {...provided.draggableProps} {...provided.dragHandleProps}>
+          <div {...provided.draggableProps} {...provided.dragHandleProps} className="my-2">
             <ProgramCard program={program} innerRef={provided.innerRef} />
           </div>
 

@@ -1,24 +1,28 @@
 import React from "react";
 import { Row, Col, } from "react-bootstrap";
 import { Droppable } from "react-beautiful-dnd";
+import ProgramCard from "../ProgramCard";
 
-const months = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"];
-
-
-function Timeline() {
+function Timeline({timelineData, programOptions}) {
   return (
-    <Row id="timeline" className="my-2 mx-1 overflow-x-scroll">
-      {months.map((name) => (
-        <MonthCol title={name} key={name} />
+    <Row id="timeline" className="my-4 mx-1 p-3 overflow-x-scroll">
+      {timelineData.monthOrder.map((name) => (
+        <MonthCol
+          title={timelineData[name].title}
+          programOptions={programOptions}
+          programList={timelineData[name].programIds}
+          key={name}
+        />
       ))}
     </Row>
   );
 }
 
-function MonthCol({title}) {
+function MonthCol({title, programList}) {
+  const emptyColumn = (programList.length === 0);
+  
   return (
-    <Droppable droppableId="monthDroppable" key={title}>
+    <Droppable droppableId={title} key={title}>
       {(provided) => (
         <Col
           {...provided.droppableProps}
@@ -26,7 +30,11 @@ function MonthCol({title}) {
           className="monthCol"
         >
           <h4>{title}</h4>
-          <p>Drag a program here...</p>
+          {programList.map((program, index) => (
+            <ProgramCard program={program} key={program.title + index} />
+          ))}
+
+          {emptyColumn && (<p>Drag a program here...</p>)}
           {provided.placeholder}
         </Col>
       )}

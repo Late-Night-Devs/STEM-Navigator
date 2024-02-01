@@ -1,13 +1,8 @@
-#bank {
-  margin: 20px 10px;
+#bank, #timeline {
   border: 1px solid darkgray;
-  padding: 5px;
-  padding-top: 10px;
 }
 
-#timeline {
-  margin: 20px 10px;
-}
+
 
 .monthCol {
   border: 1px solid darkgrey;
