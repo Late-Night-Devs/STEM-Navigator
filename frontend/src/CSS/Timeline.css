@@ -6,3 +6,8 @@
   border: 1px solid darkgrey;
   text-align: center;
 }
+
+#timeline {
+  overflow-x: auto !important;
+  display: block;
+}

@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Col, } from "react-bootstrap";
 import { Droppable } from "react-beautiful-dnd";
-import ProgramCard from "../ProgramCard";
+import BankProgram from "./BankProgram";
 
 function Timeline({timelineData, programOptions}) {
   return (
@@ -24,14 +24,10 @@ function MonthCol({title, programList}) {
   return (
     <Droppable droppableId={title} key={title}>
       {(provided) => (
-        <Col
-          {...provided.droppableProps}
-          ref={provided.innerRef}
-          className="monthCol"
-        >
+        <Col {...provided.droppableProps} ref={provided.innerRef} className="monthCol">
           <h4>{title}</h4>
           {programList.map((program, index) => (
-            <ProgramCard program={program} key={program.title + index} />
+            <BankProgram program={program} index={index} key={program.title + index} />
           ))}
 
           {emptyColumn && (<p>Drag a program here...</p>)}

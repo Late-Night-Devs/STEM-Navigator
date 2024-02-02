@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Container } from "react-bootstrap";
 import FavoritesBank from "./FavoritesBank";
 import Timeline from "./TimelineRow";
@@ -35,27 +35,70 @@ function CalendarTab() {
   function onDragEnd(result) {
     const {source, destination} = result;
   
-    if (!destination) return;
-    if (destination.droppableId === source.droppableId)
-      return;
+    if (!destination || destination.droppableId === 'bankDroppable') return;
 
-    const month = timeline[destination.droppableId];
-    const newProgramList = Array.from(month.programIds);
-    const program = testPgrms[source.index];
-    newProgramList.push(program);
+    console.log(source.droppableId, destination.droppableId);
+    switch (source.droppableId) {
+      case destination.droppableId: {
+        const month = timeline[destination.droppableId];
+        const reorderedList = Array.from(month.programIds);
+        const [movedProgram] = reorderedList.splice(source.index, 1);
+        reorderedList.splice(destination.index, 0, movedProgram);
 
-    const updatedTimeline = {
-      ...timeline,
-      [month.title]: {
-        ...month,
-        programIds: newProgramList
-      },
+        const updatedTimeline = {
+          ...timeline,
+          [month.title]: {
+            ...month,
+            programIds: reorderedList
+          },
+        }
+        setTimeline(updatedTimeline);
+        break;
+      }
+      case 'bankDroppable': {
+        const month = timeline[destination.droppableId];
+        const updatedList = Array.from(month.programIds);
+        const program = testPgrms[source.index];
+        updatedList.splice(destination.index, 0, program);
+
+        const updatedTimeline = {
+          ...timeline,
+          [month.title]: {
+            ...month,
+            programIds: updatedList
+          },
+        }
+        setTimeline(updatedTimeline);
+        break;
+      }
+      default: {
+        const srcMonth = timeline[source.droppableId];
+        const destMonth = timeline[destination.droppableId];
+
+        const updatedSrcList = Array.from(srcMonth.programIds);
+        const updatedDestList = Array.from(destMonth.programIds);
+        const [movedProgram] = updatedSrcList.splice(source.index, 1);
+        updatedDestList.splice(destination.index, 0, movedProgram);
+
+        const updatedTimeline = {
+          ...timeline,
+          [srcMonth.title]: {
+            ...srcMonth,
+            programIds: updatedSrcList
+          },
+          [destMonth.title]: {
+            ...destMonth,
+            programIds: updatedDestList
+          },
+        }
+        setTimeline(updatedTimeline);
+        break; 
+      }
     }
-
-    setTimeline(updatedTimeline);
+    
+    //setTimeline(updatedTimeline);
     
   }
-  useEffect(() => {console.log(timeline['January'])});
 
   return (
     <Container fluid>
