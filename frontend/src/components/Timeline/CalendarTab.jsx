@@ -4,6 +4,7 @@ import FavoritesBank from "./FavoritesBank";
 import Timeline from "./TimelineRow";
 import emptyTimeline from "./EmptyTimeline";
 import { DragDropContext } from "react-beautiful-dnd";
+import { v4 as uuid4 } from "uuid";
 
 const testPgrms = [
   {
@@ -11,22 +12,23 @@ const testPgrms = [
     lead_contact: "Joyce Pieretti Ph.D",
     contact_email: "lsamp@pdx.edu",
     link_to_web: "https://www.pdx.edu/alliance-minority-participation/",
+    id: uuid4(),
   },
   {
     title: "MESA C2C",
     lead_contact: "Yongwen Lampert",
     contact_email: "mesac2c@pcc.edu",
     link_to_web: "https://www.pcc.edu/maker/stem-center/programming/mesac2c/",
+    id: uuid4(),
   },
   {
     title: "ACCESS",
     lead_contact: "Vvdaul Holloway",
     contact_email: "vvdaul.holloway@pdx.edu",
     link_to_web: "https://ondeck.pdx.edu/multicultural-retention-services/access",
+    id: uuid4(),
   },
 ];
-
-
 
 function CalendarTab() {
   const [favoritesList, setFavoritesList] = useState(testPgrms);
@@ -59,7 +61,7 @@ function CalendarTab() {
         const month = timeline[destination.droppableId];
         const updatedList = Array.from(month.programIds);
         const program = testPgrms[source.index];
-        updatedList.splice(destination.index, 0, program);
+        updatedList.splice(destination.index, 0, {...program, id: uuid4()});
 
         const updatedTimeline = {
           ...timeline,

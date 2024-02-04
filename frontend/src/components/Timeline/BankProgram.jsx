@@ -5,9 +5,9 @@ import ProgramCard from "../ProgramCard";
 
 function BankProgram({program, index}) {
   return (
-    <Draggable key={program.title} draggableId={program.title + index} index={index}>
+    <Draggable key={program.title} draggableId={program.id} index={index}>
       {(provided, snapshot, rubric) => (
-        <Col md={4} className="w-25">
+        <Col md={4} className="w-25 text-start">
           {/* 
             For some reason, putting draggable & dragHandle on ProgramCard
             makes it unable to find drag handle. Putting innerRef on the
