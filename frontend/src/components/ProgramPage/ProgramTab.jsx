@@ -3,7 +3,10 @@ import { Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import FilterByTag from "./FilterByTag";
 import Programs from "./Programs";
+import FavoriteProgramsDisplay from "./FavoriteSection";
+import { Link } from "react-scroll";
 import "../../CSS/ProgramTab.css";
+
 import Cookies from "js-cookie";
 
 function ProgramTab() {
@@ -23,6 +26,15 @@ function ProgramTab() {
           <p className="intro text-center fs-3 fw-bold p-5">
             Welcome to PSU STEM
           </p>
+
+          <Link
+            to="favoriteSection"
+            smooth={true}
+            duration={300}
+            className="btn btn-primary mt-3"
+          >
+            My Favorite
+          </Link>
         </section>
       </Row>
       <Row className="mt-5">
@@ -47,6 +59,14 @@ function ProgramTab() {
           </div>
         </Col>
       </Row>
+
+      <Row>
+        <div id="favoriteSection" className="mt-4 border border-2">
+          <h3 className="p-2"> Dipslay Favorite</h3>
+          <FavoriteProgramsDisplay cookieUID={cookieUID} />
+        </div>
+      </Row>
+
     </Container>
   );
 }
