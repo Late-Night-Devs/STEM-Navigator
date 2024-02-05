@@ -13,7 +13,7 @@ function BankProgram({program, index}) {
             makes it unable to find drag handle. Putting innerRef on the
             div makes it think there is no ref.
           */}
-          <div {...provided.draggableProps} {...provided.dragHandleProps} className="my-2">
+          <div {...provided.draggableProps} {...provided.dragHandleProps} className="my-2 bankProgram">
             <ProgramCard program={program} innerRef={provided.innerRef} />
           </div>
 

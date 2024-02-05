@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Container } from "react-bootstrap";
 import FavoritesBank from "./FavoritesBank";
-import Timeline from "./TimelineRow";
+import Timeline from "./Timeline";
 import emptyTimeline from "./EmptyTimeline";
 import { DragDropContext } from "react-beautiful-dnd";
 import { v4 as uuid4 } from "uuid";
@@ -34,12 +34,13 @@ function CalendarTab() {
   const [favoritesList, setFavoritesList] = useState(testPgrms);
   const [timeline, setTimeline] = useState(emptyTimeline);
 
+  // must be inside here to have access to "setTimeline"
+  // TO DO: clean up inside, move outside of component & pass in "setTimeline"
   function onDragEnd(result) {
     const {source, destination} = result;
   
     if (!destination || destination.droppableId === 'bankDroppable') return;
 
-    console.log(source.droppableId, destination.droppableId);
     switch (source.droppableId) {
       case destination.droppableId: {
         const month = timeline[destination.droppableId];
@@ -97,18 +98,17 @@ function CalendarTab() {
         break; 
       }
     }
-    
-    //setTimeline(updatedTimeline);
-    
   }
 
   return (
     <Container fluid>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <FavoritesBank favoritesList={favoritesList} />
+    <DragDropContext onDragEnd={onDragEnd}>
+      <FavoritesBank favoritesList={favoritesList} />
 
+      <div id='timelineContainer'>
         <Timeline timelineData={timeline} programOptions={favoritesList} />
-      </DragDropContext>
+      </div>
+    </DragDropContext>
     </Container>
   );
 }

@@ -5,7 +5,7 @@ import BankProgram from "./BankProgram";
 
 function Timeline({timelineData, programOptions}) {
   return (
-    <Row id="timeline" className="my-4 mx-1 p-3 overflow-x-scroll">
+    <div id="timeline" className="my-4 mx-1 p-3">
       {timelineData.monthOrder.map((name) => (
         <MonthCol
           title={timelineData[name].title}
@@ -14,7 +14,7 @@ function Timeline({timelineData, programOptions}) {
           key={name}
         />
       ))}
-    </Row>
+    </div>
   );
 }
 
@@ -24,7 +24,7 @@ function MonthCol({title, programList}) {
   return (
     <Droppable droppableId={title} key={title}>
       {(provided) => (
-        <Col {...provided.droppableProps} ref={provided.innerRef} className="monthCol">
+        <div {...provided.droppableProps} ref={provided.innerRef} className="monthCol">
           <h4>{title}</h4>
           {programList.map((program, index) => (
             <BankProgram program={program} index={index} key={program.title + index} />
@@ -32,7 +32,7 @@ function MonthCol({title, programList}) {
 
           {emptyColumn && (<p>Drag a program here...</p>)}
           {provided.placeholder}
-        </Col>
+        </div>
       )}
     </Droppable>
   );
