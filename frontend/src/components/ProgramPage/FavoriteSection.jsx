@@ -12,37 +12,27 @@ const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 function FavoriteProgramsDisplay({ cookieUID }) {
     const { isAuthenticated } = useAuth0();
-    const [isFavorite, setIsFavorite] = useState(false);
-    const [isExpanded, setIsExpanded] = useState(false);
     const [programs, setPrograms] = useState([]);
-    
+    console.log("checking isAuthenticated", isAuthenticated);
     useEffect(() => {
-        console.log("--------- use effect from favorite display ----------")
-        
         const checkFavoriteDatabase = async () => {
             if (!isAuthenticated && !cookieUID) {
                 console.log("User is not authenticated. Please log in.");
                 return;
             }
-
             try {
-                console.log("-----!!!!---- fetching fav programs from favorite display ----------")
                 const response = await axios.get(
                     `${backend_url}/user/favorite/getFavoritePrograms/${cookieUID}`,
                     {
                         withCredentials: true,
                     }
                 );
-
-                console.log("hahahah ", response)
-                console.log(" favorite programs display:  ", response.data);
                 const isFavoriteInDatabase = response.data.isFavorite;
-                setIsFavorite(isFavoriteInDatabase);
                 setPrograms(response.data);
             } catch (error) {
                 console.log("-----!!!!---- fetching fav programs from favorite display ERROR ----------")
                 if (error.response && error.response.status === 404) {
-                    setIsFavorite(false);
+                    console.error(error)
                 } else if (error.response && error.response.status === 500) {
                     console.error("Internal Server Error:", error);
                 }
@@ -54,7 +44,7 @@ function FavoriteProgramsDisplay({ cookieUID }) {
 
     return (
         <div>
-            {programs.length > 0 ? (
+            { programs.length > 0 ? (
                 programs.map((program) => (
                     <ProgramColumn
                         key={program.program_id}
@@ -81,7 +71,6 @@ function ProgramCard({ program, cookieUID }) {
 
     useEffect(() => {
         const checkFavoriteDatabase = async () => {
-            //  console.log("22222check auth0  :  ", isAuthenticated);
             try {
                 const response = await axios.get(
                     `${backend_url}/user/favorite/checkFavorite/${cookieUID}/${program.program_id}`,
@@ -91,8 +80,7 @@ function ProgramCard({ program, cookieUID }) {
                 );
 
                 const isFavoriteInDatabase = response.data.isFavorite;
-                //  console.log("checking the return from fav : ", isFavoriteInDatabase);
-                setIsFavorite(isFavoriteInDatabase);
+               setIsFavorite(isFavoriteInDatabase);
             } catch (error) {
                 if (error.response && error.response.status === 404) {
                     // Handle 404 (Not Found) by returning false
