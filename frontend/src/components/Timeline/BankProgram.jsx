@@ -1,7 +1,6 @@
 import React from "react";
-import { Col } from "react-bootstrap";
+import { Col, Card, Button } from "react-bootstrap";
 import { Draggable } from "react-beautiful-dnd";
-import ProgramCard from "../ProgramCard";
 
 function BankProgram({program, index}) {
   return (
@@ -25,6 +24,33 @@ function BankProgram({program, index}) {
         </Col>
       )}
     </Draggable>
+  );
+}
+
+function ProgramCard({program, innerRef}) {
+  return (
+    <Card ref={innerRef}>
+      <Card.Body>
+        <Card.Title>{program.title}</Card.Title>
+        <Card.Text>
+          Lead Contact: {program.lead_contact} <br />
+          Contact Email:{" "}
+          <a href={`mailto:${program.contact_email}`}>
+            {program.contact_email}
+          </a>
+        </Card.Text>
+      </Card.Body>
+      <Card.Footer className="text-center">
+        <Button
+          variant="primary"
+          href={program.link_to_web}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn More
+        </Button>
+      </Card.Footer>
+    </Card>
   );
 }
 

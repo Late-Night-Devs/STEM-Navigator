@@ -6,6 +6,7 @@ import emptyTimeline from "./EmptyTimeline";
 import { DragDropContext } from "react-beautiful-dnd";
 import { v4 as uuid4 } from "uuid";
 
+const backend_url = process.env.REACT_APP_BACKEND_URL;
 const testPgrms = [
   {
     title: "LSAMP",
@@ -31,7 +32,7 @@ const testPgrms = [
 ];
 
 function CalendarTab() {
-  const [favoritesList, setFavoritesList] = useState(testPgrms);
+  const [favoritesList, setFavoritesList] = useState([]);
   const [timeline, setTimeline] = useState(emptyTimeline);
 
   // must be inside here to have access to "setTimeline"
@@ -105,7 +106,7 @@ function CalendarTab() {
     <DragDropContext onDragEnd={onDragEnd}>
       <FavoritesBank favoritesList={favoritesList} />
 
-      <div id='timelineContainer'>
+      <div id="timelineContainer">
         <Timeline timelineData={timeline} programOptions={favoritesList} />
       </div>
     </DragDropContext>

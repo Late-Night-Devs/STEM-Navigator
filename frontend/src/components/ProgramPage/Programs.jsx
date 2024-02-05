@@ -9,7 +9,6 @@ import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import { useAuth0 } from "@auth0/auth0-react";
 import Cookies from "js-cookie";
-import ProgramCard from "../ProgramCard";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
