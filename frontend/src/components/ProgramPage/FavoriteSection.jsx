@@ -152,7 +152,9 @@ function ProgramCard({ program, cookieUID, changeColumnWidth }) {
         <FontAwesomeIcon
           icon={isFavorite ? solidStar : regularStar}
           className="star-icon position-absolute top-0 end-0 m-2"
-          onClick={toggleFavorite}
+                  onClick={() => {
+                      toggleFavorite()
+                  }}
           style={{
             cursor: "pointer",
             color: isFavorite ? "gold" : "grey",
