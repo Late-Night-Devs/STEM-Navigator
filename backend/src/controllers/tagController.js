@@ -41,21 +41,21 @@ exports.deleteProgramsByTag = (req, res) => {
 
             // 2: Delete itself from Tags table
             // comment this out if just wanted to remove programs associated to the tagID
-            // db.query("DELETE FROM Tags WHERE tag_id = ?", [tagId], (errTags, resultsTags) => {
-            //     if (errTags) {
-            //         console.error(`Error in removing tag ${tagId} from Tags:`, errTags);
-            //         res.status(500).send(`Error in removing tag ${tagId} from Tags`);
-            //         return;
-            //     }
+            db.query("DELETE FROM Tags WHERE tag_id = ?", [tagId], (errTags, resultsTags) => {
+                if (errTags) {
+                    console.error(`Error in removing tag ${tagId} from Tags:`, errTags);
+                    res.status(500).send(`Error in removing tag ${tagId} from Tags`);
+                    return;
+                }
 
-            //     // Check if itself in Tags table
-            //     if (resultsTags.affectedRows === 0) {
-            //         console.log(`No Record of tag_id ${tagId} in Tags Table`);
-            //     }
+                // Check if itself in Tags table
+                if (resultsTags.affectedRows === 0) {
+                    console.log(`No Record of tag_id ${tagId} in Tags Table`);
+                }
 
-            //     // FINAL RESULT!!! Log success for each tag ID
-            //     console.log(`Tag ${tagId}, and associated ProgramTags removed successfully`);
-            // });
+                // FINAL RESULT!!! Log success for each tag ID
+                console.log(`Tag ${tagId}, and associated ProgramTags removed successfully`);
+            });
         });
     });
 
