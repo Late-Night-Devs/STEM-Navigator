@@ -3,14 +3,18 @@ import axios from "axios";
 import { Card, Container, Row, Col, Form } from "react-bootstrap";
 import "../../CSS/FilterByTag.css";
 import SearchByCategory from "./SearchByCategory";
+import DropdownCategory from "./DropdownCategory";
+import Dropdown from "react-bootstrap/Dropdown";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 const FilterByTag = ({ setSelectedTagIds }) => {
   const [categories, setCategories] = useState({});
   const [store, setStore] = useState({});
+  const [tempCategories, setTempCategories] = useState({});
   const [tagIdMapping, setTagIdMapping] = useState({}); // Map tag names to IDs
 
+  const [clickedName, setClickedName] = useState("All Categories");
   useEffect(() => {
     axios
       .get(`${backend_url}/tags`)
@@ -30,6 +34,12 @@ const FilterByTag = ({ setSelectedTagIds }) => {
         });
 
         setCategories(fetchedCategories);
+        // Adding an tempData for All Category[] -> help reset data
+        let tempData = { ...fetchedCategories };
+        tempData = { "All Categories": [], ...tempData };
+        console.log("hello there", tempData);
+
+        setTempCategories(tempData);
         setStore(fetchedCategories);
         setTagIdMapping(tagIdMap); // Store the tag id mapping
       })
@@ -57,7 +67,7 @@ const FilterByTag = ({ setSelectedTagIds }) => {
     });
   };
 
-  //Handle search for search function by category
+  //Handle search for search function by tag in categories
   const handleSearch = (key) => {
     let myResult = findKeyValuePair(store, key);
     if (key === "") {
@@ -69,22 +79,97 @@ const FilterByTag = ({ setSelectedTagIds }) => {
   function findKeyValuePair(data, key) {
     let result = {};
     for (const dataKey in data) {
-      if (dataKey.toLowerCase().includes(key)) {
-        result = { ...result, [dataKey]: data[dataKey] };
+      const values = data[dataKey];
+      for (const value of values) {
+        if (value.toLowerCase().includes(key.toLowerCase())) {
+          result[dataKey] = values;
+          break; 
+        }
       }
     }
+    return result;
+  }
 
-    if (Object.keys(result).length !== 0) {
-      return result;
-    } else {
-      return {};
+  ///********Handle Dropdown function******** *//
+
+  const handleClick = (event) => {
+    const name = event.target.textContent;
+    const currentCard = event.target;
+
+    const className = event.target.className;
+
+    let hasClickedClass = className.includes("clicked-div");
+
+    if (!hasClickedClass) {
+      //Remove all clicked-div class from other elements
+      const otherCards = document.querySelectorAll(".card.clicked-div");
+      otherCards.forEach((card) => {
+        card.classList.remove("clicked-div");
+      });
+      // If not present, add the class to the current element
+      currentCard.classList.add("clicked-div");
     }
+    handleDropdown(name);
+
+    setClickedName(name);
+  };
+
+  const handleDropdown = (name) => {
+    let myResult = findName(store, name);
+
+    if (name === "All Categories") {
+      myResult = store;
+    }
+    setCategories(myResult);
+  };
+
+  function findName(data, name) {
+    let result = {};
+    for (let dataKey in data) {
+      if (dataKey === name) {
+        result[dataKey] = data[dataKey];
+      }
+    }
+    return result;
   }
 
   return (
     <Container>
       <Row>
         <SearchByCategory handleSearch={handleSearch} categories={categories} />
+        {clickedName && <DropdownCategory handleSearch={handleDropdown} />}
+        
+        {/* Dropdown function */}
+        <Dropdown>
+          <Dropdown.Toggle
+            id="dropdown"
+            style={{
+              background: "grey",
+              width: "50%",
+              margin: "10px",
+              border: "var(--salmon)",
+              fontSize: "1vw",
+            }}
+          >
+            {clickedName}
+          </Dropdown.Toggle>
+          <Dropdown.Menu
+            style={{
+              marginTop: "0px",
+              width: "50%",
+              textAlign: "center",
+              fontFamily: "Cocogoose",
+              fontSize: "1vw",
+            }}
+          >
+            {Object.keys(tempCategories).map((categoryName, index) => (
+              <Dropdown.Item key={index} onClick={handleClick}>
+                <div className="card">{categoryName}</div>
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+
         {Object.entries(categories).map(([category, tags]) => (
           <Col key={category} md={4} className="mb-4 ">
             <Card>

@@ -7,7 +7,7 @@ function SearchByCategory(props) {
     <div className="search-top">
       <div className="search">
         <label for="search-tag" className="search-label p-3 fw-bold fs-5">
-          Search Program By Category:
+          Search Program By Tag:
         </label>
         <input className="rounded w-50"
           id="search-tag"
