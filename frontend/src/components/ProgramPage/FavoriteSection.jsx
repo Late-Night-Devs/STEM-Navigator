@@ -13,49 +13,44 @@ const backend_url = process.env.REACT_APP_BACKEND_URL;
 function FavoriteProgramsDisplay({ cookieUID }) {
     const { isAuthenticated } = useAuth0();
     const [programs, setPrograms] = useState([]);
-    console.log("checking isAuthenticated", isAuthenticated);
-    useEffect(() => {
-        const checkFavoriteDatabase = async () => {
-            if (!isAuthenticated && !cookieUID) {
-                console.log("User is not authenticated. Please log in.");
-                return;
-            }
-            try {
-                const response = await axios.get(
-                    `${backend_url}/user/favorite/getFavoritePrograms/${cookieUID}`,
-                    {
-                        withCredentials: true,
-                    }
-                );
-                const isFavoriteInDatabase = response.data.isFavorite;
-                setPrograms(response.data);
-            } catch (error) {
-                console.log("-----!!!!---- fetching fav programs from favorite display ERROR ----------")
-                if (error.response && error.response.status === 404) {
-                    console.error(error)
-                } else if (error.response && error.response.status === 500) {
-                    console.error("Internal Server Error:", error);
-                }
-            }
-        };
 
-        checkFavoriteDatabase();
-    }, [cookieUID]);
+    useEffect(() => {
+      const checkFavoriteDatabase = async () => {
+        if (!isAuthenticated && !cookieUID) {
+          console.log("User is not authenticated. Please log in.");
+          return;
+        }
+        try {
+          const response = await axios.get(
+            `${backend_url}/user/favorite/getFavoritePrograms/${cookieUID}`,
+            {
+              withCredentials: true,
+            }
+          );
+          setPrograms(response.data);
+        } catch (error) {
+          console.log(
+            "-----!!!!---- fetching fav programs from favorite display ERROR ----------"
+          );
+          if (error.response && error.response.status === 404) {
+            console.error(error);
+          } else if (error.response && error.response.status === 500) {
+            console.error("Internal Server Error:", error);
+          }
+        }
+      };
+
+      checkFavoriteDatabase();
+    }, [isAuthenticated, cookieUID]);
 
     return (
-        <div>
-            { programs.length > 0 ? (
-                programs.map((program) => (
-                    <ProgramColumn
-                        key={program.program_id}
-                        program={program}
-                        cookieUID={cookieUID}
-                    />
-                ))
-            ) : (
-                <p>You don't have any favorite programs at the moment.</p>
-            )}
-        </div>
+      <div>
+        {programs.length > 0 ? (
+          <ProgramColumn programs={programs} cookieUID={cookieUID} />
+        ) : (
+          <p>You don't have any favorite programs at the moment.</p>
+        )}
+      </div>
     );
 }
 
@@ -110,7 +105,8 @@ function ProgramCard({ program, cookieUID }) {
                 programID: program.program_id,
             };
 
-            const response = await axios.post(url, requestData, {
+            // update isFavorite in database
+            await axios.post(url, requestData, {
                 withCredentials: true,
             });
 
@@ -121,7 +117,6 @@ function ProgramCard({ program, cookieUID }) {
     };
     return (
         <div>
-
             <Card key={program.program_id} className="w-100 position-relative mb-3">
                 <FontAwesomeIcon
                     icon={isFavorite ? solidStar : regularStar}
@@ -172,25 +167,29 @@ function ProgramCard({ program, cookieUID }) {
 }
 
 
-const ProgramColumn = ({ program, cookieUID }) => {
-    const [mdValue, setMdValue] = useState(4);
+const ProgramColumn = ({ programs, cookieUID }) => {
+  const [mdValue, setMdValue] = useState(4);
 
-    const changeMdValue = () => {
-        if (mdValue === 4) {
-            setMdValue(12);
-        } else {
-            setMdValue(4);
-        }
-    };
+  const changeMdValue = () => {
+    if (mdValue === 4) {
+      setMdValue(12);
+    } else {
+      setMdValue(4);
+    }
+  };
 
-    return (
-        <Col key={program.id} md={mdValue} className="mb-4">
-            <ProgramCard
-                program={program}
-                cookieUID={cookieUID}
-            />
-        </Col>
-    );
+  return (
+    <div
+      className="row mb-4"
+      style={{ overflowX: "auto", whiteSpace: "nowrap" }}
+    >
+      {programs.map((program) => (
+        <div key={program.id} className={`col-md-${mdValue} d-inline-block`}>
+          <ProgramCard program={program} cookieUID={cookieUID} />
+        </div>
+      ))}
+    </div>
+  );
 };
 
 
