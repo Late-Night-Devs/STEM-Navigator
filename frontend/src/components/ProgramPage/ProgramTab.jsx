@@ -26,7 +26,7 @@ function ProgramTab() {
           <p className="intro text-center fs-3 fw-bold p-5">
             Welcome to PSU STEM
           </p>
-          {cookieUID &&
+          {cookieUID && (
             <Link
               to="favoriteSection"
               smooth={true}
@@ -35,7 +35,7 @@ function ProgramTab() {
             >
               My Favorite
             </Link>
-          }
+          )}
         </section>
       </Row>
       <Row className="mt-5">
@@ -62,14 +62,13 @@ function ProgramTab() {
       </Row>
 
       <Row>
-        {cookieUID &&
-        <div id="favoriteSection" className="mt-4 border border-2">
-          <h3 className="p-2"> Dipslay Favorite</h3>
-          <FavoriteProgramsDisplay cookieUID={cookieUID} />
+        {cookieUID && (
+          <div id="favoriteSection" className="mt-4 border border-2">
+            <h3 className="p-2"> Dipslay Favorite</h3>
+            <FavoriteProgramsDisplay cookieUID={cookieUID} />
           </div>
-        }
+        )}
       </Row>
-
     </Container>
   );
 }

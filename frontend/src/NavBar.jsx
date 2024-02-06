@@ -18,7 +18,9 @@ const NavBar = () => {
   const handleAdminStatusChange = (newAdminValue) => {
     setIsAdmin(newAdminValue);
   };
+
   if (!isAdmin && getCookieAdmin) setIsAdmin(getCookieAdmin);
+    console.log("navbar:  ",isAdmin);
   return (
     <>
       <nav className="navbar navbar-expand-lg ">
@@ -117,7 +119,7 @@ const NavBar = () => {
                 Contact
               </NavLink>
             </li>
-            {isAuthenticated && isAdmin && (
+            {isAdmin && isAuthenticated && (
               <li className="nav-item">
                 <NavLink
                   exact
