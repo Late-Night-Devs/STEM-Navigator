@@ -99,7 +99,9 @@ export const ButtonList = ({
       <div className="text-center border border-dark rounded-5 p-1 m-3">
         <h3>{name}</h3>
         <hr />
+        <span>Filter:  </span>
         <input type="text" value={filter} onChange={handleInputFilterChange} />
+        <hr />
         {sortedCategories.map((category) => (
           <div key={category}>
             <h5>{category !== "NoCategory" ? category : ""}</h5>
