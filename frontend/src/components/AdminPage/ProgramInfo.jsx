@@ -54,20 +54,6 @@ export const ProgramInfo = ({
       return;
     }
 
-    // Check if essential fields are filled
-    if (!programData?.ProgramInfo?.title ||
-      !programData?.ProgramInfo?.lead_contact ||
-      !programData?.ProgramInfo?.contact_email ||
-      !programData?.ProgramInfo?.link_to_web || 
-      !programData?.ProgramInfo?.long_description ||
-      (programData?.ProgramInfo?.duration && !programData?.ProgramInfo?.duration_unit)) { 
-      //( || programData?.ProgramInfo?.long_description?.length <= 50)) { // can add later if needed
-      e.preventDefault();
-      window.alert("Please ensure all program fields are properly filled out.");
-      //console.log("Please ensure all program fields are properly filled out.");
-      return;
-    }
-
     function useResponse(response) {
       console.log("response from Backend: ",response);
     }
@@ -143,27 +129,30 @@ export const ProgramInfo = ({
             name="lead_contact"
             value={programData?.ProgramInfo?.lead_contact}
             onChange={handleChange}
+            required
           />
         </div>
         <div>
           <StyledLabel htmlFor="ContactEmail">Contact Email</StyledLabel>
           <StyledInput
-            type="text"
+            type="email"
             id="ContactEmail"
             name="contact_email"
             value={programData?.ProgramInfo?.contact_email}
             onChange={handleChange}
             autoComplete="email"
+            required
           />
         </div>
         <div>
           <StyledLabel htmlFor="LinkToWeb">Link To Page</StyledLabel>
           <StyledInput
-            type="text"
+            type="url"
             id="LinkToWeb"
             name="link_to_web"
             value={programData?.ProgramInfo?.link_to_web}
             onChange={handleChange}
+            required
           />
         </div>
         <span>Duration</span>
@@ -179,6 +168,7 @@ export const ProgramInfo = ({
                 value={programData?.ProgramInfo?.duration}
                 onChange={handleChange}
                 style={{width: "75px"}}
+                required
               />
             </Col>
             <Col xs={6}>
@@ -188,6 +178,7 @@ export const ProgramInfo = ({
                 options={durationUnitOptions}
                 value={durationUnitOptions.find(option => option.value === programData?.ProgramInfo?.duration_unit)}
                 onChange={handleDurationUnitChange}
+                required
               />
             </label>
             </Col>
@@ -214,6 +205,7 @@ export const ProgramInfo = ({
             name="long_description"
             value={programData?.ProgramInfo?.long_description}
             onChange={handleChange}
+            required
           />
         </div>
         <SubmitButton type="submit" value="Submit" />
