@@ -71,8 +71,6 @@ function AdminPage() {
   const [selectionState, setSelectionState] = useState({
     selectedProgram: null, // the id of the currently selected Program
     selectedTag: null, // the id of the currently selected Tag
-    addingProgram: false, // becomes true when the user presses the add btn on the ProgramsButtonList
-    addingTag: false, // becomes true when the user presses the add btn Tags ButtonList
   });
 
   /* formattedProgramTags uses Tags and formats them for use by the Select <Select options={}>*/
@@ -143,8 +141,6 @@ function AdminPage() {
       setSelectionState((prevState) => ({
         ...prevState,
         selectedTag: null,
-        addingProgram: false,
-        addingTag: false,
       }));
       setSelectedTagInfo(null);
     }
@@ -210,15 +206,10 @@ function AdminPage() {
   const isTagSelected = (tagId) => tagId === selectionState.selectedTag;
 
   const handleTagClick = (tag) => {
-    if (selectionState.addingProgram) {
-      selectionState.addingProgram = false;
-    }
     if (selectionState.selectedProgram !== null) {
       setSelectionState((prevState) => ({
         ...prevState,
         selectedProgram: null,
-        addingProgram: false,
-        addingTag: false,
       }));
       setSelectedProgramInfo(null);
     }
@@ -271,8 +262,6 @@ function AdminPage() {
     setSelectionState((prevState) => ({
       selectedProgram: -1, // -1 is an available temporary Program ID
       selectedTag: null,
-      addingProgram: true,
-      addingTag: false,
     }));
 
     setSelectedProgramInfo({
@@ -296,8 +285,6 @@ function AdminPage() {
       ...prevState,
       selectedTag: -1,
       selectedProgram: null,
-      addingTag: true,
-      addingProgram: false,
     }));
     setSelectedTagInfo({tag_id: -1, tag_name: "", category:null});
     setSelectedProgramInfo(null);
@@ -389,28 +376,10 @@ function AdminPage() {
               isUniqueName={isUniqueTagName}
             />
           )}
-          {/* render the blank form for adding new program */}
-          {selectionState.addingProgram &&
-            selectionState.selectedProgram == null && (
-              <ProgramInfo
-                programData={{}}
-                allProgramTags={formattedTags}
-                onProgramDataChange={setSelectedProgramInfo}
-              />
-            )}
-          {/* render the blank form for adding new tag */}
-          {selectionState.addingTag && selectionState.selectedTag == null && (
-            <TagInfo
-              tagData={{}}
-              categories={formattedCategories}
-              onTagDataChange={setSelectedTagInfo}
-            />
-          )}
-
+          {/* Show the default message when there is not a currently selected Tag or Program */}
           {selectionState.selectedTag == null &&
             selectionState.selectedProgram == null &&
-            !selectionState.addingProgram &&
-            !selectionState.addingTag && (
+            (
               <DefaultMessage>
                 <p>Click on a Program or Tag to show information here.</p>
               </DefaultMessage>
