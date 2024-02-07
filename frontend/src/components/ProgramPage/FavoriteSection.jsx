@@ -13,6 +13,7 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
   const { isAuthenticated } = useAuth0();
   const [favoritePrograms, setFavoritePrograms] = useState([]);
 
+  // fetching favorite data through API
   const checkFavoriteDatabase = async () => {
     if (!isAuthenticated && !cookieUID) {
       console.log("User is not authenticated. Please log in.");
@@ -25,24 +26,23 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
           withCredentials: true,
         }
       );
-
-      const sortedPrograms = response.data.sort((a, b) => {
-        // Compare the isFavorite property of program a and program b
-        if (a.isFavorite === b.isFavorite) {
-          // If they have the same isFavorite value, compare by title alphabetically
-          return a.title.localeCompare(b.title);
-        }
-      });
-      setFavoritePrograms(sortedPrograms);
+      if (response.data.length > 1) {
+        const sortedPrograms = response.data.sort((a, b) => {
+          // Compare the isFavorite property of program a and program b
+          if (a.isFavorite === b.isFavorite) {
+            // If they have the same isFavorite value, compare by title alphabetically
+            return a.title.localeCompare(b.title);
+          }
+        });
+        setFavoritePrograms(sortedPrograms);
+      } else {
+        setFavoritePrograms(response.data)
+      }
     } catch (error) {
       console.log(
         "-----!!!!---- fetching fav programs from favorite display ERROR ----------"
       );
-      if (error.response && error.response.status === 404) {
-        console.error(error);
-      } else if (error.response && error.response.status === 500) {
-        console.error("Internal Server Error:", error);
-      }
+      console.error("Error fetching programs:", error);
     }
   };
   useEffect(() => {
@@ -124,6 +124,7 @@ function ProgramCard({
         );
 
         const isFavoriteInDatabase = response.data.isFavorite;
+        console.log("$$$$ program card from favorite display: ", isFavoriteInDatabase, response.data);
         setIsFavorite(isFavoriteInDatabase);
       } catch (error) {
         if (error.response && error.response.status === 404) {
@@ -147,7 +148,7 @@ function ProgramCard({
         return;
       }
 
-      console.log("isFavorite:   ", isFavorite, cookieUID, program.program_id);
+      console.log("isFavorite from favorite display:   ", isFavorite, cookieUID, program.program_id);
       const favoriteRequest = isFavorite ? "removeFavorite" : "addFavorite";
       const url = `${backend_url}/user/favorite/${favoriteRequest}`;
 

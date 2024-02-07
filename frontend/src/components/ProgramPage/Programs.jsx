@@ -32,13 +32,6 @@ const Programs = ({ selectedTagIds, cookieUID, handleFavoriteClicked }) => {
         }
       );
 
-      console.log("allProgramsResponse: ", allProgramsResponse);
-
-      console.log(
-        " allProgramsResponse.data.isFavorite:  ",
-        allProgramsResponse.data.isFavorite
-      );
-
       const sortedPrograms = allProgramsResponse.data.sort((a, b) => {
         // Compare the isFavorite property of program a and program b
         if (a.isFavorite === b.isFavorite) {
@@ -49,9 +42,8 @@ const Programs = ({ selectedTagIds, cookieUID, handleFavoriteClicked }) => {
           return a.isFavorite ? -1 : 1;
         }
       });
-
-      console.log("Sorted Programs: ", sortedPrograms);
-
+      
+      console.log("Sorted Programs from Programs.jsx: ", sortedPrograms);
       setPrograms(sortedPrograms);
     } catch (error) {
       console.error("Error fetching programs:", error);
