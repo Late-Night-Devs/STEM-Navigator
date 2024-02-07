@@ -31,20 +31,22 @@ const Programs = ({ selectedTagIds, cookieUID, handleFavoriteClicked }) => {
           userID: cookieUID, // Make sure to include the userID
         }
       );
-
-      const sortedPrograms = allProgramsResponse.data.sort((a, b) => {
-        // Compare the isFavorite property of program a and program b
-        if (a.isFavorite === b.isFavorite) {
-          // If they have the same isFavorite value, compare by title alphabetically
-          return a.title.localeCompare(b.title);
-        } else {
-          // If they have different isFavorite values, prioritize the one with isFavorite: true
-          return a.isFavorite ? -1 : 1;
-        }
-      });
-      
-      console.log("Sorted Programs from Programs.jsx: ", sortedPrograms);
-      setPrograms(sortedPrograms);
+      if (allProgramsResponse.data.length > 1) {
+        const sortedPrograms = allProgramsResponse.data.sort((a, b) => {
+          // Compare the isFavorite property of program a and program b
+          if (a.isFavorite === b.isFavorite) {
+            // If they have the same isFavorite value, compare by title alphabetically
+            return a.title.localeCompare(b.title);
+          } else {
+            // If they have different isFavorite values, prioritize the one with isFavorite: true
+            return a.isFavorite ? -1 : 1;
+          }
+        });
+        setPrograms(sortedPrograms);
+        console.log("Sorted Programs from Programs.jsx: ", sortedPrograms);
+      } else {
+        setPrograms(allProgramsResponse.data);
+      }
     } catch (error) {
       console.error("Error fetching programs:", error);
     }
@@ -144,7 +146,12 @@ const ProgramColumn = ({ program, cookieUID, handleFavoriteClicked }) => {
   );
 };
 
-const ProgramCard = ({ program, changeColumnWidth, cookieUID, handleFavoriteClicked }) => {
+const ProgramCard = ({
+  program,
+  changeColumnWidth,
+  cookieUID,
+  handleFavoriteClicked,
+}) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const { isAuthenticated } = useAuth0();
 
@@ -174,7 +181,10 @@ const ProgramCard = ({ program, changeColumnWidth, cookieUID, handleFavoriteClic
         );
 
         const isFavoriteInDatabase = response.data.isFavorite;
-        //  console.log("checking the return from fav : ", isFavoriteInDatabase);
+         console.log(
+           "checking the return from fav= ProgramCard - Programs.jsx : ",
+           isFavoriteInDatabase
+         );
         setIsFavorite(isFavoriteInDatabase);
       } catch (error) {
         if (error.response && error.response.status === 404) {
@@ -190,7 +200,12 @@ const ProgramCard = ({ program, changeColumnWidth, cookieUID, handleFavoriteClic
   }, [isAuthenticated, cookieUID, program.program_id]);
 
   const toggleFavorite = async () => {
-    console.log("programID in toggle: ", program.program_id, "UID in cookie:  ", cookieUID);
+    console.log(
+      "programID in toggle: ",
+      program.program_id,
+      "UID in cookie:  ",
+      cookieUID
+    );
     try {
       // Check if the user is authenticated
       if (!isAuthenticated) {
@@ -226,8 +241,8 @@ const ProgramCard = ({ program, changeColumnWidth, cookieUID, handleFavoriteClic
         icon={isFavorite ? solidStar : regularStar}
         className="star-icon position-absolute top-0 end-0 m-2"
         onClick={() => {
-          toggleFavorite()
-          handleFavoriteClicked()
+          toggleFavorite();
+          handleFavoriteClicked();
         }}
         style={{
           cursor: "pointer",
@@ -273,10 +288,14 @@ const ProgramCard = ({ program, changeColumnWidth, cookieUID, handleFavoriteClic
 };
 
 const ProgramDuration = ({ program }) => {
-  return <>{program.duration ?
-    "Program Duration: " + program.duration + " " + program.duration_unit :
-    "Program Duration: Varies"}</>;
-}
+  return (
+    <>
+      {program.duration
+        ? "Program Duration: " + program.duration + " " + program.duration_unit
+        : "Program Duration: Varies"}
+    </>
+  );
+};
 
 const ShowMoreShowLess = ({ isExpanded }) => {
   return <>{isExpanded ? "Show Less" : "Show More"}</>;

@@ -28,15 +28,12 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
       );
       if (response.data.length > 1) {
         const sortedPrograms = response.data.sort((a, b) => {
-          // Compare the isFavorite property of program a and program b
-          if (a.isFavorite === b.isFavorite) {
-            // If they have the same isFavorite value, compare by title alphabetically
-            return a.title.localeCompare(b.title);
-          }
+          // storing a
+          return a.title.localeCompare(b.title);
         });
         setFavoritePrograms(sortedPrograms);
       } else {
-        setFavoritePrograms(response.data)
+        setFavoritePrograms(response.data);
       }
     } catch (error) {
       console.log(
@@ -45,9 +42,10 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
       console.error("Error fetching programs:", error);
     }
   };
+
   useEffect(() => {
     checkFavoriteDatabase();
-  }, [isAuthenticated, cookieUID, handleFavoriteClicked]);
+  });
 
   return (
     <div>
@@ -64,11 +62,7 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
   );
 }
 
-function ProgramColumn({
-  favoritePrograms,
-  cookieUID,
-  handleFavoriteClicked,
-}) {
+function ProgramColumn({ favoritePrograms, cookieUID, handleFavoriteClicked }) {
   const [mdValue, setMdValue] = useState(4);
 
   const changeMdValue = () => {
@@ -93,7 +87,7 @@ function ProgramColumn({
       ))}
     </div>
   );
-};
+}
 
 function ProgramCard({
   program,
@@ -101,39 +95,12 @@ function ProgramCard({
   changeColumnWidth,
   handleFavoriteClicked,
 }) {
-  const [isFavorite, setIsFavorite] = useState(false);
   const { isAuthenticated } = useAuth0();
   const [isCollapsed, toggleIsCollapsed] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleText = () => {
     setIsExpanded(!isExpanded);
   };
-
-  useEffect(() => {
-    const checkFavoriteDatabase = async () => {
-      try {
-        const response = await axios.get(
-          `${backend_url}/user/favorite/checkFavorite/${cookieUID}/${program.program_id}`,
-          {
-            withCredentials: true,
-          }
-        );
-
-        const isFavoriteInDatabase = response.data.isFavorite;
-        console.log("$$$$ program card from favorite display: ", isFavoriteInDatabase, response.data);
-        setIsFavorite(isFavoriteInDatabase);
-      } catch (error) {
-        if (error.response && error.response.status === 404) {
-          // Handle 404 (Not Found) by returning false
-          setIsFavorite(false);
-        } else if (error.response && error.response.status === 500) {
-          console.error("Internal Server Error:", error);
-        }
-      }
-    };
-
-    checkFavoriteDatabase();
-  }, [isAuthenticated, cookieUID]);
 
   const toggleFavorite = async () => {
     try {
@@ -144,9 +111,13 @@ function ProgramCard({
         return;
       }
 
-      console.log("isFavorite from favorite display:   ", isFavorite, cookieUID, program.program_id);
-      const favoriteRequest = isFavorite ? "removeFavorite" : "addFavorite";
-      const url = `${backend_url}/user/favorite/${favoriteRequest}`;
+      console.log(
+        "@@@@@@@@@@isFavorite from favorite display:   ",
+        cookieUID,
+        program.program_id
+      );
+
+      const url = `${backend_url}/user/favorite/removeFavorite`;
 
       const requestData = {
         userID: cookieUID,
@@ -157,8 +128,6 @@ function ProgramCard({
       await axios.post(url, requestData, {
         withCredentials: true,
       });
-
-      setIsFavorite((prevIsFavorite) => !prevIsFavorite);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -167,7 +136,7 @@ function ProgramCard({
     <div>
       <Card key={program.program_id} className="w-100 position-relative mb-3">
         <FontAwesomeIcon
-          icon={isFavorite ? solidStar : regularStar}
+          icon={solidStar}
           className="star-icon position-absolute top-0 end-0 m-2"
           onClick={() => {
             toggleFavorite();
@@ -175,7 +144,7 @@ function ProgramCard({
           }}
           style={{
             cursor: "pointer",
-            color: isFavorite ? "gold" : "grey",
+            color: "gold",
           }}
         />
         <Card.Body>

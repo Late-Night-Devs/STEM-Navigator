@@ -56,7 +56,7 @@ function ProgramTab() {
           className="border-end  rounded shadow "
           style={{ minHeight: "200px" }}
         >
-          <div className="testing">
+          <div>
             {selectedTagIds.size > 0 ? (
               <Programs selectedTagIds={selectedTagIds} cookieUID={cookieUID} handleFavoriteClicked={handleFavoriteClicked} />
             ) : (
