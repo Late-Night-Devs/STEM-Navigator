@@ -27,7 +27,6 @@ margin: 0.25rem 0;
 `
 
   const durationUnitOptions = [
-  { value: null, label: "None"},
   { value: 'Weeks', label: 'Weeks' },
   { value: 'Months', label: 'Months' },
   { value: 'Terms', label: 'Terms' },
@@ -187,7 +186,7 @@ export const ProgramInfo = ({
               Unit
               <Select
                 options={durationUnitOptions}
-                value={durationUnitOptions.find(option => option.value === programData?.ProgramInfo?.duration_unit) || "None"}
+                value={durationUnitOptions.find(option => option.value === programData?.ProgramInfo?.duration_unit)}
                 onChange={handleDurationUnitChange}
               />
             </label>
