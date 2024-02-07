@@ -19,7 +19,7 @@ function CalendarTab() {
   // get userID from cookies 
   const cookieUID = Cookies.get("cookieUId");
   console.log("checking cookieUID from calendar tab: ", cookieUID)
-  
+
   // ================ fetching favorite programs via API ============== // 
   const checkFavoriteDatabase = async () => {
     if (!isAuthenticated && !cookieUID) {
@@ -97,7 +97,7 @@ function CalendarTab() {
       case 'bankDroppable': {
         const month = timeline[destination.droppableId];
         const updatedList = Array.from(month.programIds);
-        const program = testPgrms[source.index];
+        const program = favoritesList[source.index];
         updatedList.splice(destination.index, 0, { ...program, id: uuid4() });
 
         const updatedTimeline = {
