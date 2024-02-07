@@ -269,8 +269,8 @@ function AdminPage() {
       contact_email: "",
       link_to_web: "",
       long_description: "",
-      duration: "",
-      duration_unit: "",
+      duration: "1",
+      duration_unit: "Terms",
       },
       AssociatedTags: null
     });
