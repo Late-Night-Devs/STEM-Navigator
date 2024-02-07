@@ -13,34 +13,44 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
   const { isAuthenticated } = useAuth0();
   const [favoritePrograms, setFavoritePrograms] = useState([]);
 
-  useEffect(() => {
-    const checkFavoriteDatabase = async () => {
-      if (!isAuthenticated && !cookieUID) {
-        console.log("User is not authenticated. Please log in.");
-        return;
-      }
-      try {
-        const response = await axios.get(
-          `${backend_url}/user/favorite/getFavoritePrograms/${cookieUID}`,
-          {
-            withCredentials: true,
-          }
-        );
-        setFavoritePrograms(response.data);
-      } catch (error) {
-        console.log(
-          "-----!!!!---- fetching fav programs from favorite display ERROR ----------"
-        );
-        if (error.response && error.response.status === 404) {
-          console.error(error);
-        } else if (error.response && error.response.status === 500) {
-          console.error("Internal Server Error:", error);
+  const checkFavoriteDatabase = async () => {
+    if (!isAuthenticated && !cookieUID) {
+      console.log("User is not authenticated. Please log in.");
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `${backend_url}/user/favorite/getFavoritePrograms/${cookieUID}`,
+        {
+          withCredentials: true,
         }
-      }
-    };
+      );
 
+      const sortedPrograms = response.data.sort((a, b) => {
+        // Compare the isFavorite property of program a and program b
+        if (a.isFavorite === b.isFavorite) {
+          // If they have the same isFavorite value, compare by title alphabetically
+          return a.title.localeCompare(b.title);
+        }
+      });
+      setFavoritePrograms(sortedPrograms);
+    } catch (error) {
+      console.log(
+        "-----!!!!---- fetching fav programs from favorite display ERROR ----------"
+      );
+      if (error.response && error.response.status === 404) {
+        console.error(error);
+      } else if (error.response && error.response.status === 500) {
+        console.error("Internal Server Error:", error);
+      }
+    }
+  };
+  useEffect(() => {
     checkFavoriteDatabase();
-  }, [isAuthenticated, cookieUID]);
+    // if (isClickedOnFavoriteDisplay)
+    //  setClickedFavoriteDisplay(false);
+    // console.log("oooooooooaaaaaaaa: ", isClickedOnFavoriteDisplay)
+  }, [isAuthenticated, cookieUID, handleFavoriteClicked]);
 
   return (
     <div>
@@ -57,11 +67,12 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
   );
 }
 
-function ProgramColumn ({
+function ProgramColumn({
   favoritePrograms,
   cookieUID,
   handleFavoriteClicked,
-}){
+  // handleFavoriteDisplay
+}) {
   const [mdValue, setMdValue] = useState(4);
 
   const changeMdValue = () => {
@@ -125,7 +136,7 @@ function ProgramCard({
     };
 
     checkFavoriteDatabase();
-  }, [isAuthenticated, cookieUID, program.program_id]);
+  }, [isAuthenticated, cookieUID]);
 
   const toggleFavorite = async () => {
     try {
