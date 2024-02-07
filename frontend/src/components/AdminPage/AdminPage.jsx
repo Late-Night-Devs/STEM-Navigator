@@ -235,9 +235,7 @@ function AdminPage() {
       // Handle successful deletion
       // update the ButtonList for Programs
       // update the Form to be empty
-      //setSelectedProgram(null);
-      //setSelectedProgramInfo(null);
-
+      window.location.reload();
     };
     const onError = (error) => {
       // Handle error
@@ -248,8 +246,8 @@ function AdminPage() {
       "programs",
       selectionState.selectedProgram,
       "are you sure you want to delete the selected program?",
-      onError,
-      onSuccess
+      onSuccess,
+      onError
     );
   };
 
@@ -298,6 +296,7 @@ function AdminPage() {
     }
     const onSuccess = (response_data) => {
       // Handle successful deletion
+      window.location.reload(); 
       console.log(response_data);
     };
     const onError = (error) => {
