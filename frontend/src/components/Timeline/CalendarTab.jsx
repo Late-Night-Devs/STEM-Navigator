@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import FavoritesBank from "./FavoritesBank";
 import Timeline from "./Timeline";
 import emptyTimeline from "./EmptyTimeline";
 import { DragDropContext } from "react-beautiful-dnd";
 import { v4 as uuid4 } from "uuid";
+import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
+import Cookies from "js-cookie"; // Import Cookies
+
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 const testPgrms = [
@@ -34,7 +38,10 @@ const testPgrms = [
 function CalendarTab() {
   const [favoritesList, setFavoritesList] = useState([]);
   const [timeline, setTimeline] = useState(emptyTimeline);
-
+  const { isAuthenticated } = useAuth0();
+  // get userID from cookies 
+  const cookieUID = Cookies.get("cookieUId");
+  console.log("checking cookieUID from calendar tab: ", cookieUID)
   // must be inside here to have access to "setTimeline"
   // TO DO: clean up inside, move outside of component & pass in "setTimeline"
   function onDragEnd(result) {
@@ -100,6 +107,47 @@ function CalendarTab() {
       }
     }
   }
+
+  const checkFavoriteDatabase = async () => {
+    if (!isAuthenticated && !cookieUID) {
+      console.log("User is not authenticated. Please log in.");
+      return;
+    }
+    try {
+      // fetching favorite programs based on userID from cookies
+      const response = await axios.get(
+        `${backend_url}/user/favorite/getFavoritePrograms/${cookieUID}`,
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.data.length > 1) {
+        //   avoid the case if there's only one program to be sorted out
+        const sortedPrograms = response.data.sort((a, b) => {
+          // storing Alphabetically favorited programs
+          return a.title.localeCompare(b.title);
+        });
+        //   after sorting successfully, storing them to programs
+        setFavoritesList(sortedPrograms);
+      } else {
+        //  Handle only one favorite program.
+        setFavoritesList(response.data);
+      }
+
+      console.log("display data from calendar:  ", favoritesList)
+    } catch (error) {
+      console.log(
+        "-----!!!!---- fetching fav programs from calendar ERROR ----------"
+      );
+      console.error("Error fetching programs:", error);
+    }
+  };
+
+  useEffect(() => {
+    //   fetching favorite data once
+    checkFavoriteDatabase();
+  });
+
 
   return (
     <Container fluid>
