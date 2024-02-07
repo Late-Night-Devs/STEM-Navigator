@@ -19,6 +19,7 @@ function CalendarTab() {
   // get userID from cookies 
   const cookieUID = Cookies.get("cookieUId");
   console.log("checking cookieUID from calendar tab: ", cookieUID)
+  
   // ================ fetching favorite programs via API ============== // 
   const checkFavoriteDatabase = async () => {
     if (!isAuthenticated && !cookieUID) {
