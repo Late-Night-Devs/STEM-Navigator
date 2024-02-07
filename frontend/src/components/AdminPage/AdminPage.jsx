@@ -24,22 +24,38 @@ const StickyColumn = styled(Col)`
   overflow-y: visible; // allow overflow to be visible
 `;
 
-const ErrorMessage = styled.div`
+  // other Messages inherit from this to reduce redundancy
+  const BaseMessage = styled.h5`
+  text-align: center;
+  padding: 2rem;
+  border-radius: 5px;
+  `
+
+// appears when there is not a connection to the backend
+const ErrorMessage = styled(BaseMessage)`
   background-color: #dc3545; // Bootstrap danger background
   color: white;
-  text-align: center;
-  padding: 2rem;
-  border-radius: 5px;
 `;
 
-const DefaultMessage = styled.div`
-  text-align: center;
+// appears by default place of the selected program or tag form 
+const DefaultMessage = styled(BaseMessage)`
   border: 1px solid black;
-  border-radius: 5px;
-  padding: 2rem;
   margin: 3rem;
   flex-fill: 1;
 `;
+
+// appears on small screens to inform user to scroll down to edit 
+// the form after they press the 'add' button or select a program or tag.
+// 992 px = large screen size
+const ScrollNotice = styled(BaseMessage)`
+  @media (max-width: 991px) {
+    display: block; // display to small screens
+  background-color: #2A2A2A;  
+  color: white;
+  }
+
+  display: none; 
+`
 
 function AdminPage() {
   const { user, isAuthenticated, isLoading } = useAuth0(); // Get user information
@@ -330,9 +346,12 @@ function AdminPage() {
         <Col md={12} lg={6}>
           {(programsError || tagsError || programTagsError) && (
             <ErrorMessage>
-              <h5>Failed to load data. Ensure the backend is running!</h5>
+              Failed to load data. Ensure the backend is running!
             </ErrorMessage>
           )}
+          <div>
+            {(selectionState.selectedProgram || selectionState.selectedTag) && <ScrollNotice>This webpage works best with larger screens. Scroll down to view form.</ScrollNotice>}
+          </div>
           <ButtonList
             name="Programs"
             items={programItems}
