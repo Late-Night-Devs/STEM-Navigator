@@ -6,6 +6,8 @@ import Programs from "./Programs";
 import FavoriteProgramsDisplay from "./FavoriteSection";
 import { Link } from "react-scroll";
 import "../../CSS/ProgramTab.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 
 import Cookies from "js-cookie";
 
@@ -32,19 +34,28 @@ function ProgramTab() {
             Welcome to PSU STEM
           </p>
           {cookieUID && (
+            <div className="d-flex justify-content-end ">
             <Link
               to="favoriteSection"
               smooth={true}
               duration={300}
-              className="btn btn-primary mt-3"
+              className="btn btn-primary mt-3 favorite-button "
             >
-              My Favorite
-            </Link>
+              <FontAwesomeIcon icon={solidStar} style={{
+                cursor: "pointer",
+                  color: "gold",
+                paddingRight: "7px"
+              }} />
+               My Favorite Lists
+              </Link>
+              </div>
           )}
+
+
         </section>
       </Row>
       <Row className="mt-5">
-        <Col md={12} lg={6} className="border-end">
+        <Col md={12} lg={6}>
           <FilterByTag
             setSelectedTagIds={setSelectedTagIds}
             cookieUID={cookieUID}
@@ -53,7 +64,7 @@ function ProgramTab() {
         <Col
           md={12}
           lg={6}
-          className="border-end  rounded shadow "
+          className="border-end rounded shadow "
           style={{ minHeight: "200px" }}
         >
           <div>

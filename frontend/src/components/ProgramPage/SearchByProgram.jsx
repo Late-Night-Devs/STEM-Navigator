@@ -2,8 +2,8 @@ import React from "react";
 
 function SearchByProgram(props) {
   return (
-    <div className="search-top pt-3 pb-4">
-      <div className="row g-2 align-items-center">
+    <div className="search-top pt-3 pb-2">
+      <div className="row g-2 align-items-center ">
         <div className="col-md-auto">
           <label htmlFor="search-tag" className="search-label fw-bold fs-5">
             Search Program By Title:

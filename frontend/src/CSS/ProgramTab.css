@@ -8,7 +8,22 @@
   height: 40vh;
   width: 100%;
   background-position: center left;
-
   background-image: url("../image/PSU-Urban_131025_004_CMYK_R.jpg");
   background-size: cover;
+}
+
+.favorite-button {
+  background-color: green;
+  color: white;
+
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+  border: 2px solid transparent;
+  border-radius: 4px;
+}
+
+.favorite-button:hover {
+  background-color: white;
+  color: darkgreen;
+  font-weight: 700;
+  border-color: darkgreen;
 }
