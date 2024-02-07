@@ -200,7 +200,7 @@ export const ProgramInfo = ({
           <StyledLabel htmlFor="LongDescription">Long Description</StyledLabel>
           <StyledTextArea
             cols="44"
-            rows="12"
+            rows="8"
             id="LongDescription"
             name="long_description"
             value={programData?.ProgramInfo?.long_description}

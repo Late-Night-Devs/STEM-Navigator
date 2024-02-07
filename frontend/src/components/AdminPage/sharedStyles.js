@@ -15,13 +15,16 @@ export const Container = styled.div`
 `;
 
 export const StyledLabel = styled.label`
-  width: 100%;
+  width: 20%;
+  display: inline;
+  padding-right: 10px;
 `;
 
 export const StyledInput = styled.input`
   padding: 0.5rem;
   margin: 0.5rem 0;
-  width: 100%;
+  display: inline;
+  width: 70%;
 `;
 
 export const SelectContainer = styled.div`

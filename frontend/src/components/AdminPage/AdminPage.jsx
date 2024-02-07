@@ -20,8 +20,6 @@ const StickyColumn = styled(Col)`
   position: sticky;
   top: 50px;
   height: fit-content; // Adjust the height
-  max-height: 100vh; // Limit the max height
-  overflow-y: visible; // allow overflow to be visible
 `;
 
   // other Messages inherit from this to reduce redundancy
