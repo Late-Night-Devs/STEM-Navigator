@@ -47,9 +47,6 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
   };
   useEffect(() => {
     checkFavoriteDatabase();
-    // if (isClickedOnFavoriteDisplay)
-    //  setClickedFavoriteDisplay(false);
-    // console.log("oooooooooaaaaaaaa: ", isClickedOnFavoriteDisplay)
   }, [isAuthenticated, cookieUID, handleFavoriteClicked]);
 
   return (
@@ -71,7 +68,6 @@ function ProgramColumn({
   favoritePrograms,
   cookieUID,
   handleFavoriteClicked,
-  // handleFavoriteDisplay
 }) {
   const [mdValue, setMdValue] = useState(4);
 

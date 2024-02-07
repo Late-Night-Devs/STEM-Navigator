@@ -18,7 +18,7 @@ function ProgramTab() {
   // unmount the click is back to false until the user clicks on the favorite
   useEffect(() => {
     setFavoriteClicked(false);
-  });
+  },[]);
 
   // get userID from cookies
   const cookieUID = Cookies.get("cookieUId");
