@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import logo from "./image/PSU_logo.png";
 import "./CSS/NavBar.css";
@@ -10,19 +10,22 @@ import Cookies from "js-cookie"; // Import Cookies
 const NavBar = () => {
   const { isAuthenticated } = useAuth0(); // Get user information
   const [isAdmin, setIsAdmin] = useState(false);
-  const getCookieAdmin = Cookies.get("isAdmin");
   const activeLink = "bg-light text-dark rounded p-1";
   const normalLink = "";
 
-  // reload site once if the admin role is true to display the admin tools.
+  // Call the function to update isAdmin on component mount and whenever isAuthenticated changes
+  useEffect(() => {
+    const getCookieAdmin = Cookies.get("isAdmin");
+    if (getCookieAdmin === "true") {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
+  }, []); // Empty dependency array ensures the effect runs only once on initial render
+
   const handleAdminStatusChange = (newAdminValue) => {
     setIsAdmin(newAdminValue);
   };
-
-  // once it reloads the site. The cookie stores userID 
-  // if isAdmin doesn't get a right value, it should be stored the value from the cookies.
-  if (!isAdmin && getCookieAdmin) setIsAdmin(getCookieAdmin);
-
   return (
     <>
       <nav className="navbar navbar-expand-lg ">
@@ -131,7 +134,7 @@ const NavBar = () => {
                   }
                   style={{ textDecoration: "none" }}
                 >
-                  Admin Tools
+                  Admin Tools {isAdmin} {isAuthenticated}
                 </NavLink>
               </li>
             )}
