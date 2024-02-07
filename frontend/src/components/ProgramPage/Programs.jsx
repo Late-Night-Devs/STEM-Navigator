@@ -45,6 +45,10 @@ const Programs = ({ selectedTagIds, cookieUID, handleFavoriteClicked }) => {
         setPrograms(sortedPrograms);
         console.log("Sorted Programs from Programs.jsx: ", sortedPrograms);
       } else {
+        console.log(
+          "allProgramsResponse.data from Programs.jsx: ",
+          allProgramsResponse.data
+        );
         setPrograms(allProgramsResponse.data);
       }
     } catch (error) {
@@ -152,60 +156,44 @@ const ProgramCard = ({
   cookieUID,
   handleFavoriteClicked,
 }) => {
+  // State to track whether the program is marked as favorite
   const [isFavorite, setIsFavorite] = useState(false);
+
+  // Destructuring isAuthenticated from the useAuth0 hook
   const { isAuthenticated } = useAuth0();
 
+  // State for controlling the collapse/expand functionality
   const [isCollapsed, toggleIsCollapsed] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+
+  // Function to toggle the text between "Show More" and "Show Less"
   const toggleText = () => {
     setIsExpanded(!isExpanded);
   };
 
-  // console.log("check auth0  :  ", isAuthenticated);
-  // console.log("\ncookieUID:  ", cookieUID);
-  // console.log("\nprogramID: ", program.program_id);
+  // useEffect hook to check if the program is marked as favorite
   useEffect(() => {
     const checkFavoriteDatabase = async () => {
-      //  console.log("22222check auth0  :  ", isAuthenticated);
+      // Check if the user is authenticated
       if (!isAuthenticated) {
         console.log("User is not authenticated. Please log in.");
         return;
       }
 
-      try {
-        const response = await axios.get(
-          `${backend_url}/user/favorite/checkFavorite/${cookieUID}/${program.program_id}`,
-          {
-            withCredentials: true,
-          }
-        );
-
-        const isFavoriteInDatabase = response.data.isFavorite;
-         console.log(
-           "checking the return from fav= ProgramCard - Programs.jsx : ",
-           isFavoriteInDatabase
-         );
-        setIsFavorite(isFavoriteInDatabase);
-      } catch (error) {
-        if (error.response && error.response.status === 404) {
-          // Handle 404 (Not Found) by returning false
-          setIsFavorite(false);
-        } else if (error.response && error.response.status === 500) {
-          console.error("Internal Server Error:", error);
-        }
+      // Check if the program has an ID and then set its favorite status
+      if (program.program_id) {
+        setIsFavorite(program.isFavorite);
       }
     };
 
+    // Run the checkFavoriteDatabase function when dependencies change
+    // Dependencies include isAuthenticated, cookieUID, program ID, and favorite status
+    // This ensures the effect runs when any of these values change
     checkFavoriteDatabase();
-  }, [isAuthenticated, cookieUID, program.program_id]);
+  }, [isAuthenticated, cookieUID, program.program_id, program.isFavorite]);
 
   const toggleFavorite = async () => {
-    console.log(
-      "programID in toggle: ",
-      program.program_id,
-      "UID in cookie:  ",
-      cookieUID
-    );
+    console.log("toggleFavorite from programs - isFavorite: ", isFavorite);
     try {
       // Check if the user is authenticated
       if (!isAuthenticated) {
@@ -231,6 +219,7 @@ const ProgramCard = ({
       // Toggle the local state after successful request
       setIsFavorite((prevIsFavorite) => !prevIsFavorite);
     } catch (error) {
+      setIsFavorite(false);
       console.error("Error:", error);
     }
   };
