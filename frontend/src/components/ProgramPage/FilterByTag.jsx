@@ -110,7 +110,9 @@ const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
               <Card.Header as="h5" className="bg-success text-white">
                 {category}
               </Card.Header>
-              <Card.Body>
+              <Card.Body
+                className="scrollable-category"
+              >
                 {tags.map((tag, index) => (
                   <Form.Check
                     type="checkbox"

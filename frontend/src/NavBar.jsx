@@ -16,7 +16,7 @@ const NavBar = () => {
   // Call the function to update isAdmin on component mount and whenever isAuthenticated changes
   useEffect(() => {
     const getCookieAdmin = Cookies.get("isAdmin");
-    if (getCookieAdmin === "true") {
+    if (getCookieAdmin === "true") { 
       setIsAdmin(true);
     } else {
       setIsAdmin(false);
