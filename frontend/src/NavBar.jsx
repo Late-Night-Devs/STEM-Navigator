@@ -79,13 +79,13 @@ const NavBar = () => {
             <li className="nav-item">
               <NavLink
                 exact
-                to="/calender"
+                to="/calendar"
                 className={({ isActive }) =>
                   `linkStyle ${isActive ? activeLink : normalLink}`
                 }
                 style={{ textDecoration: "none" }}
               >
-                Calender
+                Calendar
               </NavLink>
             </li>
             <li className="nav-item">

@@ -1,12 +1,11 @@
-# STEM-Navigator
-
+# STEM Navigator
 Capstone Project for Portland State University FW23-24
 
-Team Members: Anh Ho, Dan Ha, Daniel Tran,
-Linh Nguyen, Matej Bozic, Wes Wolf  
-Team Lead: Nicholas Nguyen  
-Supervisor: Bruce Irvin  
-Sponsor: Tong Zhang
+Team Members:  Anh Ho, Dan Ha, Daniel Tran,
+               Linh Nguyen, Matej Bozic, Wes Wolf  
+Team Lead:     Nicholas Nguyen  
+Supervisor:    Bruce Irvin  
+Sponsor:       Tong Zhang  
 
 The purpose of this project is to create a curriculum navigator for current
 and future students who are interested in STEM fields.
