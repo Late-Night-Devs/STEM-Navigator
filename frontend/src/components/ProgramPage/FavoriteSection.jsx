@@ -5,10 +5,10 @@ import Collapse from "react-bootstrap/Collapse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
-import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
+// MAIN Function to display favorite programs
 function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
   const { isAuthenticated } = useAuth0();
   const [favoritePrograms, setFavoritePrograms] = useState([]);
@@ -20,6 +20,7 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
       return;
     }
     try {
+      // fetching favorite programs based on userID from cookies
       const response = await axios.get(
         `${backend_url}/user/favorite/getFavoritePrograms/${cookieUID}`,
         {
@@ -27,12 +28,15 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
         }
       );
       if (response.data.length > 1) {
+        //   avoid the case if there's only one program to be sorted out
         const sortedPrograms = response.data.sort((a, b) => {
-          // storing a
+          // storing Alphabetically favorited programs
           return a.title.localeCompare(b.title);
         });
+        //   after sorting successfully, storing them to programs
         setFavoritePrograms(sortedPrograms);
       } else {
+        //  Handle only one favorite program.
         setFavoritePrograms(response.data);
       }
     } catch (error) {
@@ -43,12 +47,14 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
     }
   };
 
-  useEffect(() => {
+    useEffect(() => {
+    //   fetching favorite data once
     checkFavoriteDatabase();
   });
 
   return (
     <div>
+      {/* if the total favorite programs will display data unless display an alert message*/}
       {favoritePrograms.length > 0 ? (
         <ProgramColumn
           favoritePrograms={favoritePrograms}
@@ -62,6 +68,7 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
   );
 }
 
+// Function to display favorite programs in columns
 function ProgramColumn({ favoritePrograms, cookieUID, handleFavoriteClicked }) {
   const [mdValue, setMdValue] = useState(4);
 
@@ -89,6 +96,7 @@ function ProgramColumn({ favoritePrograms, cookieUID, handleFavoriteClicked }) {
   );
 }
 
+// Function to display individual program cards
 function ProgramCard({
   program,
   cookieUID,
@@ -102,6 +110,8 @@ function ProgramCard({
     setIsExpanded(!isExpanded);
   };
 
+  //   since this section is all about favorited programs, clicking on the favorite btn again will
+  //  send a Delete request to remove that favorite program.
   const toggleFavorite = async () => {
     try {
       if (!isAuthenticated) {
@@ -110,21 +120,13 @@ function ProgramCard({
         );
         return;
       }
-
-      console.log(
-        "@@@@@@@@@@isFavorite from favorite display:   ",
-        cookieUID,
-        program.program_id
-      );
-
       const url = `${backend_url}/user/favorite/removeFavorite`;
-
       const requestData = {
-        userID: cookieUID,
-        programID: program.program_id,
+        userID: cookieUID, // Include the user's ID
+        programID: program.program_id, // Include the ID of the program to remove
       };
 
-      // update isFavorite in database
+      // Update the isFavorite status in the database by making a POST request
       await axios.post(url, requestData, {
         withCredentials: true,
       });
