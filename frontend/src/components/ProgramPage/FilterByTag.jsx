@@ -11,27 +11,46 @@ const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
   const [store, setStore] = useState({});
   const [tagIdMapping, setTagIdMapping] = useState({}); // Map tag names to IDs
   console.log("\t\n Filter By Tag - CookieUID:  ", cookieUID);
+
+  // Fetch tags from the backend and store them in the state
   useEffect(() => {
     axios
       .get(`${backend_url}/tags`)
       .then((response) => {
-        const fetchedCategories = {}; //create an empty object < key, value >
-        const tagIdMap = {};
+        const fetchedCategories = {}; // Object to store categories and tags
+        const tagIdMap = {}; // Map tag names to their IDs
 
+        // Iterate through the fetched tags
         response.data.forEach((tag) => {
-          const category = tag.category.trim(); // handle bad input like "programs " and "programs"
+          // Trim whitespace from category and tag names
+          const category = tag.category.trim();
           const tag_name = tag.tag_name.trim();
-          const tag_id = tag.tag_id; // get this data from the backend
+          const tag_id = tag.tag_id;
 
-          fetchedCategories[category] = fetchedCategories[category] || []; // if the arr has category already existed || null
+          // Add tags to their respective categories
+          fetchedCategories[category] = fetchedCategories[category] || [];
           fetchedCategories[category].push(tag_name);
 
-          tagIdMap[tag_name] = tag_id; // Map tag names to their IDs
+          // Map tag names to their IDs
+          tagIdMap[tag_name] = tag_id;
         });
 
-        setCategories(fetchedCategories);
-        setStore(fetchedCategories);
-        setTagIdMapping(tagIdMap); // Store the tag id mapping
+        // Sort categories alphabetically
+        const sortedCategories = Object.fromEntries(
+          Object.entries(fetchedCategories).sort(([catA], [catB]) =>
+            catA.localeCompare(catB)
+          )
+        );
+
+        // Sort tags alphabetically within each category
+        for (const category in sortedCategories) {
+          sortedCategories[category] = sortedCategories[category].sort();
+        }
+
+        // Update state with sorted categories and tag ID mapping
+        setCategories(sortedCategories);
+        setStore(sortedCategories);
+        setTagIdMapping(tagIdMap);
       })
       .catch((error) => console.error("Error fetching tags:", error));
   }, []);
