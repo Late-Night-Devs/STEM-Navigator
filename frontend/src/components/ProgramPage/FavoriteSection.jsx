@@ -9,7 +9,7 @@ import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
-function FavoriteProgramsDisplay({ cookieUID }) {
+function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
   const { isAuthenticated } = useAuth0();
   const [favoritePrograms, setFavoritePrograms] = useState([]);
 
@@ -48,6 +48,7 @@ function FavoriteProgramsDisplay({ cookieUID }) {
         <ProgramColumn
           favoritePrograms={favoritePrograms}
           cookieUID={cookieUID}
+          handleFavoriteClicked={handleFavoriteClicked}
         />
       ) : (
         <p>You don't have any favorite programs at the moment.</p>
@@ -56,7 +57,11 @@ function FavoriteProgramsDisplay({ cookieUID }) {
   );
 }
 
-const ProgramColumn = ({ favoritePrograms, cookieUID }) => {
+function ProgramColumn ({
+  favoritePrograms,
+  cookieUID,
+  handleFavoriteClicked,
+}){
   const [mdValue, setMdValue] = useState(4);
 
   const changeMdValue = () => {
@@ -68,15 +73,14 @@ const ProgramColumn = ({ favoritePrograms, cookieUID }) => {
   };
 
   return (
-    <div
-      className="row mb-4"
-    >
+    <div className="row mb-4">
       {favoritePrograms.map((program) => (
         <div key={program.id} className={`col-md-${mdValue} d-inline-block`}>
           <ProgramCard
             program={program}
             cookieUID={cookieUID}
             changeColumnWidth={changeMdValue}
+            handleFavoriteClicked={handleFavoriteClicked}
           />
         </div>
       ))}
@@ -84,7 +88,12 @@ const ProgramColumn = ({ favoritePrograms, cookieUID }) => {
   );
 };
 
-function ProgramCard({ program, cookieUID, changeColumnWidth }) {
+function ProgramCard({
+  program,
+  cookieUID,
+  changeColumnWidth,
+  handleFavoriteClicked,
+}) {
   const [isFavorite, setIsFavorite] = useState(false);
   const { isAuthenticated } = useAuth0();
   const [isCollapsed, toggleIsCollapsed] = useState(false);
@@ -152,9 +161,10 @@ function ProgramCard({ program, cookieUID, changeColumnWidth }) {
         <FontAwesomeIcon
           icon={isFavorite ? solidStar : regularStar}
           className="star-icon position-absolute top-0 end-0 m-2"
-                  onClick={() => {
-                      toggleFavorite()
-                  }}
+          onClick={() => {
+            toggleFavorite();
+            handleFavoriteClicked();
+          }}
           style={{
             cursor: "pointer",
             color: isFavorite ? "gold" : "grey",

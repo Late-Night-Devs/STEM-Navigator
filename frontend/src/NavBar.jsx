@@ -19,8 +19,10 @@ const NavBar = () => {
     setIsAdmin(newAdminValue);
   };
 
+  // once it reloads the site. The cookie stores userID 
+  // if isAdmin doesn't get a right value, it should be stored the value from the cookies.
   if (!isAdmin && getCookieAdmin) setIsAdmin(getCookieAdmin);
-    console.log("navbar:  ",isAdmin);
+
   return (
     <>
       <nav className="navbar navbar-expand-lg ">

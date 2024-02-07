@@ -10,13 +10,18 @@ import "../../CSS/ProgramTab.css";
 import Cookies from "js-cookie";
 
 function ProgramTab() {
-  
   const [selectedTagIds, setSelectedTagIds] = useState(new Set());
-    const cookieUID = Cookies.get("cookieUId");
-    console.log(
-      "\n >>>>> userID stored in COOKIE or not at the program tab: ",
-      cookieUID
-    );
+  const [isFavoriteClicked, setFavoriteClicked] = useState(false);
+  // no matter what is true or false for the favorite btn as long as they click on the star icon
+  // it needs to re-render the site again to update favorite programs.
+  const handleFavoriteClicked = () => setFavoriteClicked(!isFavoriteClicked);
+  // unmount the click is back to false until the user clicks on the favorite
+  useEffect(() => {
+    setFavoriteClicked(false);
+  });
+
+  // get userID from cookies
+  const cookieUID = Cookies.get("cookieUId");
 
   return (
     <Container fluid>
@@ -53,9 +58,9 @@ function ProgramTab() {
         >
           <div className="testing">
             {selectedTagIds.size > 0 ? (
-              <Programs selectedTagIds={selectedTagIds} cookieUID={cookieUID} />
+              <Programs selectedTagIds={selectedTagIds} cookieUID={cookieUID} handleFavoriteClicked={handleFavoriteClicked} />
             ) : (
-              <Programs selectedTagIds={new Set()} cookieUID={cookieUID} />
+                <Programs selectedTagIds={new Set()} cookieUID={cookieUID} handleFavoriteClicked={handleFavoriteClicked} />
             )}
           </div>
         </Col>
@@ -65,7 +70,7 @@ function ProgramTab() {
         {cookieUID && (
           <div id="favoriteSection" className="mt-4 border border-2">
             <h3 className="p-2"> Dipslay Favorite</h3>
-            <FavoriteProgramsDisplay cookieUID={cookieUID} />
+            <FavoriteProgramsDisplay cookieUID={cookieUID} handleFavoriteClicked={handleFavoriteClicked} />
           </div>
         )}
       </Row>

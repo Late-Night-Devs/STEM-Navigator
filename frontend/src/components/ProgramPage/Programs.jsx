@@ -13,7 +13,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 // const cookieUserID = Cookies.get("cookieUId");
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
-const Programs = ({ selectedTagIds, cookieUID }) => {
+const Programs = ({ selectedTagIds, cookieUID, handleFavoriteClicked }) => {
   const [programs, setPrograms] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(9);
@@ -95,6 +95,7 @@ const Programs = ({ selectedTagIds, cookieUID }) => {
             key={program.id}
             program={program}
             cookieUID={cookieUID}
+            handleFavoriteClicked={handleFavoriteClicked}
           />
         ))}
         {noProgramsAfterFilter && (
@@ -128,7 +129,7 @@ const Programs = ({ selectedTagIds, cookieUID }) => {
 
 // ===================== END of the main function ===============================
 
-const ProgramColumn = ({ program, cookieUID }) => {
+const ProgramColumn = ({ program, cookieUID, handleFavoriteClicked }) => {
   const [mdValue, setMdValue] = useState(4);
 
   const changeMdValue = () => {
@@ -145,12 +146,13 @@ const ProgramColumn = ({ program, cookieUID }) => {
         program={program}
         changeColumnWidth={changeMdValue}
         cookieUID={cookieUID}
+        handleFavoriteClicked={handleFavoriteClicked}
       />
     </Col>
   );
 };
 
-const ProgramCard = ({ program, changeColumnWidth, cookieUID }) => {
+const ProgramCard = ({ program, changeColumnWidth, cookieUID, handleFavoriteClicked }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const { isAuthenticated } = useAuth0();
 
@@ -231,7 +233,10 @@ const ProgramCard = ({ program, changeColumnWidth, cookieUID }) => {
       <FontAwesomeIcon
         icon={isFavorite ? solidStar : regularStar}
         className="star-icon position-absolute top-0 end-0 m-2"
-        onClick={toggleFavorite}
+        onClick={() => {
+          toggleFavorite()
+          handleFavoriteClicked()
+        }}
         style={{
           cursor: "pointer",
           color: isFavorite ? "gold" : "grey",
