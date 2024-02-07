@@ -225,7 +225,7 @@ const ProgramCard = ({
   };
 
   return (
-    <Card className="w-100 position-relative">
+    <Card className="w-auto position-relative" style={{ height: "100%" }}>
       <FontAwesomeIcon
         icon={isFavorite ? solidStar : regularStar}
         className="star-icon position-absolute top-0 end-0 m-2"
