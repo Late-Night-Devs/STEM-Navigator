@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 
 const lightGreen = "#BFD49B";
@@ -65,6 +65,12 @@ export const ButtonList = ({
   handleRemoveBtnClick,
   handleAddBtnClick,
 }) => {
+  /* allows user input to filter shown programs or tags */
+  const [filter, setFilter] = useState('');
+  const handleInputFilterChange = (event) => {
+    setFilter(event.target.value)
+  }
+
   // Function to group items by category
   const groupByCategory = (items) => {
     return items.reduce((groups, item) => {
@@ -83,27 +89,22 @@ export const ButtonList = ({
   // Get category names and sort them alphabetically
   const sortedCategories = Object.keys(groupedItems).sort();
 
-  /*
-  const handleAddBtnClick = () => {
-    try {
-      // try to add the entry to the database
-      // by using an API endpoint with axios
-      console.log("Use backend api to add item to database");
-    } catch (error) {
-      console.error("Error adding program:", error);
-    }
+  const shouldShowItem = (item) => {
+    if (filter === "") return true;
+    return item.name.toLowerCase().includes(filter.toLowerCase());
   };
-  */
 
   return (
     <div className="mb-5" style={{ minHeight: "125px" }}>
       <div className="text-center border border-dark rounded-5 p-1 m-3">
         <h3>{name}</h3>
         <hr />
+        <input type="text" value={filter} onChange={handleInputFilterChange} />
         {sortedCategories.map((category) => (
           <div key={category}>
             <h5>{category !== "NoCategory" ? category : ""}</h5>
-            {groupedItems[category].map((item) => (
+            {/* filtering by 'shouldShowItem' before displaying */}
+            {groupedItems[category].filter(shouldShowItem).map((item) => (
               <StyledButton
                 type="button"
                 $category={item.category} // transient prop?
