@@ -35,12 +35,14 @@ function CalendarTab() {
         }
       );
       console.log("Initial fetching data from favorite at calendar: ", response.data)
-      const addIDToPrograms = response.data.map(program => ({
-        ...program,
-        // the key is here. Drag n drop set up needs id. I add it to our response data. 
-        // without this id, the data can be displayed but not dragged and dropped anywhere.
-        id: uuid4(), // Add a new 'id' property with a UUID value
-      }));
+      // Check if response.data exists and is an array before applying the map function
+      const addIDToPrograms = response.data && Array.isArray(response.data)
+        ? response.data.map(program => ({
+          ...program,
+          id: uuid4(), // Add a new 'id' property with a UUID value
+        }))
+        : []; // Return an empty array if response.data is not iterable
+
 
       if (addIDToPrograms.length > 1) {
         //   avoid the case if there's only one program to be sorted out
@@ -64,10 +66,21 @@ function CalendarTab() {
     }
   };
 
+  const [isFavoriteClicked, setFavoriteClicked] = useState(false);
+  // no matter what is true or false for the favorite btn as long as they click on the star icon
+  // it needs to re-render the site again to update favorite programs.
+  const handleFavoriteClicked = () => setFavoriteClicked(!isFavoriteClicked);
+  // unmount the click is back to false until the user clicks on the favorite
+  console.log("1/isFavoriteClicked:  ", isFavoriteClicked)
   useEffect(() => {
-    //   fetching favorite data once
     checkFavoriteDatabase();
-  }, []);
+    setFavoriteClicked(false);
+  }, [isFavoriteClicked]); // Add isFavoriteClicked to the dependency array
+
+  // Inside the useEffect, log the updated value of isFavoriteClicked
+  useEffect(() => {
+    console.log("2/isFavoriteClicked: ", isFavoriteClicked);
+  }, [isFavoriteClicked]);
   // =================== DONE ==========================================//
 
   // must be inside here to have access to "setTimeline"
@@ -140,10 +153,10 @@ function CalendarTab() {
     <Container fluid>
       <DragDropContext onDragEnd={onDragEnd}>
         {/* display favorite programs */}
-        <FavoritesBank favoritesList={favoritesList} />
+        <FavoritesBank favoritesList={favoritesList} cookieUID={cookieUID} handleFavoriteClicked={handleFavoriteClicked} />
         {/* drag n drop the program to the timeline */}
         <div id="timelineContainer">
-          <Timeline timelineData={timeline} programOptions={favoritesList} />
+          <Timeline timelineData={timeline} programOptions={favoritesList} cookieUID={cookieUID} handleFavoriteClicked={handleFavoriteClicked} />
         </div>
       </DragDropContext>
     </Container>
