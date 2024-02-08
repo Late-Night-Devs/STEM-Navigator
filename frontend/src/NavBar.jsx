@@ -29,7 +29,7 @@ const NavBar = () => {
               Home
             </a> */}
               <NavLink
-                exact
+                exact='true'
                 to="/"
                 className={({ isActive }) =>
                   `linkStyle ${isActive ? activeLink : normalLink}`
@@ -45,7 +45,7 @@ const NavBar = () => {
               Events
             </a> */}
               <NavLink
-                exact
+                exact='true'
                 to="/events"
                 className={({ isActive }) =>
                   `linkStyle ${isActive ? activeLink : normalLink}`
@@ -60,7 +60,7 @@ const NavBar = () => {
               Scholarship
             </a> */}
               <NavLink
-                exact
+                exact='true'
                 to="/scholarship"
                 className={({ isActive }) =>
                   `linkStyle ${isActive ? activeLink : normalLink}`
@@ -75,7 +75,7 @@ const NavBar = () => {
               Calender
             </a> */}
               <NavLink
-                exact
+                exact='true'
                 to="/calendar"
                 className={({ isActive }) =>
                   `linkStyle ${isActive ? activeLink : normalLink}`
@@ -90,7 +90,7 @@ const NavBar = () => {
               Program
             </a> */}
               <NavLink
-                exact
+                exact='true'
                 to="/program"
                 className={({ isActive }) =>
                   `linkStyle ${isActive ? activeLink : normalLink}`
@@ -105,7 +105,7 @@ const NavBar = () => {
               Newsletter
             </a> */}
               <NavLink
-                exact
+                exact='true'
                 to="/newsletter"
                 className={({ isActive }) =>
                   `linkStyle ${isActive ? activeLink : normalLink}`
@@ -120,7 +120,7 @@ const NavBar = () => {
               Newsletter
             </a> */}
               <NavLink
-                exact
+                exact='true'
                 to="/contact"
                 className={({ isActive }) =>
                   `linkStyle ${isActive ? activeLink : normalLink}`
@@ -140,7 +140,7 @@ const NavBar = () => {
                   Admin Tools
                 </a> */}
                   <NavLink
-                    exact
+                    exact='true'
                     to="/admin-modify-db"
                     className={({ isActive }) =>
                       `linkStyle ${isActive ? activeLink : normalLink}`

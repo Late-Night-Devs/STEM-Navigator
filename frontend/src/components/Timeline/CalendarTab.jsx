@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import FavoritesBank from "./FavoritesBank";
 import Timeline from "./Timeline";
 import emptyTimeline from "./EmptyTimeline";
 import { DragDropContext } from "react-beautiful-dnd";
 import { v4 as uuid4 } from "uuid";
+import axios from "axios";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 const testPgrms = [
@@ -32,7 +33,7 @@ const testPgrms = [
 ];
 
 function CalendarTab() {
-  const [favoritesList, setFavoritesList] = useState([]);
+  const [favoritesList, setFavoritesList] = useState(testPgrms);
   const [timeline, setTimeline] = useState(emptyTimeline);
 
   // must be inside here to have access to "setTimeline"
@@ -100,6 +101,13 @@ function CalendarTab() {
       }
     }
   }
+
+  useEffect(() => {
+    axios.get(`${backend_url}/programs`)
+      .then((response) => {console.log(response)})
+      .catch((error) => {console.log("Could not fetch favorited programs: ")})
+  });
+
 
   return (
     <Container fluid>
