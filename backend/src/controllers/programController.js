@@ -13,21 +13,71 @@ exports.getPrograms = (req, res) => {
     });
 };
 
+// exports.filterPrograms = (req, res) => {
+//     const tagIds = req.body.tagIds || [];
+//     console.log("filterPrograms - Request Body:", req.body);
+
+//     if (tagIds.length > 0) {
+//         const placeholders = tagIds.map(() => "?").join(",");
+//         const sqlQuery = `
+//       SELECT p.* FROM Programs p
+//       JOIN ProgramTags pt ON p.program_id = pt.program_id
+//       WHERE pt.tag_id IN (${placeholders})
+//       GROUP BY p.program_id
+//       HAVING COUNT(DISTINCT pt.tag_id) = ?  -- Ensure all selected tags are present
+//     `;
+
+//         db.query(sqlQuery, [...tagIds, tagIds.length], (err, results) => {
+//             if (err) {
+//                 res.status(500).send("Error in fetching filtered programs");
+//                 return;
+//             }
+//             res.json(results);
+//         });
+//     } else {
+//         // If no tag IDs are provided, return all programs
+//         db.query("SELECT * FROM Programs", (err, results) => {
+//             if (err) {
+//                 res.status(500).send("Error in fetching programs");
+//                 return;
+//             }
+//             res.json(results);
+//         });
+//     }
+// };
+const fetchFavoritePrograms = async (userID) => {
+    return new Promise((resolve, reject) => {
+        const sqlQuery = 'SELECT program_id FROM UserFavorites WHERE user_id = ?'; 
+        db.query(sqlQuery, [userID], (err, results) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            const favoritePrograms = results.map(result => result.program_id);
+            resolve(favoritePrograms);
+        });
+    });
+};
+// filter by tagIDs
+// also checking if their favorite is favorite or not to mark 0 or 1
 exports.filterPrograms = (req, res) => {
     const tagIds = req.body.tagIds || [];
+    const userID = req.body.userID; // Assuming you pass userID in the request body
     console.log("filterPrograms - Request Body:", req.body);
-
+    
     if (tagIds.length > 0) {
         const placeholders = tagIds.map(() => "?").join(",");
         const sqlQuery = `
-      SELECT p.* FROM Programs p
-      JOIN ProgramTags pt ON p.program_id = pt.program_id
-      WHERE pt.tag_id IN (${placeholders})
-      GROUP BY p.program_id
-      HAVING COUNT(DISTINCT pt.tag_id) = ?  -- Ensure all selected tags are present
-    `;
+            SELECT p.*, (uf.program_id IS NOT NULL) AS isFavorite FROM Programs p
+            LEFT JOIN UserFavorites uf ON p.program_id = uf.program_id AND uf.user_id = ?
+            JOIN ProgramTags pt ON p.program_id = pt.program_id
+            WHERE pt.tag_id IN (${placeholders})
+            GROUP BY p.program_id
+            HAVING COUNT(DISTINCT pt.tag_id) = ?  -- Ensure all selected tags are present
+            `;
 
-        db.query(sqlQuery, [...tagIds, tagIds.length], (err, results) => {
+        db.query(sqlQuery, [userID, ...tagIds, tagIds.length], (err, results) => {
             if (err) {
                 res.status(500).send("Error in fetching filtered programs");
                 return;
@@ -35,8 +85,12 @@ exports.filterPrograms = (req, res) => {
             res.json(results);
         });
     } else {
-        // If no tag IDs are provided, return all programs
-        db.query("SELECT * FROM Programs", (err, results) => {
+        // If no tag IDs are provided, return all programs with isFavorite column
+        const sqlQuery = `
+            SELECT p.*, (uf.program_id IS NOT NULL) AS isFavorite FROM Programs p
+            LEFT JOIN UserFavorites uf ON p.program_id = uf.program_id AND uf.user_id = ?
+            `;
+        db.query(sqlQuery, [userID], (err, results) => {
             if (err) {
                 res.status(500).send("Error in fetching programs");
                 return;
@@ -45,6 +99,7 @@ exports.filterPrograms = (req, res) => {
         });
     }
 };
+
 
 // Delete program based on IDs | delete from multiple associates -> itself
 exports.deleteProgram = (req, res) => {

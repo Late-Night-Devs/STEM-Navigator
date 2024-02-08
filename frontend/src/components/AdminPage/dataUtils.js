@@ -23,28 +23,16 @@ const useFetchData = (endpoint) => {
   return { data, error };
 };
 
-// use this for creating new programs or tags
-// the payload is the data you want to send in the post
-/*
-const usepostdata = (endpoint, payload) => {
-  const [response, setresponse] = usestate(null);
-  const [error, seterror] = usestate(null);
+export const postData = async(endpoint, payload, setResponse, setError) => {
+  try {
+    const res = await axios.post(`${backend_url}/${endpoint}`, payload);
+    setResponse(res.data);
+  } catch (error) {
+    setError(error);
+    console.error(`Error posting to ${endpoint}:`, error);
+  }
+}
 
-  useeffect(() => {
-    axios
-      .post(`${backend_url}/${endpoint}`, payload)
-      .then((res) => {
-        setResponse(res.data);
-      })
-      .catch((err) => {
-        setError(err);
-        console.error(`Error posting to ${endpoint}:`, err);
-      });
-  }, [endpoint, payload]);
-
-  return { response, error };
-};
-*/
 
 // generic way to handle deleting a resource from the backend by dynamically building the backend endpoint
 // this allows us to delete tags and programs with the same functionality

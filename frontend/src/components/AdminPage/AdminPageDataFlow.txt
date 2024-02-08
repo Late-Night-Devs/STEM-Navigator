@@ -20,4 +20,16 @@ selectedProgramInfo
 
 
 
+# updated tag info by clicking a tag
+{tag_id: 27, tag_name: 'Community College', category: 'Identity'}
+
+# updated tag info by clicking the 'Add' button
+updated tag info:  {tag_name: '', tag_id: -1, category: ''}
+
+# updated tag info by filling out the tag-form-submit
+TagInfo.jsx:15 Before updating:  {}
+TagInfo.jsx:17 After updating:  {tag_name: 'a'}
+
+
+
 
