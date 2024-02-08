@@ -6,6 +6,7 @@ import { TagInfo } from "./TagInfo";
 import useFetchData, { handleDelete } from "./dataUtils";
 import { useAuth0 } from "@auth0/auth0-react"; // Import the Auth0 hook
 import styled from "styled-components";
+import Cookies from "js-cookie";
 
 // styled components
 const PageContainer = styled.div`
@@ -42,7 +43,7 @@ const DefaultMessage = styled.div`
 `;
 
 function AdminPage() {
-  const { user, isAuthenticated, isLoading } = useAuth0(); // Get user information
+  const { isAuthenticated, isLoading } = useAuth0(); // Get user information
   // fetch the programs data from the backend
   const { data: programs, error: programsError } = useFetchData("programs");
   // fetch the tags data from the backend
@@ -50,6 +51,8 @@ function AdminPage() {
   // fetch the relationship data between tags and programs
   const { data: programTags, error: programTagsError } =
     useFetchData("program-tags");
+  // Check if the user is an admin from the cookie
+  const isAdmin = Cookies.get("isAdmin") === "true";
 
   // a way to organize related state values?
   const [selectionState, setSelectionState] = useState({
@@ -70,6 +73,28 @@ function AdminPage() {
   // button list items, transformed from programs and tags
   const [programItems, setProgramItems] = useState([]);
   const [tagItems, setTagItems] = useState([]);
+
+  // iterate over the tags to find a tag with matching name
+  function isUniqueTagName(newTagName) {
+    // if is unique, there is not some tag in the tags which has a matching name 
+    return !tags.some(tag => tag.tag_name.toLowerCase() === newTagName.toLowerCase());
+  }
+
+  // iterate over the programs to find a program with matching name
+  function isUniqueProgramName(newProgramName) {
+    // if is unique, there is not some tag in the tags which has a matching name 
+    return !programs.some(program => program.title.toLowerCase() === newProgramName.toLowerCase());
+  }
+
+
+  // for debugging 
+  useEffect(() => {
+    console.log("updated tag info: ", selectedTagInfo);
+  }, [selectedTagInfo])
+
+  useEffect(() => {
+    console.log("updated program info: ", selectedProgramInfo);
+  }, [selectedProgramInfo])
 
   useEffect(() => {
     if (programs) {
@@ -100,6 +125,7 @@ function AdminPage() {
   }, [tags]); // Recalculate when tags data changes
 
   const handleProgramClick = (program) => {
+    // handle previously selected tag
     if (selectionState.selectedTag !== null) {
       setSelectionState((prevState) => ({
         ...prevState,
@@ -202,8 +228,9 @@ function AdminPage() {
 
   const handleRemoveProgram = () => {
     // remove the selected program (if there is one)
-    if (selectionState.selectedProgram == null) {
-      console.log("no selected program to remove");
+    // -1 used for temporary program id of 'adding' program
+    if (selectionState.selectedProgram == null || selectionState.selectedProgram === -1) {
+      window.alert("No currently selected program to remove!")
       return;
     }
 
@@ -213,6 +240,7 @@ function AdminPage() {
       // update the Form to be empty
       //setSelectedProgram(null);
       //setSelectedProgramInfo(null);
+
     };
     const onError = (error) => {
       // Handle error
@@ -230,21 +258,24 @@ function AdminPage() {
 
   const handleAddProgram = () => {
     setSelectionState((prevState) => ({
-      selectedProgram: null,
+      selectedProgram: -1, // -1 is an available temporary Program ID
       selectedTag: null,
       addingProgram: true,
       addingTag: false,
     }));
 
     setSelectedProgramInfo({
+      ProgramInfo: {
       program_id: "-1",
       title: "",
       lead_contact: "",
       contact_email: "",
       link_to_web: "",
+      long_description: "",
       duration: "",
       duration_unit: "",
-      long_description: "",
+      },
+      AssociatedTags: null
     });
     setSelectedTagInfo(null);
   };
@@ -252,19 +283,20 @@ function AdminPage() {
   const handleAddTag = () => {
     setSelectionState((prevState) => ({
       ...prevState,
-      selectedTag: null,
+      selectedTag: -1,
       selectedProgram: null,
       addingTag: true,
       addingProgram: false,
     }));
-    setSelectedTagInfo(null);
+    setSelectedTagInfo({tag_id: -1, tag_name: "", category:null});
     setSelectedProgramInfo(null);
   };
 
   // not fully implemented yet
   const handleRemoveTag = () => {
-    if (selectionState.selectedTag == null) {
-      console.log("no selected tag to remove");
+    // -1 used for temporary program id of 'adding' tag
+    if (selectionState.selectedTag == null || selectionState.selectedTag === -1) {
+      window.alert("No currently selected tag to remove!");
       return;
     }
     const onSuccess = (response_data) => {
@@ -289,10 +321,7 @@ function AdminPage() {
   }
 
   // Redirect or show an error if the user is not authenticated or not the specific user
-  if (
-    !isAuthenticated ||
-    (user && user.email !== "latenightdevsfw23@gmail.com")
-  ) {
+  if (!isAuthenticated || !isAdmin) {
     return <p>Access Denied</p>;
   }
 
@@ -331,6 +360,7 @@ function AdminPage() {
               programData={selectedProgramInfo}
               allProgramTags={formattedTags}
               onProgramDataChange={setSelectedProgramInfo}
+              isUniqueName={isUniqueProgramName}
             />
           )}
           {selectionState.selectedTag != null && (
@@ -338,6 +368,7 @@ function AdminPage() {
               tagData={selectedTagInfo}
               categories={formattedCategories}
               onTagDataChange={setSelectedTagInfo}
+              isUniqueName={isUniqueTagName}
             />
           )}
           {/* render the blank form for adding new program */}

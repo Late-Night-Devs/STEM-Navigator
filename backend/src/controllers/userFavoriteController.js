@@ -11,6 +11,40 @@ exports.getAllFavorites = (req, res) => {
     });
 };
 
+exports.getFavoritePrograms = (req, res) => {
+    const userID = req.params.userID;
+
+    // Fetch all favorite programs based on the userID
+    db.query('SELECT program_id FROM UserFavorites WHERE user_id = ?', [userID], (err, results) => {
+        if (err) {
+            console.error('Error fetching favorite programs:', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        if (results.length === 0) {
+            // No favorite programs found for the user
+            res.json(false);
+            return;
+        }
+
+        
+        const favoriteProgramIds = results.map(result => result.program_id);
+
+        // Fetch details of favorite programs from the Programs table
+        db.query('SELECT * FROM Programs WHERE program_id IN (?)', [favoriteProgramIds], (err, programResults) => {
+            if (err) {
+                console.error('Error fetching program details:', err);
+                res.status(500).send('Internal Server Error');
+                return;
+            }
+            res.json(programResults);
+        });
+    });
+};
+
+
+
 exports.checkFavorite = (req, res) => {
     const { userID, programID } = req.params;
 
