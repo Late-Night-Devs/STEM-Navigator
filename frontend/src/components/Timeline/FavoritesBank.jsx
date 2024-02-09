@@ -3,7 +3,7 @@ import { Row } from "react-bootstrap";
 import "../../CSS/Timeline.css";
 import { Droppable } from "react-beautiful-dnd";
 import BankProgram from "./BankProgram";
-import FavoriteProgramsDisplay from "../ProgramPage/FavoriteSection";
+
 function FavoritesBank({ favoritesList, cookieUID, handleFavoriteClicked }) {
   const noFavorites = favoritesList.length === 0;
   console.log("favorite bank: ", favoritesList);
@@ -26,7 +26,7 @@ function FavoritesBank({ favoritesList, cookieUID, handleFavoriteClicked }) {
             {noFavorites && (
               <p>
                 Your favorited programs will be listed here. <br />
-                You can search for and favorite programs in our "Program" tab!
+                You can search for and save favorite programs in our "Program" tab!
               </p>
             )}
             {provided.placeholder}
