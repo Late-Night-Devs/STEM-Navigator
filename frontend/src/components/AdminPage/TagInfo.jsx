@@ -21,34 +21,6 @@ export const TagInfo = ({
     onTagDataChange({ ...initialTagData, [name]: value });
   };
 
-  /*
-  const handleSubmit = (e) => {
-
-    // ensure unique name
-    if (tagData?.tag_id === -1 && !isUniqueName(tagData.tag_name)) {
-      window.alert("Your chosen tag name is already in use!") 
-      e.preventDefault();
-      return;
-    }
-
-    // handle form submission here
-    // gather the payload data
-    // post to the backend
-    function useResponse(response) {
-      console.log("response from Backend: " + response);
-    }
-
-    function setError(e) {
-      console.log("Backend returned error: " + e);
-    }
-
-    // at this point we have ensured the tag data is valid for submission
-    const payload = tagData;
-    postData("admin/admin-modify-db/tag-form-submit", payload, useResponse, setError)
-    console.log("Submitting form to backend");
-  };
-  */
-
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
 

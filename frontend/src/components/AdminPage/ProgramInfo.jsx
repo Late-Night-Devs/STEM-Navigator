@@ -1,8 +1,8 @@
 import React from "react";
 import Select from "react-select";
 import styled from "styled-components";
-import {postData} from "./dataUtils.js"
-import { Row, Col } from "react-bootstrap"; 
+import { postData } from "./dataUtils.js";
+import { Row, Col } from "react-bootstrap";
 
 import {
   Container,
@@ -19,19 +19,19 @@ const StyledTextArea = styled.textarea`
 `;
 
 const StyledRow = styled(Row)`
-display: flex;
-flex-direction: row;
-align-items: center;
-justify-content: center;
-margin: 0.25rem 0;
-`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 0.25rem 0;
+`;
 
-  const durationUnitOptions = [
-  { value: null, label: "None"},
-  { value: 'Weeks', label: 'Weeks' },
-  { value: 'Months', label: 'Months' },
-  { value: 'Terms', label: 'Terms' },
-  { value: 'Years', label: 'Years' }
+const durationUnitOptions = [
+  { value: null, label: "None" },
+  { value: "Weeks", label: "Weeks" },
+  { value: "Months", label: "Months" },
+  { value: "Terms", label: "Terms" },
+  { value: "Years", label: "Years" },
   // ... add more options as needed here
 ];
 
@@ -39,87 +39,89 @@ export const ProgramInfo = ({
   programData,
   allProgramTags,
   onProgramDataChange,
-  isUniqueName
+  isUniqueName,
 }) => {
   const associatedTags = programData ? programData.AssociatedTags : null;
 
-
-
   const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
 
-    // handle non-unique name on new program 
-    if (programData?.ProgramInfo?.program_id === "-1" && !isUniqueName(programData?.ProgramInfo?.title))
-    {
-      e.preventDefault();
-      window.alert("Your chosen program name is already in use!");
+    if (!programData || !programData.ProgramInfo) {
+      console.error("Program data is missing or invalid.");
       return;
     }
 
-    // Check if essential fields are filled
-    if (!programData?.ProgramInfo?.title ||
-      !programData?.ProgramInfo?.lead_contact ||
-      !programData?.ProgramInfo?.contact_email ||
-      !programData?.ProgramInfo?.link_to_web || 
-      !programData?.ProgramInfo?.long_description ||
-      (programData?.ProgramInfo?.duration && !programData?.ProgramInfo?.duration_unit)) { 
-      //( || programData?.ProgramInfo?.long_description?.length <= 50)) { // can add later if needed
-      e.preventDefault();
-      window.alert("Please ensure all program fields are properly filled out.");
-      //console.log("Please ensure all program fields are properly filled out.");
+    if (
+      programData.program_id === -1 &&
+      !isUniqueName(programData.ProgramInfo.title)
+    ) {
+      window.alert("This program title is already in use!");
       return;
     }
 
-    function useResponse(response) {
-      console.log("response from Backend: ",response);
-    }
+    // Extract program info from programData
+    const { ProgramInfo } = programData;
 
-    function setError(e) {
-      console.log("Backend returned error: ", e);
-    }
+    // Construct payload
+    const payload = {
+      program_id: ProgramInfo.program_id,
+      title: ProgramInfo.title,
+      lead_contact: ProgramInfo.lead_contact,
+      contact_email: ProgramInfo.contact_email,
+      link_to_web: ProgramInfo.link_to_web,
+      duration: ProgramInfo.duration,
+      duration_unit: ProgramInfo.duration_unit,
+      long_description: ProgramInfo.long_description,
+    };
 
-    // at this point we have ensured the tag data is valid for submission
-    const payload = programData;
-    // post to the backend
-    console.log("submitting form to backend");
-    postData("admin/admin-modify-db/program-form-submit", payload, useResponse, setError)
+    postData(
+      "admin/admin-modify-db/program-form-submit",
+      payload,
+      (response) => {
+        console.log("Response from Backend: " + JSON.stringify(response));
+      },
+      (error) => {
+        console.error("Backend returned error: " + error);
+      }
+    );
+
+    console.log("Submitting form to backend with payload:", payload);
   };
- 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "number") {
-      onProgramDataChange(prevData => ({
+      onProgramDataChange((prevData) => ({
         ...prevData,
         ProgramInfo: {
           ...prevData.ProgramInfo,
-          duration: value
-        }
+          duration: value,
+        },
       }));
     } else {
-      onProgramDataChange(prevData => ({
+      onProgramDataChange((prevData) => ({
         ...prevData,
-        ProgramInfo: {...prevData.ProgramInfo, [name]: value}
-      }))
+        ProgramInfo: { ...prevData.ProgramInfo, [name]: value },
+      }));
     }
   };
 
   const handleSelectChange = (selectedOptions) => {
-    onProgramDataChange(prevData => ({
+    onProgramDataChange((prevData) => ({
       ...prevData,
-      AssociatedTags: selectedOptions || []
+      AssociatedTags: selectedOptions || [],
     }));
-  }
+  };
 
   const handleDurationUnitChange = (selectedOptions) => {
-    onProgramDataChange(prevData => ({
+    onProgramDataChange((prevData) => ({
       ...prevData,
       ProgramInfo: {
         ...prevData.ProgramInfo,
-        duration_unit: selectedOptions.value
-      }
-    }))
-  }
-
+        duration_unit: selectedOptions.value,
+      },
+    }));
+  };
 
   return (
     <Container>
@@ -179,18 +181,23 @@ export const ProgramInfo = ({
                 min="1" // duration can't be zero or negative
                 value={programData?.ProgramInfo?.duration}
                 onChange={handleChange}
-                style={{width: "75px"}}
+                style={{ width: "75px" }}
               />
             </Col>
             <Col xs={6}>
-            <label>
-              Unit
-              <Select
-                options={durationUnitOptions}
-                value={durationUnitOptions.find(option => option.value === programData?.ProgramInfo?.duration_unit) || "None"}
-                onChange={handleDurationUnitChange}
-              />
-            </label>
+              <label>
+                Unit
+                <Select
+                  options={durationUnitOptions}
+                  value={
+                    durationUnitOptions.find(
+                      (option) =>
+                        option.value === programData?.ProgramInfo?.duration_unit
+                    ) || "None"
+                  }
+                  onChange={handleDurationUnitChange}
+                />
+              </label>
             </Col>
           </StyledRow>
         </Container>
