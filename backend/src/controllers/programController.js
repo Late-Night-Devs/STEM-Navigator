@@ -219,13 +219,15 @@ exports.addProgram = (req, res) => {
     duration,
     duration_unit,
     long_description,
-    tag_ids, // assuming tag_ids are provided in the request body for program
+    tag_ids,
   } = req.body;
-  const query =
+
+  // Insert the program into the Programs table
+  const insertProgramQuery =
     "INSERT INTO Programs (title, lead_contact, contact_email, link_to_web, duration, duration_unit, long_description) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
   db.query(
-    query,
+    insertProgramQuery,
     [
       title,
       lead_contact,
@@ -241,12 +243,14 @@ exports.addProgram = (req, res) => {
         res.status(500).send("Error adding new program");
         return;
       }
+
       const programId = results.insertId;
-      // If tag_ids are provided, associate the program with tags in the ProgramTags table
+
       if (tag_ids && tag_ids.length > 0) {
         const programTagValues = tag_ids.map((tag_id) => [programId, tag_id]);
         const programTagQuery =
           "INSERT INTO ProgramTags (program_id, tag_id) VALUES ?";
+
         db.query(
           programTagQuery,
           [programTagValues],
@@ -260,6 +264,7 @@ exports.addProgram = (req, res) => {
           }
         );
       }
+
       res.status(201).json({
         message: "New program added successfully",
         programId: programId,
@@ -278,7 +283,7 @@ exports.updateProgram = (req, res) => {
     duration,
     duration_unit,
     long_description,
-    tag_ids, // assuming tag_ids are provided in the request body for program
+    tag_ids,
   } = req.body;
   const query =
     "UPDATE Programs SET title = ?, lead_contact = ?, contact_email = ?, link_to_web = ?, duration = ?, duration_unit = ?, long_description = ? WHERE program_id = ?";
@@ -301,9 +306,7 @@ exports.updateProgram = (req, res) => {
         res.status(500).send("Error updating program");
         return;
       }
-      // If tag_ids are provided, update associations in the ProgramTags table
       if (tag_ids && tag_ids.length > 0) {
-        // First, delete existing associations for the program
         const deleteQuery = "DELETE FROM ProgramTags WHERE program_id = ?";
         db.query(deleteQuery, [program_id], (errDelete, resultsDelete) => {
           if (errDelete) {
@@ -312,7 +315,6 @@ exports.updateProgram = (req, res) => {
             return;
           }
           console.log("Existing program tags deleted successfully");
-          // Then, insert new associations for the program
           const programTagValues = tag_ids.map((tag_id) => [
             program_id,
             tag_id,

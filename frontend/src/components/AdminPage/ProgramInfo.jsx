@@ -60,7 +60,7 @@ export const ProgramInfo = ({
     }
 
     // Extract program info from programData
-    const { ProgramInfo } = programData;
+    const { ProgramInfo, AssociatedTags } = programData;
 
     // Construct payload
     const payload = {
@@ -72,6 +72,7 @@ export const ProgramInfo = ({
       duration: ProgramInfo.duration,
       duration_unit: ProgramInfo.duration_unit,
       long_description: ProgramInfo.long_description,
+      tag_ids: AssociatedTags.map((tag) => tag.value),
     };
 
     postData(
