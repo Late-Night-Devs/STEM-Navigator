@@ -256,20 +256,22 @@ const ProgramCard = ({
       <Card.Body>
         <Card.Title>{program.title}</Card.Title>
         <Card.Text>
-          <Collapse in={isCollapsed}>
-            <div id="collapse-text">
-              <br />
-              <b>PROGRAM DETAILS</b>  <br />
+              {isCollapsed == false ? "" : <br />}
+              <ProgramDetailsTitle isCollapsed={isCollapsed}/>  <br />
               Lead Contact: {program.lead_contact}  <br />
               Contact Email:{" "} <a href={`mailto:${program.contact_email}`}> {program.contact_email}</a>  <br />
-              Web Link: <a href={program.link_to_web}> {program.link_to_web}</a>  <br />
+              <WebLink isCollapsed={isCollapsed} program={program}/>  {isCollapsed == false ? "" : <br />}
               <ProgramDuration program={program} />  <br />
+          <Collapse in={isCollapsed}>
+            <div id="collapse-text">
+              {/* Web Link: <a href={program.link_to_web}> {program.link_to_web}</a>  <br /> */}
               <br />
               {program.long_description}  <br />
 
               {eligibilityTags.length == 0 && studentServicesTags.length == 0 ? "" : <br />}
               <EligibilityCriteriaTitle eligibilityTags={eligibilityTags} />
               <EligibilityCriteriaTags  eligibilityTags={eligibilityTags} />
+
               {eligibilityTags.length != 0 && studentServicesTags.length != 0 ? <br /> : ""}
               <StudentServicesTitle studentServicesTags={studentServicesTags} />
               <StudentServicesTags  studentServicesTags={studentServicesTags} />
@@ -292,6 +294,18 @@ const ProgramCard = ({
       </Card.Footer>
     </Card>
   );
+};
+
+const ProgramDetailsTitle = ({ isCollapsed }) => {
+  return <> {
+    isCollapsed == false ? "" : <b>PROGRAM DETAILS</b>
+  } </>
+};
+
+const WebLink = ({ isCollapsed, program }) => {
+  return <> {
+    isCollapsed == false ? "" : <>Web Link:  <a href={program.link_to_web}> {program.link_to_web}</a></>
+  } </>
 };
 
 const ProgramDuration = ({ program }) => {
