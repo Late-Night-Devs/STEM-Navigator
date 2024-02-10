@@ -22,11 +22,10 @@ export const TagInfo = ({
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-
     // Ensure unique name
     if (tagData?.tag_id === -1 && !isUniqueName(tagData.tag_name)) {
       window.alert("Your chosen tag name is already in use!");
+      e.preventDefault();
       return;
     }
 

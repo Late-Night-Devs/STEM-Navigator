@@ -44,18 +44,30 @@ export const ProgramInfo = ({
   const associatedTags = programData ? programData.AssociatedTags : null;
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-
-    if (!programData || !programData.ProgramInfo) {
-      console.error("Program data is missing or invalid.");
+    // handle non-unique name on new program
+    if (
+      programData?.ProgramInfo?.program_id === "-1" &&
+      !isUniqueName(programData?.ProgramInfo?.title)
+    ) {
+      e.preventDefault();
+      window.alert("Your chosen program name is already in use!");
       return;
     }
 
+    // Check if essential fields are filled
     if (
-      programData.program_id === -1 &&
-      !isUniqueName(programData.ProgramInfo.title)
+      !programData?.ProgramInfo?.title ||
+      !programData?.ProgramInfo?.lead_contact ||
+      !programData?.ProgramInfo?.contact_email ||
+      !programData?.ProgramInfo?.link_to_web ||
+      !programData?.ProgramInfo?.long_description ||
+      (programData?.ProgramInfo?.duration &&
+        !programData?.ProgramInfo?.duration_unit)
     ) {
-      window.alert("This program title is already in use!");
+      //( || programData?.ProgramInfo?.long_description?.length <= 50)) { // can add later if needed
+      e.preventDefault();
+      window.alert("Please ensure all program fields are properly filled out.");
+      //console.log("Please ensure all program fields are properly filled out.");
       return;
     }
 
