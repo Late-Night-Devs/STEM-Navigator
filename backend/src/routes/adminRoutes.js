@@ -23,7 +23,7 @@ router.post("/admin-modify-db/tag-form-submit", (req, res) => {
 });
 
 router.post("/admin-modify-db/program-form-submit", (req, res) => {
-  const { program_id } = req.body;
+  const program_id = Number(req.body.program_id);
 
   if (program_id === -1) {
     // Add a new program
