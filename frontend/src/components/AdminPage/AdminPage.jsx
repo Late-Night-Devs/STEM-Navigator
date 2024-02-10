@@ -3,66 +3,182 @@ import { Row, Col } from "react-bootstrap"; // Make sure to import Bootstrap com
 import { ButtonList } from "./ButtonList";
 import { ProgramInfo } from "./ProgramInfo";
 import { TagInfo } from "./TagInfo";
-import useFetchData from "./useFetchData";
+import useFetchData, { handleDelete } from "./dataUtils";
 import { useAuth0 } from "@auth0/auth0-react"; // Import the Auth0 hook
-//import axios from "axios";
-//const backend_url = process.env.REACT_APP_BACKEND_URL;
+import styled from "styled-components";
+import Cookies from "js-cookie";
+
+// styled components
+const PageContainer = styled.div`
+  margin: auto;
+`;
+
+const ProgramsAndTagsRow = styled(Row)`
+  padding: 2rem;
+`;
+
+const StickyColumn = styled(Col)`
+  position: sticky;
+  top: 50px;
+  height: fit-content; // Adjust the height
+  max-height: 100vh; // Limit the max height
+  overflow-y: visible; // allow overflow to be visible
+`;
+
+const ErrorMessage = styled.div`
+  background-color: #dc3545; // Bootstrap danger background
+  color: white;
+  text-align: center;
+  padding: 2rem;
+  border-radius: 5px;
+`;
+
+const DefaultMessage = styled.div`
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 2rem;
+  margin: 3rem;
+  flex-fill: 1;
+`;
 
 function AdminPage() {
-  const { user, isAuthenticated, isLoading } = useAuth0(); // Get user information
-
+  const { isAuthenticated, isLoading } = useAuth0(); // Get user information
+  // fetch the programs data from the backend
   const { data: programs, error: programsError } = useFetchData("programs");
+  // fetch the tags data from the backend
   const { data: tags, error: tagsError } = useFetchData("tags");
-  // currently unused, but should be used to fill out the default values in the Multi Select
+  // fetch the relationship data between tags and programs
   const { data: programTags, error: programTagsError } =
     useFetchData("program-tags");
+  // Check if the user is an admin from the cookie
+  const isAdmin = Cookies.get("isAdmin") === "true";
 
-  /* formattedProgramTags uses Tags and formats them for use by the MultiSelect <Select options={}>*/
-  const [formattedProgramTags, setFormattedProgramTags] = useState(null);
+  // a way to organize related state values?
+  const [selectionState, setSelectionState] = useState({
+    selectedProgram: null, // the id of the currently selected Program
+    selectedTag: null, // the id of the currently selected Tag
+    addingProgram: false, // becomes true when the user presses the add btn on the ProgramsButtonList
+    addingTag: false, // becomes true when the user presses the add btn Tags ButtonList
+  });
 
-  // state values representing the selected program or tag
-  const [selectedProgram, setSelectedProgram] = useState(null);
-  const [selectedTag, setSelectedTag] = useState(null);
-  // state values representing the visibility of the Program Info or Tag Info
-  const [showProgramInfo, setShowProgramInfo] = useState(false);
-  const [showTagInfo, setShowTagInfo] = useState(false);
+  /* formattedProgramTags uses Tags and formats them for use by the Select <Select options={}>*/
+  const [formattedTags, setFormattedTags] = useState(null);
+  const [formattedCategories, setFormattedCategories] = useState([]);
 
+  // object state values representing information about the currently selected program or tag
   const [selectedProgramInfo, setSelectedProgramInfo] = useState(null);
   const [selectedTagInfo, setSelectedTagInfo] = useState(null);
-  //const [selectedProgramTagInfo, setSelectedProgramTagInfo] = useState([]);
 
-  // Transform programs data for ButtonList
-  const programItems = programs
-    .map((program) => ({
-      key: program.program_id,
-      id: program.program_id,
-      name: program.title,
-    }))
-    .sort((a, b) => a.name.localeCompare(b.name));
+  // button list items, transformed from programs and tags
+  const [programItems, setProgramItems] = useState([]);
+  const [tagItems, setTagItems] = useState([]);
 
-  // Transform tags data for TagsList
-  const tagItems = tags
-    .map((tag) => ({
-      key: tag.tag_id,
-      id: tag.tag_id,
-      name: tag.tag_name,
-    }))
-    .sort((a, b) => a.name.localeCompare(b.name));
+  // iterate over the tags to find a tag with matching name
+  function isUniqueTagName(newTagName) {
+    // if is unique, there is not some tag in the tags which has a matching name 
+    return !tags.some(tag => tag.tag_name.toLowerCase() === newTagName.toLowerCase());
+  }
+
+  // iterate over the programs to find a program with matching name
+  function isUniqueProgramName(newProgramName) {
+    // if is unique, there is not some tag in the tags which has a matching name 
+    return !programs.some(program => program.title.toLowerCase() === newProgramName.toLowerCase());
+  }
+
+
+  // for debugging 
+  useEffect(() => {
+    console.log("updated tag info: ", selectedTagInfo);
+  }, [selectedTagInfo])
+
+  useEffect(() => {
+    console.log("updated program info: ", selectedProgramInfo);
+  }, [selectedProgramInfo])
+
+  useEffect(() => {
+    if (programs) {
+      console.log("programs re-loaded");
+      const transformedPrograms = programs
+        .map((program) => ({
+          key: program.program_id,
+          id: program.program_id,
+          name: program.title,
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      setProgramItems(transformedPrograms);
+    }
+  }, [programs]); // Recalculate when programs data changes
+
+  useEffect(() => {
+    if (tags) {
+      const transformedTags = tags
+        .map((tag) => ({
+          key: tag.tag_id,
+          id: tag.tag_id,
+          name: tag.tag_name,
+          category: tag.category.trim(),
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      setTagItems(transformedTags);
+    }
+  }, [tags]); // Recalculate when tags data changes
 
   const handleProgramClick = (program) => {
+    // handle previously selected tag
+    if (selectionState.selectedTag !== null) {
+      setSelectionState((prevState) => ({
+        ...prevState,
+        selectedTag: null,
+        addingProgram: false,
+        addingTag: false,
+      }));
+      setSelectedTagInfo(null);
+    }
     // if clicking a selected program, deselect it
-    if (program.id === selectedProgram) {
-      setSelectedProgram(null);
+    if (program.id === selectionState.selectedProgram) {
+      setSelectionState({
+        selectedProgram: null,
+        selectedTag: null,
+      });
       setSelectedProgramInfo(null);
     } else {
+      // we selected a new program
+      // get the associated tags for that program (found in programTags)
+      const associatedTags = programTags
+        .filter((pt) => pt.program_id === program.id)
+        .map((pt) => {
+          const tagInfo = tags.find((tag) => tag.tag_id === pt.tag_id);
+          return tagInfo
+            ? { value: tagInfo.tag_id.toString(), label: tagInfo.tag_name }
+            : null;
+        })
+        .filter((tag) => tag !== null);
+
       // find a program with the same id as the selected program
       const programInfo = programs.find((p) => p.program_id === program.id);
-      setSelectedProgram(program.id);
-      setSelectedProgramInfo(programInfo);
-      setSelectedTag(null);
-      setShowTagInfo(false);
+      setSelectionState({
+        selectedProgram: program.id,
+        selectedTag: null,
+      });
+      setSelectedProgramInfo({
+        ProgramInfo: programInfo,
+        AssociatedTags: associatedTags,
+      });
     }
   };
+
+  // Extract unique categories from tags
+  useEffect(() => {
+    if (tags) {
+      const uniqueCategories = new Set(tags.map((tag) => tag.category.trim()));
+      const formatted = Array.from(uniqueCategories).map((category) => ({
+        value: category, // The category name itself is the value
+        label: category, // The category name is also the label
+      }));
+      setFormattedCategories(formatted);
+    }
+  }, [tags]);
 
   // runs when tags are available and formats them to be used by the Multi Select
   useEffect(() => {
@@ -71,127 +187,219 @@ function AdminPage() {
         const tagInfo = tags.find((tag) => tag.tag_id === pt.tag_id);
         return { value: tagInfo.tag_id.toString(), label: tagInfo.tag_name };
       });
-      setFormattedProgramTags(formattedTags);
+      setFormattedTags(formattedTags);
     }
   }, [tags]); // Depend on tags and programTags
 
   // utility to determine if a program or tag is currently selected
-  const isProgramSelected = (programId) => programId === selectedProgram;
-  const isTagSelected = (tagId) => tagId === selectedTag;
+  const isProgramSelected = (programId) =>
+    programId === selectionState.selectedProgram;
+  const isTagSelected = (tagId) => tagId === selectionState.selectedTag;
 
   const handleTagClick = (tag) => {
+    if (selectionState.addingProgram) {
+      selectionState.addingProgram = false;
+    }
+    if (selectionState.selectedProgram !== null) {
+      setSelectionState((prevState) => ({
+        ...prevState,
+        selectedProgram: null,
+        addingProgram: false,
+        addingTag: false,
+      }));
+      setSelectedProgramInfo(null);
+    }
     // if clicking a selected tag, deselect it
-    if (tag.id === selectedTag) {
-      setSelectedTag(null);
-      setSelectedTagInfo(null);
+    if (tag.id === selectionState.selectedTag) {
+      setSelectionState((prevState) => ({
+        ...prevState,
+        selectedTag: null,
+      }));
     } else {
       const tagInfo = tags.find((t) => t.tag_id === tag.id);
-      setSelectedTag(tag.id);
+      setSelectionState({
+        selectedProgram: null,
+        selectedTag: tag.id,
+      });
       setSelectedTagInfo(tagInfo);
-      setSelectedProgram(null);
       setSelectedProgramInfo(null);
     }
   };
 
-  useEffect(() => {
-    // This block will be executed after the component has re-rendered
-    // when the selectedProgram changes state, update the visibility of ProgramInfo
-    if (selectedProgram === null) {
-      setShowProgramInfo(false);
-    } else {
-      setShowProgramInfo(true);
+  const handleRemoveProgram = () => {
+    // remove the selected program (if there is one)
+    // -1 used for temporary program id of 'adding' program
+    if (selectionState.selectedProgram == null || selectionState.selectedProgram === -1) {
+      window.alert("No currently selected program to remove!")
+      return;
     }
-  }, [selectedProgram]);
 
-  useEffect(() => {
-    // when the selectedTag changes state, update the visibility of TagInfo
-    if (selectedTag === null) {
-      setShowTagInfo(false);
-    } else {
-      setShowTagInfo(true);
+    const onSuccess = (response_data) => {
+      // Handle successful deletion
+      // update the ButtonList for Programs
+      // update the Form to be empty
+      //setSelectedProgram(null);
+      //setSelectedProgramInfo(null);
+
+    };
+    const onError = (error) => {
+      // Handle error
+      //console.log(error);
+      console.log("backend returned error: " + error);
+    };
+    handleDelete(
+      "programs",
+      selectionState.selectedProgram,
+      "are you sure you want to delete the selected program?",
+      onError,
+      onSuccess
+    );
+  };
+
+  const handleAddProgram = () => {
+    setSelectionState((prevState) => ({
+      selectedProgram: -1, // -1 is an available temporary Program ID
+      selectedTag: null,
+      addingProgram: true,
+      addingTag: false,
+    }));
+
+    setSelectedProgramInfo({
+      ProgramInfo: {
+      program_id: "-1",
+      title: "",
+      lead_contact: "",
+      contact_email: "",
+      link_to_web: "",
+      long_description: "",
+      duration: "",
+      duration_unit: "",
+      },
+      AssociatedTags: null
+    });
+    setSelectedTagInfo(null);
+  };
+
+  const handleAddTag = () => {
+    setSelectionState((prevState) => ({
+      ...prevState,
+      selectedTag: -1,
+      selectedProgram: null,
+      addingTag: true,
+      addingProgram: false,
+    }));
+    setSelectedTagInfo({tag_id: -1, tag_name: "", category:null});
+    setSelectedProgramInfo(null);
+  };
+
+  // not fully implemented yet
+  const handleRemoveTag = () => {
+    // -1 used for temporary program id of 'adding' tag
+    if (selectionState.selectedTag == null || selectionState.selectedTag === -1) {
+      window.alert("No currently selected tag to remove!");
+      return;
     }
-  }, [selectedTag]);
+    const onSuccess = (response_data) => {
+      // Handle successful deletion
+      console.log(response_data);
+    };
+    const onError = (error) => {
+      // Handle error
+      console.log(error);
+    };
+    handleDelete(
+      "tags",
+      selectionState.selectedTag,
+      "are you sure you want to delete the selected tag?",
+      onSuccess,
+      onError
+    );
+  };
 
   if (isLoading) {
     return null; // Render nothing while loading
   }
 
   // Redirect or show an error if the user is not authenticated or not the specific user
-  if (
-    !isAuthenticated ||
-    (user && user.email !== "latenightdevsfw23@gmail.com")
-  ) {
+  if (!isAuthenticated || !isAdmin) {
     return <p>Access Denied</p>;
   }
 
   return (
-    <div className="m-auto">
-      {/* Intro section */}
-      <Row className="img-hero-welcome p-2">
-        <Col>
-          <section>
-            <h1 className="intro text-center fw-bold">Admin Tools</h1>
-            <p className="text-center">
-              Select a Program or Tag by clicking on it. You can only select one
-              at a time!
-            </p>
-          </section>
-        </Col>
-      </Row>
-
-      {/* PROGRAMS AND TAGS */}
-      <Row className="p-4">
-        {/* PROGRAMS */}
+    <PageContainer>
+      <ProgramsAndTagsRow>
         <Col md={12} lg={6}>
           {(programsError || tagsError || programTagsError) && (
-            <div className="bg-danger rounded-5 text-center p-2">
-              <h5 className="text-white text-xl">
-                Failed to load data. Ensure the backend is running!
-              </h5>
-            </div>
+            <ErrorMessage>
+              <h5>Failed to load data. Ensure the backend is running!</h5>
+            </ErrorMessage>
           )}
           <ButtonList
             name="Programs"
             items={programItems}
             isItemSelected={isProgramSelected}
             handleButtonClick={handleProgramClick}
-            className="d-flex justify-content-center"
+            handleRemoveBtnClick={handleRemoveProgram}
+            handleAddBtnClick={handleAddProgram}
           />
-
-          {/* TAGS */}
           <ButtonList
             name="Tags"
             items={tagItems}
             isItemSelected={isTagSelected}
             handleButtonClick={handleTagClick}
+            handleRemoveBtnClick={handleRemoveTag}
+            handleAddBtnClick={handleAddTag}
           />
         </Col>
 
-        <Col
-          md={12}
-          lg={6}
-          className="d-flex flex-column justify-content-center"
-        >
-          {/* PROGRAM INFO */}
-          {showProgramInfo && (
+        <StickyColumn md={12} lg={6}>
+          {selectionState.selectedProgram != null && (
             <ProgramInfo
+              // using a 'key' prop forces a re-render when the key changes.
+              key={selectionState.selectedProgram || "default-key"}
               programData={selectedProgramInfo}
-              allProgramTags={formattedProgramTags}
+              allProgramTags={formattedTags}
+              onProgramDataChange={setSelectedProgramInfo}
+              isUniqueName={isUniqueProgramName}
             />
           )}
-          {/* TAG INFO */}
-          {showTagInfo && <TagInfo tagData={selectedTagInfo} />}
-          {/* When not showing tags or programs, display this default message */}
-          {!showTagInfo && !showProgramInfo && (
-            <div className="text-center border border-dark rounded-5 p-2 m-3 flex-fill">
-              <p className="p-2 m-2">
-                Click on a Program or Tag to show information here.
-              </p>
-            </div>
+          {selectionState.selectedTag != null && (
+            <TagInfo
+              tagData={selectedTagInfo}
+              categories={formattedCategories}
+              onTagDataChange={setSelectedTagInfo}
+              isUniqueName={isUniqueTagName}
+            />
           )}
-        </Col>
-      </Row>
-    </div>
+          {/* render the blank form for adding new program */}
+          {selectionState.addingProgram &&
+            selectionState.selectedProgram == null && (
+              <ProgramInfo
+                programData={{}}
+                allProgramTags={formattedTags}
+                onProgramDataChange={setSelectedProgramInfo}
+              />
+            )}
+          {/* render the blank form for adding new tag */}
+          {selectionState.addingTag && selectionState.selectedTag == null && (
+            <TagInfo
+              tagData={{}}
+              categories={formattedCategories}
+              onTagDataChange={setSelectedTagInfo}
+            />
+          )}
+
+          {selectionState.selectedTag == null &&
+            selectionState.selectedProgram == null &&
+            !selectionState.addingProgram &&
+            !selectionState.addingTag && (
+              <DefaultMessage>
+                <p>Click on a Program or Tag to show information here.</p>
+              </DefaultMessage>
+            )}
+        </StickyColumn>
+      </ProgramsAndTagsRow>
+    </PageContainer>
   );
 }
 

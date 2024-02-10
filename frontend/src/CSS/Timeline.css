@@ -1,0 +1,23 @@
+#bank, #timeline, .monthCol {
+  border: 1px solid darkgray;
+}
+
+#timelineContainer {
+  width: 100%;
+  overflow-x: auto;
+}
+
+#timeline {
+  display: inline-flex;
+}
+
+.monthCol {
+  text-align: center;
+  width: 200px;
+  display: inline-table;
+}
+
+.bankProgram {
+  width: 190px;
+  margin: 5px;
+}
