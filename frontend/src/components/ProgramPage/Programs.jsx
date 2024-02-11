@@ -282,22 +282,10 @@ const ProgramCard = ({
               <ProgramDuration program={program} />  <br />
           <Collapse in={isCollapsed}>
             <div id="collapse-text">
-              {/* Web Link: <a href={program.link_to_web}> {program.link_to_web}</a>  <br /> */}
-              <br />
-              Web Link: <a href={program.link_to_web}>
-                {" "}
-                {program.link_to_web}
-              </a>{" "}
-              <br />
-              <ProgramDuration program={program} /> <br />
               <br />
               {program.long_description} <br />
-              {eligibilityTags.length == 0 &&
-              studentServicesTags.length == 0 ? (
-                ""
-              ) : (
-                <br />
-              )}
+              
+              {eligibilityTags.length == 0 && studentServicesTags.length == 0 ? "" : <br />}
               <EligibilityCriteriaTitle eligibilityTags={eligibilityTags} />
               <EligibilityCriteriaTags  eligibilityTags={eligibilityTags} />
 
