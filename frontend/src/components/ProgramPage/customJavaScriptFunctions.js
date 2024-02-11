@@ -1,4 +1,13 @@
 
+export function getAllTagCategoryPairingsForAProgram(program, programTags, tags) {
+    return programTags
+    .filter((programTags) => programTags.program_id === program.program_id)
+    .map((programTags) => {
+      const tagInfo = tags.find((tag) => programTags.tag_id === tag.tag_id);
+      return tagInfo ? { tag_name: tagInfo.tag_name.toString(), category: tagInfo.category } : null; })
+    .filter((tag) => tag !== null);
+}
+
 const FIRST_ELEMENT  = 0;
 const SECOND_ELEMENT = 1;
 
@@ -22,13 +31,4 @@ export function getTagsThatHaveACertainCategory(associatedTags, category) {
     }
     
     return tagsWithTheDesiredCategory;
-}
-
-export function getAllTagCategoryPairingsForAProgram(program, programTags, tags) {
-    return programTags
-    .filter((programTags) => programTags.program_id === program.program_id)
-    .map((programTags) => {
-      const tagInfo = tags.find((tag) => programTags.tag_id === tag.tag_id);
-      return tagInfo ? { tag_name: tagInfo.tag_name.toString(), category: tagInfo.category } : null; })
-    .filter((tag) => tag !== null);
 }
