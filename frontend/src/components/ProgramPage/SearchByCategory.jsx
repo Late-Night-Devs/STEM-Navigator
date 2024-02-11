@@ -8,7 +8,7 @@ function SearchByCategory(props) {
       <div className="row g-2 align-items-center">
         <div className="col-md-auto">
           <label htmlFor="search-tag" className="search-label fw-bold fs-5">
-            Search Program By Category:
+            Search Program By Tag:
           </label>
         </div>
         <div className="col">
