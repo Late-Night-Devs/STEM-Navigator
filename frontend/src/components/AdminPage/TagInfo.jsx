@@ -3,44 +3,52 @@ import Select from "react-select";
 import { postData } from "./dataUtils.js"; // should be used to post data to the backend
 import { SelectContainer, StyledLabel, Container } from "./sharedStyles.js";
 
-export const TagInfo = ({ tagData, onTagDataChange, categories, isUniqueName }) => {
-
+export const TagInfo = ({
+  tagData,
+  onTagDataChange,
+  categories,
+  isUniqueName,
+}) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     const initialTagData = {
       // nullish coalescing operator
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing
-      tag_id: tagData?.tag_id??-1, 
-      tag_name: tagData?.tag_name??"", 
-      category: tagData?.category?? ""
+      tag_id: tagData?.tag_id ?? -1,
+      tag_name: tagData?.tag_name ?? "",
+      category: tagData?.category ?? "",
     };
     onTagDataChange({ ...initialTagData, [name]: value });
   };
 
   const handleSubmit = (e) => {
-
-    // ensure unique name
+    // Ensure unique name
     if (tagData?.tag_id === -1 && !isUniqueName(tagData.tag_name)) {
-      window.alert("Your chosen tag name is already in use!") 
+      window.alert("Your chosen tag name is already in use!");
       e.preventDefault();
       return;
     }
 
-    // handle form submission here
-    // gather the payload data
-    // post to the backend
-    function useResponse(response) {
-      console.log("response from Backend: " + response);
-    }
+    // Handle form submission here
+    const payload = {
+      tag_id: tagData.tag_id, // Ensure this is set correctly; -1 indicates a new tag
+      tag_name: tagData.tag_name,
+      category: tagData.category,
+    };
 
-    function setError(e) {
-      console.log("Backend returned error: " + e);
-    }
+    // Use the postData function for submitting the form data to the backend
+    postData(
+      "admin/admin-modify-db/tag-form-submit",
+      payload,
+      (response) => {
+        console.log("Response from Backend: " + JSON.stringify(response));
+      },
+      (error) => {
+        console.error("Backend returned error: " + error);
+      }
+    );
 
-    // at this point we have ensured the tag data is valid for submission
-    const payload = tagData;
-    postData("admin/admin-modify-db/tag-form-submit", payload, useResponse, setError)
-    console.log("Submitting form to backend");
+    console.log("Submitting form to backend with payload:", payload);
   };
 
   const handleCategoryChange = (selectedOption) => {
@@ -76,7 +84,7 @@ export const TagInfo = ({ tagData, onTagDataChange, categories, isUniqueName }) 
                 onChange={handleCategoryChange}
                 value={
                   tagData && tagData.category
-                    ? categories.find(c => c.value === tagData?.category)
+                    ? categories.find((c) => c.value === tagData?.category)
                     : null
                 }
                 required

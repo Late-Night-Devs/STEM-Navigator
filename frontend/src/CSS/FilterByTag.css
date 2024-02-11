@@ -3,9 +3,9 @@
     flex-wrap: wrap;
     justify-content: flex-start; /* Items align to the start */
     gap: 0.5rem; /* Adds space between the boxes */
-  }
+}
   
-  .box-option {
+.box-option {
     width: calc(33.333% - 0.5rem); /* Subtract the gap from the total width */
     border: 1px solid black;
     padding: 0.5rem 1rem;
@@ -15,22 +15,57 @@
     color: black;
     text-align: center;
     box-sizing: border-box;
-  }
+}
   
-  .box-option:hover, .box-option.selected {
+.box-option:hover, .box-option.selected {
     background-color: blue;
     color: white;
-  }
+}
   
-  @media (max-width: 768px) {
-    .box-option {
+
+  
+  /* tags, categories  */
+/* Apply styles to the scrollable container */
+.scrollable-category {
+  height: 300px;
+  max-height: 300px; /* Set a maximum height for the container */
+  overflow: auto; /* Enable scrolling */
+}
+
+/* Hide scrollbar for Firefox */
+.scrollable-category {
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  /* Hide scrollbar for Chrome, Safari, and Opera */
+  /* Note: Use the 'scrollbar-width' property for Firefox and the 'display' property for other browsers */
+  scrollbar-color: transparent transparent; /* Hide scrollbar thumb and track */
+}
+
+/* Style the scrollbar thumb */
+.scrollable-category::-webkit-scrollbar-thumb {
+  background-color: #d31414; /* Color of the thumb */
+  border-radius: 10000px; /* Rounded corners for the thumb */
+}
+
+/* Style the scrollbar track */
+.scrollable-category::-webkit-scrollbar-track {
+  background-color: #0a0101; /* Color of the track */
+}
+
+
+/* tablet, mobile view */
+@media (max-width: 768px) {
+  .box-option {
       width: calc(50% - 0.5rem); /* Adjust for fewer columns on smaller screens */
-    }
   }
+}
   
-  @media (max-width: 576px) {
-    .box-option {
+@media (max-width: 576px) {
+  .scrollable-category {
+    height: auto;
+    max-height: 300px; /* Set a maximum height for the container */
+    overflow: auto; /* Enable scrolling */
+  }
+  .box-option {
       width: 100%; /* Full width on the smallest screens */
-    }
   }
-  
+}

@@ -1,19 +1,30 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import FilterByTag from "./FilterByTag";
 import Programs from "./Programs";
+import FavoriteProgramsDisplay from "./FavoriteSection";
+import { Link } from "react-scroll";
 import "../../CSS/ProgramTab.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
+
 import Cookies from "js-cookie";
 
 function ProgramTab() {
-  
   const [selectedTagIds, setSelectedTagIds] = useState(new Set());
-    console.log(
-      "\n >>>>> userID stored in COOKIE or not at the program tab: ",
-      Cookies.get("cookieUId")
-    );
+  const [isFavoriteClicked, setFavoriteClicked] = useState(false);
+  // no matter what is true or false for the favorite btn as long as they click on the star icon
+  // it needs to re-render the site again to update favorite programs.
+  const handleFavoriteClicked = () => setFavoriteClicked(!isFavoriteClicked);
+  // unmount the click is back to false until the user clicks on the favorite
+  useEffect(() => {
+    setFavoriteClicked(false);
+  }, []);
+
+  // get userID from cookies
+  const cookieUID = Cookies.get("cookieUId");
+
   return (
     <Container fluid>
       <Row class="img-hero-welcome">
@@ -22,26 +33,69 @@ function ProgramTab() {
           <p className="intro text-center fs-3 fw-bold p-5">
             Welcome to PSU STEM
           </p>
+          {cookieUID && (
+            <div className="d-flex justify-content-end ">
+              <Link
+                to="favoriteSection"
+                smooth={true}
+                duration={300}
+                className="btn btn-primary mt-3 favorite-button "
+              >
+                <FontAwesomeIcon
+                  icon={solidStar}
+                  style={{
+                    cursor: "pointer",
+                    color: "gold",
+                    paddingRight: "7px",
+                  }}
+                />
+                My Favorite Lists
+              </Link>
+            </div>
+          )}
         </section>
       </Row>
       <Row className="mt-5">
-        <Col md={12} lg={6} className="border-end">
-          <FilterByTag setSelectedTagIds={setSelectedTagIds} />
+        <Col md={12} lg={6}>
+          <FilterByTag
+            setSelectedTagIds={setSelectedTagIds}
+            cookieUID={cookieUID}
+          />
         </Col>
         <Col
           md={12}
           lg={6}
-          className="border-end  rounded shadow "
+          className="border-end rounded shadow "
           style={{ minHeight: "200px" }}
         >
-          <div className="testing">
+          <div>
             {selectedTagIds.size > 0 ? (
-              <Programs selectedTagIds={selectedTagIds} />
+              <Programs
+                selectedTagIds={selectedTagIds}
+                cookieUID={cookieUID}
+                handleFavoriteClicked={handleFavoriteClicked}
+              />
             ) : (
-              <Programs selectedTagIds={new Set()} />
+              <Programs
+                selectedTagIds={new Set()}
+                cookieUID={cookieUID}
+                handleFavoriteClicked={handleFavoriteClicked}
+              />
             )}
           </div>
         </Col>
+      </Row>
+
+      <Row>
+        {cookieUID && (
+          <div id="favoriteSection" className="mt-4 border border-2">
+            <h3 className="p-2"> Display Favorite</h3>
+            <FavoriteProgramsDisplay
+              cookieUID={cookieUID}
+              handleFavoriteClicked={handleFavoriteClicked}
+            />
+          </div>
+        )}
       </Row>
     </Container>
   );

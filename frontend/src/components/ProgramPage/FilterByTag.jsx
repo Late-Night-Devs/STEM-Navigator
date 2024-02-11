@@ -3,35 +3,67 @@ import axios from "axios";
 import { Card, Container, Row, Col, Form } from "react-bootstrap";
 import "../../CSS/FilterByTag.css";
 import SearchByCategory from "./SearchByCategory";
+import DropdownCategory from "./DropdownCategory";
+import Dropdown from "react-bootstrap/Dropdown";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
-const FilterByTag = ({ setSelectedTagIds }) => {
+const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
   const [categories, setCategories] = useState({});
   const [store, setStore] = useState({});
+  const [tempCategories, setTempCategories] = useState({});
   const [tagIdMapping, setTagIdMapping] = useState({}); // Map tag names to IDs
+  console.log("\t\n Filter By Tag - CookieUID:  ", cookieUID);
 
+  const [clickedName, setClickedName] = useState("All Categories");
+  // Fetch tags from the backend and store them in the state
   useEffect(() => {
     axios
       .get(`${backend_url}/tags`)
       .then((response) => {
-        const fetchedCategories = {}; //create an empty object < key, value >
-        const tagIdMap = {};
+        const fetchedCategories = {}; // Object to store categories and tags
+        const tagIdMap = {}; // Map tag names to their IDs
 
+        // Iterate through the fetched tags
         response.data.forEach((tag) => {
-          const category = tag.category.trim(); // handle bad input like "programs " and "programs"
+          // Trim whitespace from category and tag names
+          const category = tag.category.trim();
           const tag_name = tag.tag_name.trim();
-          const tag_id = tag.tag_id; // get this data from the backend
+          const tag_id = tag.tag_id;
 
-          fetchedCategories[category] = fetchedCategories[category] || []; // if the arr has category already existed || null
+          // Add tags to their respective categories
+          fetchedCategories[category] = fetchedCategories[category] || [];
           fetchedCategories[category].push(tag_name);
 
-          tagIdMap[tag_name] = tag_id; // Map tag names to their IDs
+          // Map tag names to their IDs
+          tagIdMap[tag_name] = tag_id;
         });
 
         setCategories(fetchedCategories);
+        // Adding an tempData for All Category[] -> help reset data
+        let tempData = { ...fetchedCategories };
+        tempData = { "All Categories": [], ...tempData };
+        //console.log("hello there", tempData);
+
+        setTempCategories(tempData);
         setStore(fetchedCategories);
         setTagIdMapping(tagIdMap); // Store the tag id mapping
+        // Sort categories alphabetically
+        const sortedCategories = Object.fromEntries(
+          Object.entries(fetchedCategories).sort(([catA], [catB]) =>
+            catA.localeCompare(catB)
+          )
+        );
+
+        // Sort tags alphabetically within each category
+        for (const category in sortedCategories) {
+          sortedCategories[category] = sortedCategories[category].sort();
+        }
+
+        // Update state with sorted categories and tag ID mapping
+        setCategories(sortedCategories);
+        setStore(sortedCategories);
+        setTagIdMapping(tagIdMap);
       })
       .catch((error) => console.error("Error fetching tags:", error));
   }, []);
@@ -57,7 +89,7 @@ const FilterByTag = ({ setSelectedTagIds }) => {
     });
   };
 
-  //Handle search for search function by category
+  //Handle search for search function by tag in categories
   const handleSearch = (key) => {
     let myResult = findKeyValuePair(store, key);
     if (key === "") {
@@ -69,29 +101,106 @@ const FilterByTag = ({ setSelectedTagIds }) => {
   function findKeyValuePair(data, key) {
     let result = {};
     for (const dataKey in data) {
-      if (dataKey.toLowerCase().includes(key)) {
-        result = { ...result, [dataKey]: data[dataKey] };
+      const values = data[dataKey];
+      for (const value of values) {
+        if (value.toLowerCase().includes(key.toLowerCase())) {
+          result[dataKey] = values;
+          break; 
+        }
       }
     }
+    return result;
+  }
 
-    if (Object.keys(result).length !== 0) {
-      return result;
-    } else {
-      return {};
+  ///********Handle Dropdown function******** *//
+
+  const handleClick = (event) => {
+    const name = event.target.textContent;
+    const currentCard = event.target;
+
+    const className = event.target.className;
+
+    let hasClickedClass = className.includes("clicked-div");
+
+    if (!hasClickedClass) {
+      //Remove all clicked-div class from other elements
+      const otherCards = document.querySelectorAll(".card.clicked-div");
+      otherCards.forEach((card) => {
+        card.classList.remove("clicked-div");
+      });
+      // If not present, add the class to the current element
+      currentCard.classList.add("clicked-div");
     }
+    handleDropdown(name);
+
+    setClickedName(name);
+  };
+
+  const handleDropdown = (name) => {
+    let myResult = findName(store, name);
+
+    if (name === "All Categories") {
+      myResult = store;
+    }
+    setCategories(myResult);
+  };
+
+  function findName(data, name) {
+    let result = {};
+    for (let dataKey in data) {
+      if (dataKey === name) {
+        result[dataKey] = data[dataKey];
+      }
+    }
+    return result;
   }
 
   return (
     <Container>
       <Row>
         <SearchByCategory handleSearch={handleSearch} categories={categories} />
+        {clickedName && <DropdownCategory handleSearch={handleDropdown} />}
+        
+        {/* Dropdown function */}
+        <Dropdown>
+          <Dropdown.Toggle
+            id="dropdown"
+            style={{
+              background: "grey",
+              width: "50%",
+              margin: "10px",
+              border: "var(--salmon)",
+              fontSize: "1vw",
+            }}
+          >
+            {clickedName}
+          </Dropdown.Toggle>
+          <Dropdown.Menu
+            style={{
+              marginTop: "0px",
+              width: "50%",
+              textAlign: "center",
+              fontFamily: "Cocogoose",
+              fontSize: "1vw",
+            }}
+          >
+            {Object.keys(tempCategories).map((categoryName, index) => (
+              <Dropdown.Item key={index} onClick={handleClick}>
+                <div className="card">{categoryName}</div>
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+
         {Object.entries(categories).map(([category, tags]) => (
           <Col key={category} md={4} className="mb-4 ">
             <Card>
               <Card.Header as="h5" className="bg-success text-white">
                 {category}
               </Card.Header>
-              <Card.Body>
+              <Card.Body
+                className="scrollable-category"
+              >
                 {tags.map((tag, index) => (
                   <Form.Check
                     type="checkbox"
