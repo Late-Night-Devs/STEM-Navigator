@@ -30,9 +30,9 @@ function ProgramTab() {
       <Row class="img-hero-welcome">
         <div className="hero-img"></div>
         <section>
-          <p className="intro text-center fs-3 fw-bold p-5">
+          <h1 className="intro text-center fs-3 fw-bold p-5">
             Welcome to PSU STEM
-          </p>
+          </h1>
           {cookieUID && (
             <div className="d-flex justify-content-end ">
               <Link
@@ -56,7 +56,12 @@ function ProgramTab() {
         </section>
       </Row>
       <Row className="mt-5">
-        <Col md={12} lg={6}>
+        <Col
+          md={12}
+          lg={6}
+          role="region"
+          aria-label="filter programs by tag"
+        >
           <FilterByTag
             setSelectedTagIds={setSelectedTagIds}
             cookieUID={cookieUID}
@@ -67,6 +72,8 @@ function ProgramTab() {
           lg={6}
           className="border-end rounded shadow "
           style={{ minHeight: "200px" }}
+          role="region"
+          aria-label="filtered programs"
         >
           <div>
             {selectedTagIds.size > 0 ? (
@@ -86,7 +93,7 @@ function ProgramTab() {
         </Col>
       </Row>
 
-      <Row>
+      <Row role="region" aria-label="favorited programs">
         {cookieUID && (
           <div id="favoriteSection" className="mt-4 border border-2">
             <h3 className="p-2"> Display Favorite</h3>
