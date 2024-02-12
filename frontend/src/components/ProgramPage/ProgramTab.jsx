@@ -20,7 +20,7 @@ function ProgramTab() {
   // unmount the click is back to false until the user clicks on the favorite
   useEffect(() => {
     setFavoriteClicked(false);
-  },[]);
+  }, []);
 
   // get userID from cookies
   const cookieUID = Cookies.get("cookieUId");
@@ -35,23 +35,24 @@ function ProgramTab() {
           </p>
           {cookieUID && (
             <div className="d-flex justify-content-end ">
-            <Link
-              to="favoriteSection"
-              smooth={true}
-              duration={300}
-              className="btn btn-primary mt-3 favorite-button "
-            >
-              <FontAwesomeIcon icon={solidStar} style={{
-                cursor: "pointer",
-                  color: "gold",
-                paddingRight: "7px"
-              }} />
-               My Favorite Lists
+              <Link
+                to="favoriteSection"
+                smooth={true}
+                duration={300}
+                className="btn btn-primary mt-3 favorite-button "
+              >
+                <FontAwesomeIcon
+                  icon={solidStar}
+                  style={{
+                    cursor: "pointer",
+                    color: "gold",
+                    paddingRight: "7px",
+                  }}
+                />
+                My Favorite Lists
               </Link>
-              </div>
+            </div>
           )}
-
-
         </section>
       </Row>
       <Row className="mt-5">
@@ -69,9 +70,17 @@ function ProgramTab() {
         >
           <div>
             {selectedTagIds.size > 0 ? (
-              <Programs selectedTagIds={selectedTagIds} cookieUID={cookieUID} handleFavoriteClicked={handleFavoriteClicked} />
+              <Programs
+                selectedTagIds={selectedTagIds}
+                cookieUID={cookieUID}
+                handleFavoriteClicked={handleFavoriteClicked}
+              />
             ) : (
-                <Programs selectedTagIds={new Set()} cookieUID={cookieUID} handleFavoriteClicked={handleFavoriteClicked} />
+              <Programs
+                selectedTagIds={new Set()}
+                cookieUID={cookieUID}
+                handleFavoriteClicked={handleFavoriteClicked}
+              />
             )}
           </div>
         </Col>
@@ -80,8 +89,11 @@ function ProgramTab() {
       <Row>
         {cookieUID && (
           <div id="favoriteSection" className="mt-4 border border-2">
-            <h3 className="p-2"> Dipslay Favorite</h3>
-            <FavoriteProgramsDisplay cookieUID={cookieUID} handleFavoriteClicked={handleFavoriteClicked} />
+            <h3 className="p-2"> Display Favorite</h3>
+            <FavoriteProgramsDisplay
+              cookieUID={cookieUID}
+              handleFavoriteClicked={handleFavoriteClicked}
+            />
           </div>
         )}
       </Row>
