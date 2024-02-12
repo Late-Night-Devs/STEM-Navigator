@@ -293,26 +293,32 @@ function AdminPage() {
     setSelectedProgramInfo(null);
   };
 
-  // not fully implemented yet
   const handleRemoveTag = () => {
     // -1 used for temporary program id of 'adding' tag
-    if (selectionState.selectedTag == null || selectionState.selectedTag === -1) {
+    if (
+      selectionState.selectedTag == null ||
+      selectionState.selectedTag === -1
+    ) {
       window.alert("No currently selected tag to remove!");
       return;
     }
+
     const onSuccess = (response_data) => {
       // Handle successful deletion
-      window.location.reload(); 
+      // Refresh page to reflect changes
+      window.location.reload();
       console.log(response_data);
     };
+
     const onError = (error) => {
       // Handle error
       console.log(error);
     };
+
     handleDelete(
-      "tags",
+      "tags/remove",
       selectionState.selectedTag,
-      "are you sure you want to delete the selected tag?",
+      "Are you sure you want to delete the selected tag?",
       onSuccess,
       onError
     );
