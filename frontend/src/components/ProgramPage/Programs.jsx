@@ -347,7 +347,7 @@ const EligibilityCriteriaTags = ({ eligibilityTags }) => {
     <>
       {" "}
       {eligibilityTags.map((eligibilityTag) => (
-        <IndividualTag individualTag={eligibilityTag} />
+        <IndividualTag individualTag={eligibilityTag} key={eligibilityTag}/>
       ))}{" "}
     </>
   );
@@ -371,7 +371,7 @@ const StudentServicesTags = ({ studentServicesTags }) => {
     <>
       {" "}
       {studentServicesTags.map((studentServicesTag) => (
-        <IndividualTag individualTag={studentServicesTag} />
+        <IndividualTag individualTag={studentServicesTag} key={studentServicesTag}/>
       ))}{" "}
     </>
   );
