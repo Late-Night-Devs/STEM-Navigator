@@ -86,6 +86,8 @@ function AdminPage() {
   const [programItems, setProgramItems] = useState([]);
   const [tagItems, setTagItems] = useState([]);
 
+  const [submitClicked, setSubmitClicked] = useState(false);
+
   // iterate over the tags to find a tag with matching name
   function isUniqueTagName(newTagName) {
     // if is unique, there is not some tag in the tags which has a matching name 
@@ -325,6 +327,9 @@ function AdminPage() {
     return <p>Access Denied</p>;
   }
 
+  //  handle refreshing the site after a successful submission
+  const handleReloadAfterSubmission = () => setSubmitClicked(!submitClicked);
+
   return (
     <PageContainer>
       <ProgramsAndTagsRow>
@@ -335,7 +340,12 @@ function AdminPage() {
             </ErrorMessage>
           )}
           <div>
-            {(selectionState.selectedProgram || selectionState.selectedTag) && <ScrollNotice>This webpage works best with larger screens. Scroll down to view form.</ScrollNotice>}
+            {(selectionState.selectedProgram || selectionState.selectedTag) && (
+              <ScrollNotice>
+                This webpage works best with larger screens. Scroll down to view
+                form.
+              </ScrollNotice>
+            )}
           </div>
           <ButtonList
             name="Programs"
@@ -364,6 +374,7 @@ function AdminPage() {
               allProgramTags={formattedTags}
               onProgramDataChange={setSelectedProgramInfo}
               isUniqueName={isUniqueProgramName}
+              handleReloadAfterSubmission={handleReloadAfterSubmission}
             />
           )}
           {selectionState.selectedTag != null && (
@@ -372,12 +383,12 @@ function AdminPage() {
               categories={formattedCategories}
               onTagDataChange={setSelectedTagInfo}
               isUniqueName={isUniqueTagName}
+              handleReloadAfterSubmission={handleReloadAfterSubmission}
             />
           )}
           {/* Show the default message when there is not a currently selected Tag or Program */}
           {selectionState.selectedTag == null &&
-            selectionState.selectedProgram == null &&
-            (
+            selectionState.selectedProgram == null && (
               <DefaultMessage>
                 <p>Click on a Program or Tag to show information here.</p>
               </DefaultMessage>

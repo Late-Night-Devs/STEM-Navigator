@@ -39,6 +39,7 @@ export const ProgramInfo = ({
   allProgramTags,
   onProgramDataChange,
   isUniqueName,
+  handleReloadAfterSubmission,
 }) => {
   const associatedTags = programData ? programData.AssociatedTags : null;
 
@@ -74,6 +75,7 @@ export const ProgramInfo = ({
       payload,
       (response) => {
         console.log("Response from Backend: " + JSON.stringify(response));
+        handleReloadAfterSubmission();
       },
       (error) => {
         console.error("Backend returned error: " + error);
@@ -179,7 +181,7 @@ export const ProgramInfo = ({
                 min="1" // duration can't be zero or negative
                 value={programData?.ProgramInfo?.duration}
                 onChange={handleChange}
-                style={{width: "75px"}}
+                style={{ width: "75px" }}
                 required
               />
             </Col>
@@ -188,14 +190,12 @@ export const ProgramInfo = ({
                 Unit
                 <Select
                   options={durationUnitOptions}
-                  value={
-                    durationUnitOptions.find(
-                      (option) =>
-                        option.value === programData?.ProgramInfo?.duration_unit
-                    )
-                  }
+                  value={durationUnitOptions.find(
+                    (option) =>
+                      option.value === programData?.ProgramInfo?.duration_unit
+                  )}
                   onChange={handleDurationUnitChange}
-                required
+                  required
                 />
               </label>
             </Col>
