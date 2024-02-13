@@ -273,7 +273,7 @@ const ProgramCard = ({
       />
       <Card.Body>
         <Card.Title>{program.title}</Card.Title>
-        <Card.Text>
+        <Card.Text as="div">
               {isCollapsed === false ? "" : <br aria-hidden="true"/>}
               <ProgramDetailsTitle isCollapsed={isCollapsed}/>  <br aria-hidden="true"/>
               Lead Contact: {program.lead_contact}  <br aria-hidden="true"/>
