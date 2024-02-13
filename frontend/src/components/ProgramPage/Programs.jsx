@@ -274,22 +274,22 @@ const ProgramCard = ({
       <Card.Body>
         <Card.Title>{program.title}</Card.Title>
         <Card.Text>
-              {isCollapsed === false ? "" : <br />}
-              <ProgramDetailsTitle isCollapsed={isCollapsed}/>  <br />
-              Lead Contact: {program.lead_contact}  <br />
-              Contact Email:{" "} <a href={`mailto:${program.contact_email}`}> {program.contact_email}</a>  <br />
-              <WebLink isCollapsed={isCollapsed} program={program}/>  {isCollapsed === false ? "" : <br />}
-              <ProgramDuration program={program} />  <br />
+              {isCollapsed === false ? "" : <br aria-hidden="true"/>}
+              <ProgramDetailsTitle isCollapsed={isCollapsed}/>  <br aria-hidden="true"/>
+              Lead Contact: {program.lead_contact}  <br aria-hidden="true"/>
+              Contact Email:{" "} <a href={`mailto:${program.contact_email}`}> {program.contact_email}</a>  <br aria-hidden="true"/>
+              <WebLink isCollapsed={isCollapsed} program={program}/>  {isCollapsed === false ? "" : <br aria-hidden="true"/>}
+              <ProgramDuration program={program} />  <br aria-hidden="true"/>
           <Collapse in={isCollapsed}>
             <div id="collapse-text">
-              <br />
-              {program.long_description} <br />
+              <br aria-hidden="true"/>
+              {program.long_description} <br aria-hidden="true"/>
               
-              {eligibilityTags.length === 0 && studentServicesTags.length === 0 ? "" : <br />}
+              {eligibilityTags.length === 0 && studentServicesTags.length === 0 ? "" : <br aria-hidden="true"/>}
               <EligibilityCriteriaTitle eligibilityTags={eligibilityTags} />
               <EligibilityCriteriaTags  eligibilityTags={eligibilityTags} />
 
-              {eligibilityTags.length !== 0 && studentServicesTags.length !== 0 ? <br /> : ""}
+              {eligibilityTags.length !== 0 && studentServicesTags.length !== 0 ? <br aria-hidden="true"/> : ""}
               <StudentServicesTitle studentServicesTags={studentServicesTags} />
               <StudentServicesTags studentServicesTags={studentServicesTags} />
             </div>
