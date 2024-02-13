@@ -393,7 +393,7 @@ const Pagination = ({ itemsPerPage, totalItems, paginate }) => {
   }
 
   return (
-    <nav aria-label="change filtered programs page">
+    <nav aria-label="CHANGE FILTERED PROGRAMS PAGE">
       <ul className="pagination">
         {pageNumbers.map((number) => (
           <li key={number} className="page-item">

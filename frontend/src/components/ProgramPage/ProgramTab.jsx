@@ -60,7 +60,7 @@ function ProgramTab() {
           md={12}
           lg={6}
           role="region"
-          aria-label="filter programs by tag"
+          aria-label="FILTER PROGRAMS BY TAG"
         >
           <FilterByTag
             setSelectedTagIds={setSelectedTagIds}
@@ -73,7 +73,7 @@ function ProgramTab() {
           className="border-end rounded shadow "
           style={{ minHeight: "200px" }}
           role="region"
-          aria-label="filtered programs"
+          aria-label="FILTERED PROGRAMS"
         >
           <div>
             {selectedTagIds.size > 0 ? (
@@ -93,7 +93,7 @@ function ProgramTab() {
         </Col>
       </Row>
 
-      <Row role="region" aria-label="favorited programs">
+      <Row role="region" aria-label="FAVORITED PROGRAMS">
         {cookieUID && (
           <div id="favoriteSection" className="mt-4 border border-2">
             <h3 className="p-2"> Display Favorite</h3>
