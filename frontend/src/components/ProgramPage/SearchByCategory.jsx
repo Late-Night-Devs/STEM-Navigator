@@ -1,5 +1,5 @@
 import React from "react";
-
+import "../../CSS/SearchByCategory.css"
 
 // Define a functional component named SearchByCategory
 function SearchByCategory(props) {
@@ -7,16 +7,14 @@ function SearchByCategory(props) {
     <div className="search-top pt-3 pb-4 gap-2">
       <div className="row g-2 align-items-center">
         <div className="col-md-auto">
-          <label htmlFor="search-tag" className="search-label fw-bold fs-5">
-            Search Program By Tag:
-          </label>
+          <label htmlFor="search-tag" className="search-label fw-bold fs-5"/>
         </div>
         <div className="col">
           <input
-            className="rounded w-100"
+            className="rounded w-100 search-for-a-tag"
             id="search-tag"
             type="text"
-            placeholder="Enter to search..."
+            placeholder="Search for a tag, e.g. Application Required"
             onChange={(e) => props.handleSearch(e.target.value)}
           />
         </div>
