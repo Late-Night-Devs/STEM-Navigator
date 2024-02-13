@@ -47,7 +47,7 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
     }
   };
 
-    useEffect(() => {
+  useEffect(() => {
     //   fetching favorite data once
     checkFavoriteDatabase();
   });

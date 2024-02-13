@@ -10,12 +10,15 @@ import Cookies from "js-cookie"; // Import Cookies
 const NavBar = () => {
   const { isAuthenticated } = useAuth0(); // Get user information
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isUserID, setUserID] = useState(false);
   const activeLink = "bg-light text-dark rounded p-1";
   const normalLink = "";
 
   // Call the function to update isAdmin on component mount and whenever isAuthenticated changes
   useEffect(() => {
     const getCookieAdmin = Cookies.get("isAdmin");
+    const cookieUID = Cookies.get("cookieUId");
+    setUserID(cookieUID);
     if (getCookieAdmin === "true") { 
       setIsAdmin(true);
     } else {
@@ -134,7 +137,7 @@ const NavBar = () => {
                   }
                   style={{ textDecoration: "none" }}
                 >
-                  Admin Tools {isAdmin} {isAuthenticated}
+                  Admin Tools
                 </NavLink>
               </li>
             )}
