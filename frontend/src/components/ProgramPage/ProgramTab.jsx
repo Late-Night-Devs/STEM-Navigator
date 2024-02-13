@@ -27,7 +27,7 @@ function ProgramTab() {
 
   return (
     <Container fluid>
-      <Row class="img-hero-welcome">
+      <Row className="img-hero-welcome">
         <div className="hero-img"></div>
         <section>
           <h1 className="intro text-center fs-3 fw-bold p-5">
