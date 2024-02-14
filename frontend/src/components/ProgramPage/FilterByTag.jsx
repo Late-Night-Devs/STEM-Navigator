@@ -201,6 +201,7 @@ const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
               <Card.Body
                 className="scrollable-category"
               >
+                <ul className="tagList">
                 {tags.map((tag, index) => (
                   <Form.Check
                     type="checkbox"
@@ -210,6 +211,7 @@ const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
                     onChange={() => handleCheckboxChange(tag)}
                   />
                 ))}
+                </ul>
               </Card.Body>
             </Card>
           </Col>
