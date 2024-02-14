@@ -275,15 +275,14 @@ const ProgramCard = ({
         <Card.Title>{program.title}</Card.Title>
         <Card.Text as="div">
               {isCollapsed === false ? "" : <br aria-hidden="true"/>}
-              <ProgramDetailsTitle isCollapsed={isCollapsed}/>  <br aria-hidden="true"/>
-              Lead Contact: {program.lead_contact}  <br aria-hidden="true"/>
-              Lead Contact Email:{" "} <a href={`mailto:${program.contact_email}`}> {program.contact_email}</a>  <br aria-hidden="true"/>
-              <WebLink isCollapsed={isCollapsed} program={program}/>  {isCollapsed === false ? "" : <br aria-hidden="true"/>}
+              <ProgramDetailsTitle isCollapsed={isCollapsed}/>
+              <div>Lead Contact: {program.lead_contact}</div>
+              <div>Lead Contact Email:{" "} <a href={`mailto:${program.contact_email}`}> {program.contact_email}</a></div>
+              <ProgramHomepage isCollapsed={isCollapsed} program={program}/>
               <ProgramDuration program={program} />  <br aria-hidden="true"/>
           <Collapse in={isCollapsed}>
             <div id="collapse-text">
-              <br aria-hidden="true"/>
-              {program.long_description} <br aria-hidden="true"/>
+              <div>{program.long_description}</div>
               
               {eligibilityTags.length === 0 && studentServicesTags.length === 0 ? "" : <br aria-hidden="true"/>}
               <EligibilityCriteriaTitle eligibilityTags={eligibilityTags} />
@@ -314,31 +313,31 @@ const ProgramCard = ({
 };
 
 const ProgramDetailsTitle = ({ isCollapsed }) => {
-  return <> {
+  return <div> {
     isCollapsed === false ? "" : <b>PROGRAM DETAILS</b>
-  } </>
+  } </div>
 };
 
-const WebLink = ({ isCollapsed, program }) => {
-  return <> {
+const ProgramHomepage = ({ isCollapsed, program }) => {
+  return <div> {
     isCollapsed === false ? "" : <>Program Homepage:  <a href={program.link_to_web}> {program.link_to_web}</a></>
-  } </>
+  } </div>
 };
 
 const ProgramDuration = ({ program }) => {
   return (
-    <>
+    <div>
       {" "}
       {program.duration
         ? "Program Duration: " + program.duration + " " + program.duration_unit
         : "Program Duration: Varies"}{" "}
-    </>
+    </div>
   );
 };
 
 const EligibilityCriteriaTitle = ({ eligibilityTags }) => {
   return (
-    <> {eligibilityTags.length === 0 ? "" : <b>ELIGIBILITY CRITERIA</b>} </>
+    <div> {eligibilityTags.length === 0 ? "" : <b>ELIGIBILITY CRITERIA</b>} </div>
   );
 };
 
@@ -355,14 +354,14 @@ const EligibilityCriteriaTags = ({ eligibilityTags }) => {
 
 const StudentServicesTitle = ({ studentServicesTags }) => {
   return (
-    <>
+    <div>
       {" "}
       {studentServicesTags.length === 0 ? (
         ""
       ) : (
         <b>PROGRAM STUDENT SUPPORT SERVICES</b>
       )}{" "}
-    </>
+    </div>
   );
 };
 
