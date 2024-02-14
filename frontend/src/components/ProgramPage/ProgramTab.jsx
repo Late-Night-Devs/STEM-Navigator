@@ -31,7 +31,7 @@ function ProgramTab() {
         <div className="hero-img"></div>
         <section>
           <h1 className="intro text-center fs-3 fw-bold p-5">
-            PSU STEM Programs
+            Portland State University STEM Programs
           </h1>
           {cookieUID && (
             <div className="d-flex justify-content-end ">
