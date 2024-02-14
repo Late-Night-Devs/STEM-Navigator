@@ -277,7 +277,7 @@ const ProgramCard = ({
               {isCollapsed === false ? "" : <br aria-hidden="true"/>}
               <ProgramDetailsTitle isCollapsed={isCollapsed}/>  <br aria-hidden="true"/>
               Lead Contact: {program.lead_contact}  <br aria-hidden="true"/>
-              Contact Email:{" "} <a href={`mailto:${program.contact_email}`}> {program.contact_email}</a>  <br aria-hidden="true"/>
+              Lead Contact Email:{" "} <a href={`mailto:${program.contact_email}`}> {program.contact_email}</a>  <br aria-hidden="true"/>
               <WebLink isCollapsed={isCollapsed} program={program}/>  {isCollapsed === false ? "" : <br aria-hidden="true"/>}
               <ProgramDuration program={program} />  <br aria-hidden="true"/>
           <Collapse in={isCollapsed}>
@@ -321,7 +321,7 @@ const ProgramDetailsTitle = ({ isCollapsed }) => {
 
 const WebLink = ({ isCollapsed, program }) => {
   return <> {
-    isCollapsed === false ? "" : <>Web Link:  <a href={program.link_to_web}> {program.link_to_web}</a></>
+    isCollapsed === false ? "" : <>Program Homepage:  <a href={program.link_to_web}> {program.link_to_web}</a></>
   } </>
 };
 
