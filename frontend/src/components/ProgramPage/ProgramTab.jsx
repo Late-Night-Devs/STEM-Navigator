@@ -30,8 +30,8 @@ function ProgramTab() {
       <Row className="img-hero-welcome">
         <div className="hero-img"></div>
         <section>
-          <h1 className="intro text-center fs-3 fw-bold p-5">
-            Portland State University STEM Programs
+          <h1 className="intro text-center fs-3 fw-bold p-5" aria-label="Portland State University STEM Programs">
+            PSU STEM Programs
           </h1>
           {cookieUID && (
             <div className="d-flex justify-content-end ">
