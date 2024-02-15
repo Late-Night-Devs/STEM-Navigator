@@ -6,7 +6,7 @@ import BankProgram from "./BankProgram";
 
 function FavoritesBank({ favoritesList, cookieUID, handleFavoriteClicked }) {
   const noFavorites = favoritesList.length === 0;
-  console.log("favorite bank: ", favoritesList);
+  
   return (
     <Row id="bank" className="my-2 mx-1 p-2">
       <h3 className="mt-1">Favorited Programs</h3>

@@ -90,8 +90,7 @@ function CalendarTab() {
   };
 
   const [isFavoriteClicked, setFavoriteClicked] = useState(false);
-  // no matter what is true or false for the favorite btn as long as they click on the star icon
-  // it needs to re-render the site again to update favorite programs.
+  // re-render the site again to update favorite programs.
   const handleFavoriteClicked = () => setFavoriteClicked(!isFavoriteClicked);
   // unmount the click is back to false until the user clicks on the favorite
   console.log("1/isFavoriteClicked:  ", isFavoriteClicked)
@@ -107,17 +106,35 @@ function CalendarTab() {
   // =================== DONE ==========================================//
 
   // must be inside here to have access to "setTimeline"
-  // TO DO: clean up inside
   function onDragEnd(result) {
     const { source, destination } = result;
 
-    if (!destination || destination.droppableId === 'bankDroppable') return;
+    if (!destination) return; // invalid destination
+
+    if (  // putting timeline entries back into bank
+      source.droppableId != 'bankDroppable' && 
+      destination.droppableId === 'bankDroppable'
+    ) {
+      const srcMonth = timeline[source.droppableId];
+      const srcList = Array.from(srcMonth.programIds);
+      srcList.splice(source.index, 1);
+
+      const updatedTimeline = {
+        ...timeline,
+        [srcMonth.title]: {
+          ...srcMonth,
+          programIds: srcList
+        },
+      }
+      setTimeline(updatedTimeline);
+      return;
+    }
 
     const destMonth = timeline[destination.droppableId];
     const destList = Array.from(destMonth.programIds);
     let updatedTimeline = null;
     switch (source.droppableId) {
-      case destination.droppableId: {
+      case destination.droppableId: // reorder programs in same term
         updatedTimeline = {
           ...timeline,
           [destMonth.title]: {
@@ -126,9 +143,8 @@ function CalendarTab() {
           },
         }
         break;
-      }
 
-      case 'bankDroppable': {
+      case 'bankDroppable': // add new program to timeline from bank
         updatedTimeline = {
           ...timeline,
           [destMonth.title]: {
@@ -139,9 +155,8 @@ function CalendarTab() {
           },
         }
         break;
-      }
 
-      default: {
+      default:  // move program entries between terms
         const srcMonth = timeline[source.droppableId];
         const srcList = Array.from(srcMonth.programIds);
         const [updatedSrcList, updatedDestList] = moveProgram(
@@ -160,7 +175,6 @@ function CalendarTab() {
           },
         }
         break;
-      }
     }
 
     setTimeline(updatedTimeline);
@@ -205,10 +219,12 @@ function addProgram(favoritesList, srcIndex, destIndex, updatedList) {
 }
 
 function moveProgram(srcList, destList, srcIndex, destIndex) {
-  const [moved] = srcList.splice(srcIndex, 1);
-  destList.splice(destIndex, 0, moved);
+  const updatedSrcList = srcList;
+  const updatedDestList = destList;
+  const [moved] = updatedSrcList.splice(srcIndex, 1);
+  updatedDestList.splice(destIndex, 0, moved);
 
-  return [srcList, destList];
+  return [updatedSrcList, updatedDestList];
 }
 
 export default CalendarTab;

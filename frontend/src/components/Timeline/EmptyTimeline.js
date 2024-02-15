@@ -1,54 +1,20 @@
 const emptyTimeline = {
-  monthOrder: ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ],
+  order: ["Fall", "Winter", "Spring", "Summer"],
 
-  January: {
-    title: "January",
+  Fall: {
+    title: "Fall",
     programIds: []
   },
-  February: {
-    title: "February",
+  Winter: {
+    title: "Winter",
     programIds: []
   },
-  March: {
-    title: "March",
+  Spring: {
+    title: "Spring",
     programIds: []
   },
-  April: {
-    title: "April",
-    programIds: []
-  },
-  May: {
-    title: "May",
-    programIds: []
-  },
-  June: {
-    title: "June",
-    programIds: []
-  },
-  July: {
-    title: "July",
-    programIds: []
-  },
-  August: {
-    title: "August",
-    programIds: []
-  },
-  September: {
-    title: "September",
-    programIds: []
-  },
-  October: {
-    title: "October",
-    programIds: []
-  },
-  November: {
-    title: "November",
-    programIds: []
-  },
-  December: {
-    title: "December",
+  Summer: {
+    title: "Summer",
     programIds: []
   },
 };
