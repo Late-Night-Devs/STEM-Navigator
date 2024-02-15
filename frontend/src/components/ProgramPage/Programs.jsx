@@ -262,6 +262,7 @@ const ProgramCard = ({
       <FontAwesomeIcon
         icon={isFavorite ? solidStar : regularStar}
         className="star-icon position-absolute top-0 end-0 m-2"
+        aria-hidden="false"
         onClick={() => {
           toggleFavorite();
           handleFavoriteClicked();
@@ -272,13 +273,13 @@ const ProgramCard = ({
         }}
       />
       <Card.Body>
-        <Card.Title as="h5">{program.title}</Card.Title>
+        <Card.Title as="h5" tabIndex="0">{program.title}</Card.Title>
         <Card.Text as="div">
               {isCollapsed === false ? "" : <br aria-hidden="true"/>}
               <ProgramDetailsTitle isCollapsed={isCollapsed}/>
               <div>Lead Contact: {program.lead_contact}</div>
-              <div>Lead Contact Email:{" "} <a href={`mailto:${program.contact_email}`}> {program.contact_email}</a></div>
-              <ProgramHomepage isCollapsed={isCollapsed} program={program}/>
+              <div>Lead Contact Email:{" "} <a href={`mailto:${program.contact_email}`} tabIndex="-1"> {program.contact_email}</a></div>
+              <ProgramWebsite isCollapsed={isCollapsed} program={program} tabIndex="-1"/>
               <ProgramDuration program={program} />  <br aria-hidden="true"/>
           <Collapse in={isCollapsed}>
             <div id="collapse-text">
@@ -297,6 +298,7 @@ const ProgramCard = ({
       </Card.Body>
       <Card.Footer className="text-center">
         <Button
+          tabIndex="-1"
           onClick={() => {
             changeColumnWidth();
             toggleIsCollapsed(!isCollapsed);
@@ -305,7 +307,7 @@ const ProgramCard = ({
           aria-controls="collapse-text"
           aria-expanded={isCollapsed}
         >
-          <ShowMoreShowLess isExpanded={isExpanded} />
+          <ShowMoreShowLess isExpanded={isExpanded} tabIndex="-1"/>
         </Button>
       </Card.Footer>
     </Card>
@@ -318,9 +320,9 @@ const ProgramDetailsTitle = ({ isCollapsed }) => {
   } </div>
 };
 
-const ProgramHomepage = ({ isCollapsed, program }) => {
+const ProgramWebsite = ({ isCollapsed, program }) => {
   return <div> {
-    isCollapsed === false ? "" : <>Program Homepage:  <a href={program.link_to_web}> {program.link_to_web}</a></>
+    isCollapsed === false ? "" : <>Program Website: <a href={program.link_to_web} tabIndex="-1"> {program.link_to_web}</a></>
   } </div>
 };
 

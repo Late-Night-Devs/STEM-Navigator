@@ -195,7 +195,7 @@ const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
         {Object.entries(categories).map(([category, tags]) => (
           <Col key={category} md={4} className="mb-4 ">
             <Card>
-              <Card.Header as="h5" className="bg-success text-white" aria-label={`${category} tag category`}>
+              <Card.Header as="h5" className="bg-success text-white" aria-label={`${category} tag category`} tabIndex="0">
                 {category}
               </Card.Header>
               <Card.Body
@@ -208,6 +208,7 @@ const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
                     id={`check-${tag}-${index}`}
                     key={`${tag}-${index}`}
                     label={tag}
+                    tabIndex="-1"
                     onChange={() => handleCheckboxChange(tag)}
                   />
                 ))}
