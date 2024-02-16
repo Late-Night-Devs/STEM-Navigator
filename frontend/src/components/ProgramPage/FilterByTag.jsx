@@ -193,7 +193,7 @@ const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
         </Dropdown>
 
         {Object.entries(categories).map(([category, tags]) => (
-          <Col key={category} md={4} className="mb-4 ">
+          <Col key={category} xs={12} lg={6} xxl={4} className="mb-4 ">
             <Card>
               <Card.Header as="h5" className="bg-success text-white" aria-label={`${category} tag category`} tabIndex="0">
                 {category}

@@ -57,8 +57,10 @@ function ProgramTab() {
       </Row>
       <Row className="mt-5">
         <Col
-          md={12}
-          lg={6}
+        xs={12}
+        sm={6}
+        md={5}
+        lg={6}
           role="region"
           aria-label="FILTER PROGRAMS BY TAG"
         >
@@ -68,7 +70,9 @@ function ProgramTab() {
           />
         </Col>
         <Col
-          md={12}
+          xs={12}
+          sm={6}
+          md={7}
           lg={6}
           className="border-end rounded shadow "
           style={{ minHeight: "200px" }}

@@ -97,7 +97,7 @@ const Programs = ({ selectedTagIds, cookieUID, handleFavoriteClicked }) => {
         <SearchByProgram handleSearchByProgram={handleSearchByProgram} />
         {currentItems.map((program) => (
           <ProgramColumn
-            key={program.id}
+            key={program.title}
             program={program}
             programTags={programTags}
             tags={tags}
@@ -143,23 +143,26 @@ const ProgramColumn = ({
   cookieUID,
   handleFavoriteClicked,
 }) => {
-  const [mdValue, setMdValue] = useState(4);
+  const [mdValue,  setMdValue]  = useState(6);
+  const [xxlValue, setXxlValue] = useState(4);
 
-  const changeMdValue = () => {
-    if (mdValue === 4) {
-      setMdValue(12);
-    } else {
-      setMdValue(4);
-    }
+  const changeColumnWidth = () => {
+    mdValue  === 6 ? setMdValue (12) : setMdValue (6);
+    xxlValue === 4 ? setXxlValue(12) : setXxlValue(4);
+    // if (mdValue === 4) {
+    //   setMdValue(12);
+    // } else {
+    //   setMdValue(4);
+    // }
   };
 
   return (
-    <Col key={program.id} md={mdValue} className="mb-4">
+    <Col key={program.id} xs={12} md={mdValue} xxl={xxlValue} className="mb-4">
       <ProgramCard
         program={program}
         programTags={programTags}
         tags={tags}
-        changeColumnWidth={changeMdValue}
+        changeColumnWidth={changeColumnWidth}
         cookieUID={cookieUID}
         handleFavoriteClicked={handleFavoriteClicked}
       />
