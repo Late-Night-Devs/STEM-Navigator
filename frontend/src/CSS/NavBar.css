@@ -17,3 +17,7 @@
 .nav-item a {
   color: #121111;
 }
+
+.nav-item:hover .nav-link {
+  color: #ffffff; /* Change color on hover */
+}
