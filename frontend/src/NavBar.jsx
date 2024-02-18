@@ -14,7 +14,6 @@ const NavBar = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isUserID, setUserID] = useState(false);
   const [isOpen, setIsOpen] = useState(false); // State for controlling mobile menu
-
   // Ref for referencing the menu container
   const dispearMenu = useRef(null);
 
@@ -39,6 +38,7 @@ const NavBar = () => {
       setIsOpen(false);
     }
   };
+
   // Add event listener to detect clicks outside the menu and call handleClickOutside
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -73,7 +73,7 @@ const NavBar = () => {
   return (
     <>
       <nav className="navbar navbar-expand-lg">
-        <div className="container-fluid text-dark">
+        <div className="container-fluid">
           <div className="pl-5">
             <img
               className="d-inline-block align-top logo-image"
@@ -96,9 +96,8 @@ const NavBar = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div
-            className={`collapse navbar-collapse justify-content-between Larger ${
-              isOpen ? "show" : ""
-            }`}
+            className={`navbar-collapse justify-content-between Larger 
+                 collapse ${isOpen ? "show" : ""}`}
             ref={dispearMenu}
             id="navbarNav"
           >
@@ -186,7 +185,9 @@ const NavBar = () => {
                   </NavLink>
                 </li>
               )}
-              <LogInOutBtn />
+              <li className="nav-item">
+                <LogInOutBtn />
+              </li>
             </ul>
           </div>
         </div>

@@ -1,30 +1,50 @@
+/* Styles for the navbar */
 .navbar {
-  /* color for the navbar */
   background-color: rgba(106, 127, 16, 1); 
 }
 
-
+/* Styles for the logo image */
 .logo-image {
-  margin-left: 20px;
+  margin-left: 20px; 
   margin-bottom: 10px;
-  margin-top: 10px;
+  margin-top: 10px; 
 }
 
+/* Styles for navbar items */
 .navbar-nav .nav-item {
-  display: block;
-}
-.nav-item {
-  padding: 5px;
-  font-weight: bold;
-  font-size: larger;
-  margin-left: 1px;
-  display: block;
-}
-.nav-item a {
-  color: #121111;
+  display: block; 
 }
 
-.nav-item .nav-link:hover  {
+/* Styles for navbar links */
+.navbar-nav .nav-link {
+  font-size: 16px; 
+  font-family: 'Montserrat', sans-serif; 
+}
+
+/* Styles for individual nav items */
+.nav-item {
+  padding-left: 10px; 
+  font-weight: bold; 
+  font-size: larger; 
+  margin-left: 1px; 
+  display: block; 
+}
+
+/* Styles for nav item links */
+.nav-item a {
+  color: #121111; /* Set text color */
+}
+
+/* Styles for nav link hover */
+.nav-item .nav-link:hover {
   color: #ffffff; /* Change color on hover */
-    /* font-weight: bolder; */
+}
+
+/* Media query for smaller screens */
+@media (max-width: 1024px) {
+  /* Adjust padding for smaller screens */
+  .nav-item {
+    padding-left: 5px; 
+    transition: padding-left 0.4s ease; 
+  }
 }

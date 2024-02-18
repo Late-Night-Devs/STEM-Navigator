@@ -4,7 +4,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Link } from "react-router-dom";
 import loadingBtn from "../../image/loadingBtn.gif";
 import Cookies from "js-cookie";
-import "../../CSS/NavBar.css";
 
 const LogInOutBtn = () => {
   const { loginWithRedirect, logout, isAuthenticated, isLoading, user } =
@@ -24,7 +23,7 @@ const LogInOutBtn = () => {
     }
   };
   return (
-    <div className="sm:">
+    <div>
       {/* User authentication section */}
       {isLoading ? (
         // Display loading indicator when authentication status is being determined
