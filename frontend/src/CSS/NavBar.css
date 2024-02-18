@@ -8,6 +8,7 @@
   margin-left: 20px; 
   margin-bottom: 10px;
   margin-top: 10px; 
+  height: 40px;
 }
 
 /* Styles for navbar items */
@@ -18,21 +19,22 @@
 /* Styles for navbar links */
 .navbar-nav .nav-link {
   font-size: 16px; 
-  font-family: 'Montserrat', sans-serif; 
+  font-weight: 700;
+  letter-spacing:0.075em;
+
 }
 
 /* Styles for individual nav items */
 .nav-item {
   padding-left: 10px; 
-  font-weight: bold; 
-  font-size: larger; 
   margin-left: 1px; 
   display: block; 
+  
 }
 
 /* Styles for nav item links */
 .nav-item a {
-  color: #121111; /* Set text color */
+  color: #000000; /* Set text color */
 }
 
 /* Styles for nav link hover */
@@ -40,11 +42,27 @@
   color: #ffffff; /* Change color on hover */
 }
 
-/* Media query for smaller screens */
-@media (max-width: 1024px) {
-  /* Adjust padding for smaller screens */
+/* Media query for screens up to 1060px */
+@media (max-width: 1060px) {
+  /* Styles for smaller screens */
   .nav-item {
-    padding-left: 5px; 
-    transition: padding-left 0.4s ease; 
+    padding-left: 5px;
+    font-size: 15px;
+    transition: padding-left 0.4s ease;
+  }
+}
+
+/* Media query for screens up to 991px */
+@media (max-width: 991px) {
+  /* Styles for smaller screens */
+  .navbar .logo-image {
+    height: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Styles for smaller screens */
+  .navbar .logo-image {
+    height: 45px;
   }
 }

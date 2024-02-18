@@ -79,7 +79,6 @@ const NavBar = () => {
               className="d-inline-block align-top logo-image"
               alt="icon-logo"
               src={logo}
-              height="40"
             />
           </div>
 
@@ -117,7 +116,7 @@ const NavBar = () => {
                   Home
                 </NavLink>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <NavLink
                   exact
                   to="/events"
@@ -127,7 +126,7 @@ const NavBar = () => {
                 >
                   Events
                 </NavLink>
-              </li>
+              </li> */}
               <li className="nav-item">
                 <NavLink
                   exact
@@ -161,6 +160,17 @@ const NavBar = () => {
                   Program
                 </NavLink>
               </li>
+              {/* <li className="nav-item ">
+                <NavLink
+                  exact
+                  to="/contact"
+                  className={({ isActive }) =>
+                    `nav-link ${isActive && activeLink} `
+                  }
+                >
+                  Newsletter
+                </NavLink>
+              </li> */}
               <li className="nav-item ">
                 <NavLink
                   exact
