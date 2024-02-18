@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
-import logo from "./image/PSU_logo.png";
+import logo from "./image/PSU_logo2.svg";
 import "./CSS/NavBar.css";
 import LogInOutBtn from "./components/Auth0/logInOutBtn";
 import { useAuth0 } from "@auth0/auth0-react"; // Import the Auth0 hook
@@ -26,15 +26,19 @@ const NavBar = () => {
     setIsOpen(!isOpen);
   };
 
+  console.log("is open:  ", isOpen);
   // Function to handle clicks outside the menu, closing it if clicked outside
   const handleClickOutside = (event) => {
     // Check if the click event occurred outside the menu container
-    if (dispearMenu.current && !dispearMenu.current.contains(event.target)) {
+    if (
+      dispearMenu.current &&
+      !dispearMenu.current.contains(event.target) &&
+      !event.target.closest(".navbar-toggler") // Check if the collapse button is clicked
+    ) {
       // Close the menu if it's open
       setIsOpen(false);
     }
   };
-
   // Add event listener to detect clicks outside the menu and call handleClickOutside
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -70,9 +74,9 @@ const NavBar = () => {
     <>
       <nav className="navbar navbar-expand-lg">
         <div className="container-fluid text-dark">
-          <div>
+          <div className="pl-5">
             <img
-              className="d-inline-block align-top"
+              className="d-inline-block align-top logo-image"
               alt="icon-logo"
               src={logo}
               height="40"
@@ -108,7 +112,7 @@ const NavBar = () => {
                   exact
                   to="/"
                   className={({ isActive }) =>
-                    `linkStyle nav-link ${isActive && activeLink} `
+                    `nav-link ${isActive && activeLink} `
                   }
                 >
                   Home
@@ -119,7 +123,7 @@ const NavBar = () => {
                   exact
                   to="/events"
                   className={({ isActive }) =>
-                    `linkStyle nav-link ${isActive && activeLink} `
+                    `nav-link ${isActive && activeLink} `
                   }
                 >
                   Events
@@ -130,7 +134,7 @@ const NavBar = () => {
                   exact
                   to="/scholarship"
                   className={({ isActive }) =>
-                    `linkStyle nav-link ${isActive && activeLink} `
+                    `nav-link ${isActive && activeLink} `
                   }
                 >
                   Scholarship
@@ -141,7 +145,7 @@ const NavBar = () => {
                   exact
                   to="/calendar"
                   className={({ isActive }) =>
-                    `linkStyle nav-link ${isActive && activeLink} `
+                    `nav-link ${isActive && activeLink} `
                   }
                 >
                   Calendar
@@ -152,21 +156,10 @@ const NavBar = () => {
                   exact
                   to="/program"
                   className={({ isActive }) =>
-                    `linkStyle nav-link ${isActive && activeLink} `
+                    `nav-link ${isActive && activeLink} `
                   }
                 >
                   Program
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink
-                  exact
-                  to="/newsletter"
-                  className={({ isActive }) =>
-                    `linkStyle nav-link ${isActive && activeLink} `
-                  }
-                >
-                  Newsletter
                 </NavLink>
               </li>
               <li className="nav-item ">
@@ -174,7 +167,7 @@ const NavBar = () => {
                   exact
                   to="/contact"
                   className={({ isActive }) =>
-                    `linkStyle nav-link ${isActive && activeLink} `
+                    `nav-link ${isActive && activeLink} `
                   }
                 >
                   Contact
@@ -186,16 +179,16 @@ const NavBar = () => {
                     exact
                     to="/admin-modify-db"
                     className={({ isActive }) =>
-                      `linkStyle nav-link ${isActive && activeLink} `
+                      `nav-link ${isActive && activeLink} text-nowrap`
                     }
                   >
                     Admin Tools
                   </NavLink>
                 </li>
               )}
+              <LogInOutBtn />
             </ul>
           </div>
-          <LogInOutBtn />
         </div>
       </nav>
 
