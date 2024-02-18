@@ -8,13 +8,18 @@ import LoginMessage from "./components/Auth0/LoginMessage.jsx";
 import Cookies from "js-cookie"; // Import Cookies
 
 const NavBar = () => {
-  const { isAuthenticated } = useAuth0(); // Get user information
+  // Get user authentication information from Auth0
+  const { isAuthenticated } = useAuth0();
+  // State variables for managing admin status, user ID, and menu toggling
   const [isAdmin, setIsAdmin] = useState(false);
   const [isUserID, setUserID] = useState(false);
-  const activeLink = "bg-light text-dark rounded p-1";
-  const normalLink = "";
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // State for controlling mobile menu
+
+  // Ref for referencing the menu container
   const dispearMenu = useRef(null);
+
+  // CSS class for highlighting active links in the navbar
+  const activeLink = "bg-light text-dark rounded p-2";
 
   // Function to toggle the menu open/close state
   const handleMenuToggle = () => {
@@ -87,20 +92,24 @@ const NavBar = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div
-            className={`collapse navbar-collapse justify-content-between Larger ${isOpen ? "show" : ""
-              }`}
+            className={`collapse navbar-collapse justify-content-between Larger ${
+              isOpen ? "show" : ""
+            }`}
             ref={dispearMenu}
             id="navbarNav"
           >
-            <ul className={`navbar-nav ${isOpen ? "flex-column" : "flex-row ms-auto"}`}>
-              <li className="nav-item custom-list">
+            <ul
+              className={`navbar-nav ${
+                isOpen ? "flex-column" : "flex-row ms-auto"
+              }`}
+            >
+              <li className="nav-item">
                 <NavLink
                   exact
                   to="/"
                   className={({ isActive }) =>
-                    `linkStyle nav-link ${isActive && activeLink}`
+                    `linkStyle nav-link ${isActive && activeLink} `
                   }
-                  style={{ textDecoration: "none" }}
                 >
                   Home
                 </NavLink>
@@ -110,9 +119,8 @@ const NavBar = () => {
                   exact
                   to="/events"
                   className={({ isActive }) =>
-                    `linkStyle nav-link ${isActive && activeLink}`
+                    `linkStyle nav-link ${isActive && activeLink} `
                   }
-                  style={{ textDecoration: "none" }}
                 >
                   Events
                 </NavLink>
@@ -122,9 +130,8 @@ const NavBar = () => {
                   exact
                   to="/scholarship"
                   className={({ isActive }) =>
-                    `linkStyle nav-link ${isActive && activeLink}`
+                    `linkStyle nav-link ${isActive && activeLink} `
                   }
-                  style={{ textDecoration: "none" }}
                 >
                   Scholarship
                 </NavLink>
@@ -134,9 +141,8 @@ const NavBar = () => {
                   exact
                   to="/calendar"
                   className={({ isActive }) =>
-                    `linkStyle nav-link ${isActive && activeLink}`
+                    `linkStyle nav-link ${isActive && activeLink} `
                   }
-                  style={{ textDecoration: "none" }}
                 >
                   Calendar
                 </NavLink>
@@ -146,9 +152,8 @@ const NavBar = () => {
                   exact
                   to="/program"
                   className={({ isActive }) =>
-                    `linkStyle nav-link ${isActive && activeLink}`
+                    `linkStyle nav-link ${isActive && activeLink} `
                   }
-                  style={{ textDecoration: "none" }}
                 >
                   Program
                 </NavLink>
@@ -158,21 +163,19 @@ const NavBar = () => {
                   exact
                   to="/newsletter"
                   className={({ isActive }) =>
-                    `linkStyle nav-link ${isActive && activeLink}`
+                    `linkStyle nav-link ${isActive && activeLink} `
                   }
-                  style={{ textDecoration: "none" }}
                 >
                   Newsletter
                 </NavLink>
               </li>
-              <li className="nav-item">
+              <li className="nav-item ">
                 <NavLink
                   exact
                   to="/contact"
                   className={({ isActive }) =>
-                    `linkStyle nav-link ${isActive && activeLink}`
+                    `linkStyle nav-link ${isActive && activeLink} `
                   }
-                  style={{ textDecoration: "none" }}
                 >
                   Contact
                 </NavLink>
@@ -183,9 +186,8 @@ const NavBar = () => {
                     exact
                     to="/admin-modify-db"
                     className={({ isActive }) =>
-                      `linkStyle nav-link ${isActive && activeLink}`
+                      `linkStyle nav-link ${isActive && activeLink} `
                     }
-                    style={{ textDecoration: "none" }}
                   >
                     Admin Tools
                   </NavLink>

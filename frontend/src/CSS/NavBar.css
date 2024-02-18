@@ -1,14 +1,14 @@
 .navbar {
   background-color: rgba(109, 139, 39, 1);
 }
-.nav-link {
+/* .nav-link {
   font-weight: bolder;
-}
+} */
 .navbar-nav .nav-item {
   display: block;
 }
 .nav-item {
-  padding: 10px;
+  padding: 5px;
   font-weight: bold;
   font-size: larger;
   margin-left: 1px;
@@ -18,6 +18,7 @@
   color: #121111;
 }
 
-.nav-item:hover .nav-link {
+.nav-item .nav-link:hover  {
   color: #ffffff; /* Change color on hover */
+    /* font-weight: bolder; */
 }
