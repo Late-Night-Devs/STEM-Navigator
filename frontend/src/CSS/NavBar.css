@@ -42,6 +42,12 @@
   color: #ffffff; /* Change color on hover */
 }
 
+.navbar-toggler:hover {
+  background-color: #ffffff;
+  border-color: #000; 
+}
+
+
 /* Media query for screens up to 1060px */
 @media (max-width: 1060px) {
   /* Styles for smaller screens */

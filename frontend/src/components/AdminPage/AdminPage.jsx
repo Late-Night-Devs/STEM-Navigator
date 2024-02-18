@@ -15,6 +15,7 @@ const PageContainer = styled.div`
 
 const ProgramsAndTagsRow = styled(Row)`
   padding: 2rem;
+  margin: 0;
 `;
 
 const StickyColumn = styled(Col)`
