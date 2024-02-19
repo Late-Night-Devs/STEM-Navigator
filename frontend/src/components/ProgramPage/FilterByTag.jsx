@@ -194,7 +194,7 @@ const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
 
         {Object.entries(categories).map(([category, tags]) => (
           <Col key={category} md={4} className="mb-4 ">
-            <Card>
+            <Card className="w-100 h-100">
               <Card.Header as="h5" className="bg-success text-white">
                 {category}
               </Card.Header>

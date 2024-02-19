@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Row, Col} from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import axios from "axios";
 import ProgramCard from "./ProgramCard";
 import useFetchData from "../AdminPage/dataUtils";
@@ -28,27 +28,30 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
           withCredentials: true,
         }
       );
-    if (response.data.length > 0) {
-      if (response.data.length > 1) {
-        const sortedPrograms = response.data
-          .map((program) => {
-            // Add the isFavorite property to each program object
-            return { ...program, isFavorite: true };
-          })
-          .sort((a, b) => {
-            return a.title.localeCompare(b.title);
-          });
+      if (response.data.length > 0) {
+        if (response.data.length > 1) {
+          const sortedPrograms = response.data
+            .map((program) => {
+              // Add the isFavorite property to each program object
+              return { ...program, isFavorite: true };
+            })
+            .sort((a, b) => {
+              return a.title.localeCompare(b.title);
+            });
 
-        setFavoritePrograms(sortedPrograms);
+          setFavoritePrograms(sortedPrograms);
+        } else {
+          // Handle only one favorite program.
+          const programWithIsFavorite = {
+            ...response.data[0],
+            isFavorite: true,
+          };
+          setFavoritePrograms([programWithIsFavorite]);
+        }
       } else {
-        // Handle only one favorite program.
-        const programWithIsFavorite = { ...response.data[0], isFavorite: true };
-        setFavoritePrograms([programWithIsFavorite]);
+        // Handle case where there is no data
+        setFavoritePrograms([]);
       }
-    } else {
-      // Handle case where there is no data
-      setFavoritePrograms([]);
-    }
     } catch (error) {
       console.log(
         "-----!!!!---- fetching fav programs from favorite display ERROR ----------"
@@ -171,6 +174,5 @@ function ProgramColumn({
     </Col>
   );
 }
-
 
 export default FavoriteProgramsDisplay;
