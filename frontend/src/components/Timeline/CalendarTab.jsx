@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 import FavoritesBank from "./FavoritesBank";
 import Timeline from "./Timeline";
 import emptyTimeline from "./EmptyTimeline";
@@ -32,12 +32,16 @@ const testPgrms = [
     id: uuid4(),
   },
 ];
+const currDate = new Date();
+const currYear = currDate.getFullYear();
+const first4Years = [ currYear, currYear+1, currYear+2, currYear+3 ];
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 function CalendarTab() {
   const [favoritesList, setFavoritesList] = useState(testPgrms);
   const [timeline, setTimeline] = useState(emptyTimeline);
+  const [years, setYears] = useState(first4Years);
   const { isAuthenticated } = useAuth0();
   // get userID from cookies 
   const cookieUID = Cookies.get("cookieUId");
@@ -184,11 +188,36 @@ function CalendarTab() {
     setTimeline(updatedTimeline);
   }
 
-  const currDate = new Date();
-  const currYear = currDate.getFullYear();
-  const first4years = [
-    currYear, currYear+1, currYear+2, currYear+3
-  ];
+  function addYear() {
+    const newYear = currYear + years.length;
+    // don't push this to 'years' array until end
+    // to keep years.length the same value
+
+    const updatedTimeline = {
+      ...timeline,
+      ['Fall'+years.length]: {
+        title: 'Fall'+years.length,
+        programIds: []
+      },
+      ['Winter'+years.length]: {
+        title: 'Winter'+years.length,
+        programIds: []
+      },
+      ['Spring'+years.length]: {
+        title: 'Spring'+years.length,
+        programIds: []
+      },
+      ['Summer'+years.length]: {
+        title: 'Summer'+years.length,
+        programIds: []
+      },
+    }
+
+    const updatedYears = years;
+    updatedYears.push(newYear);
+    setYears(updatedYears);
+    setTimeline(updatedTimeline);
+  }
 
   return (
     <Container fluid>
@@ -199,10 +228,15 @@ function CalendarTab() {
           cookieUID={cookieUID}
           handleFavoriteClicked={handleFavoriteClicked}
         />
+
+        <Button onClick={() => addYear()} className="my-3" id="newYear">
+          New Year
+        </Button>
+
         {/* drag n drop the program to the timeline */}
-        {first4years.map((year, index) => (
+        {years.map((year, index) => (
           <div className="timelineContainer">
-            <h3>{year}-{year+1}</h3>
+            <h3 className="my-0">{year}-{year+1}</h3>
             <Timeline
               timelineData={timeline}
               year={index}

@@ -6,7 +6,7 @@ function Timeline({
   timelineData, year, programOptions, cookieUID, handleFavoriteClicked,
 }) {
   return (
-    <div className="my-4 mx-1 p-3 timeline">
+    <div className="mt-2 mb-4 mx-1 p-3 timeline">
       {timelineData.order.map((name) => (
         <MonthCol
           title={timelineData[name+year].title}
