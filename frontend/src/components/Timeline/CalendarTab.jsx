@@ -9,11 +9,34 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import Cookies from "js-cookie"; // Import Cookies
 
+const testPgrms = [
+  {
+    title: "LSAMP",
+    lead_contact: "Joyce Pieretti Ph.D",
+    contact_email: "lsamp@pdx.edu",
+    link_to_web: "https://www.pdx.edu/alliance-minority-participation/",
+    id: uuid4(),
+  },
+  {
+    title: "MESA C2C",
+    lead_contact: "Yongwen Lampert",
+    contact_email: "mesac2c@pcc.edu",
+    link_to_web: "https://www.pcc.edu/maker/stem-center/programming/mesac2c/",
+    id: uuid4(),
+  },
+  {
+    title: "ACCESS",
+    lead_contact: "Vvdaul Holloway",
+    contact_email: "vvdaul.holloway@pdx.edu",
+    link_to_web: "https://ondeck.pdx.edu/multicultural-retention-services/access",
+    id: uuid4(),
+  },
+];
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 function CalendarTab() {
-  const [favoritesList, setFavoritesList] = useState([]);
+  const [favoritesList, setFavoritesList] = useState(testPgrms);
   const [timeline, setTimeline] = useState(emptyTimeline);
   const { isAuthenticated } = useAuth0();
   // get userID from cookies 
@@ -39,7 +62,7 @@ function CalendarTab() {
       const addIDToPrograms = response.data && Array.isArray(response.data)
         ? response.data.map(program => ({
           ...program,
-          id: uuid4(), // Add a new 'id' property with a UUID value
+          id: uuid4(), // Add a new 'id' property with a UUID value to allow infinite copies
         }))
         : []; // Return an empty array if response.data is not iterable
 
@@ -67,8 +90,7 @@ function CalendarTab() {
   };
 
   const [isFavoriteClicked, setFavoriteClicked] = useState(false);
-  // no matter what is true or false for the favorite btn as long as they click on the star icon
-  // it needs to re-render the site again to update favorite programs.
+  // re-render the site again to update favorite programs.
   const handleFavoriteClicked = () => setFavoriteClicked(!isFavoriteClicked);
   // unmount the click is back to false until the user clicks on the favorite
   console.log("1/isFavoriteClicked:  ", isFavoriteClicked)
@@ -84,55 +106,64 @@ function CalendarTab() {
   // =================== DONE ==========================================//
 
   // must be inside here to have access to "setTimeline"
-  // TO DO: clean up inside, move outside of component & pass in "setTimeline"
   function onDragEnd(result) {
     const { source, destination } = result;
 
-    if (!destination || destination.droppableId === 'bankDroppable') return;
+    if (!destination) return; // invalid destination
 
+    if (  // putting timeline entries back into bank
+      source.droppableId != 'bankDroppable' && 
+      destination.droppableId === 'bankDroppable'
+    ) {
+      const srcMonth = timeline[source.droppableId];
+      const srcList = Array.from(srcMonth.programIds);
+      srcList.splice(source.index, 1);
+
+      const updatedTimeline = {
+        ...timeline,
+        [srcMonth.title]: {
+          ...srcMonth,
+          programIds: srcList
+        },
+      }
+      setTimeline(updatedTimeline);
+      return;
+    }
+
+    const destMonth = timeline[destination.droppableId];
+    const destList = Array.from(destMonth.programIds);
+    let updatedTimeline = null;
     switch (source.droppableId) {
-      case destination.droppableId: {
-        const month = timeline[destination.droppableId];
-        const reorderedList = Array.from(month.programIds);
-        const [movedProgram] = reorderedList.splice(source.index, 1);
-        reorderedList.splice(destination.index, 0, movedProgram);
-
-        const updatedTimeline = {
+      case destination.droppableId: // reorder programs in same term
+        updatedTimeline = {
           ...timeline,
-          [month.title]: {
-            ...month,
-            programIds: reorderedList
+          [destMonth.title]: {
+            ...destMonth,
+            programIds: reorderPrograms(destList, source.index, destination.index)
           },
         }
-        setTimeline(updatedTimeline);
         break;
-      }
-      case 'bankDroppable': {
-        const month = timeline[destination.droppableId];
-        const updatedList = Array.from(month.programIds);
-        const program = favoritesList[source.index];
-        updatedList.splice(destination.index, 0, { ...program, id: uuid4() });
 
-        const updatedTimeline = {
+      case 'bankDroppable': // add new program to timeline from bank
+        updatedTimeline = {
           ...timeline,
-          [month.title]: {
-            ...month,
-            programIds: updatedList
+          [destMonth.title]: {
+            ...destMonth,
+            programIds: addProgram(
+              favoritesList, source.index, destination.index, destList
+            )
           },
         }
-        setTimeline(updatedTimeline);
         break;
-      }
-      default: {
+
+      default:  // move program entries between terms
         const srcMonth = timeline[source.droppableId];
-        const destMonth = timeline[destination.droppableId];
+        const srcList = Array.from(srcMonth.programIds);
+        const [updatedSrcList, updatedDestList] = moveProgram(
+          srcList, destList, source.index, destination.index
+        );
 
-        const updatedSrcList = Array.from(srcMonth.programIds);
-        const updatedDestList = Array.from(destMonth.programIds);
-        const [movedProgram] = updatedSrcList.splice(source.index, 1);
-        updatedDestList.splice(destination.index, 0, movedProgram);
-
-        const updatedTimeline = {
+        updatedTimeline = {
           ...timeline,
           [srcMonth.title]: {
             ...srcMonth,
@@ -143,24 +174,57 @@ function CalendarTab() {
             programIds: updatedDestList
           },
         }
-        setTimeline(updatedTimeline);
         break;
-      }
     }
+
+    setTimeline(updatedTimeline);
   }
+
 
   return (
     <Container fluid>
       <DragDropContext onDragEnd={onDragEnd}>
         {/* display favorite programs */}
-        <FavoritesBank favoritesList={favoritesList} cookieUID={cookieUID} handleFavoriteClicked={handleFavoriteClicked} />
+        <FavoritesBank
+          favoritesList={favoritesList}
+          cookieUID={cookieUID}
+          handleFavoriteClicked={handleFavoriteClicked}
+        />
         {/* drag n drop the program to the timeline */}
         <div id="timelineContainer">
-          <Timeline timelineData={timeline} programOptions={favoritesList} cookieUID={cookieUID} handleFavoriteClicked={handleFavoriteClicked} />
+          <Timeline
+          timelineData={timeline}
+          programOptions={favoritesList}
+          cookieUID={cookieUID}
+          handleFavoriteClicked={handleFavoriteClicked}
+        />
         </div>
       </DragDropContext>
     </Container>
   );
+}
+
+function reorderPrograms(programList, srcIndex, destIndex) {
+  const [moved] = programList.splice(srcIndex, 1);
+  programList.splice(destIndex, 0, moved);
+
+  return programList;
+}
+
+function addProgram(favoritesList, srcIndex, destIndex, updatedList) {
+  const program = favoritesList[srcIndex];
+  updatedList.splice(destIndex, 0, { ...program, id: uuid4() });
+
+  return updatedList;
+}
+
+function moveProgram(srcList, destList, srcIndex, destIndex) {
+  const updatedSrcList = srcList;
+  const updatedDestList = destList;
+  const [moved] = updatedSrcList.splice(srcIndex, 1);
+  updatedDestList.splice(destIndex, 0, moved);
+
+  return [updatedSrcList, updatedDestList];
 }
 
 export default CalendarTab;
