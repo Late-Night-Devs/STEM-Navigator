@@ -110,9 +110,13 @@ function CalendarTab() {
     const { source, destination } = result;
 
     if (!destination) return; // invalid destination
+    if (  // cancelled add from bank
+      source.droppableId === 'bankDroppable' &&
+      destination.droppableId === 'bankDroppable'
+    ) return;
 
     if (  // putting timeline entries back into bank
-      source.droppableId != 'bankDroppable' && 
+      source.droppableId !== 'bankDroppable' && 
       destination.droppableId === 'bankDroppable'
     ) {
       const srcMonth = timeline[source.droppableId];
@@ -180,6 +184,11 @@ function CalendarTab() {
     setTimeline(updatedTimeline);
   }
 
+  const currDate = new Date();
+  const currYear = currDate.getFullYear();
+  const first4years = [
+    currYear, currYear+1, currYear+2, currYear+3
+  ];
 
   return (
     <Container fluid>
@@ -191,14 +200,18 @@ function CalendarTab() {
           handleFavoriteClicked={handleFavoriteClicked}
         />
         {/* drag n drop the program to the timeline */}
-        <div id="timelineContainer">
-          <Timeline
-          timelineData={timeline}
-          programOptions={favoritesList}
-          cookieUID={cookieUID}
-          handleFavoriteClicked={handleFavoriteClicked}
-        />
-        </div>
+        {first4years.map((year, index) => (
+          <div className="timelineContainer">
+            <h3>{year}-{year+1}</h3>
+            <Timeline
+              timelineData={timeline}
+              year={index}
+              programOptions={favoritesList}
+              cookieUID={cookieUID}
+              handleFavoriteClicked={handleFavoriteClicked}
+            />
+          </div>
+        ))}
       </DragDropContext>
     </Container>
   );

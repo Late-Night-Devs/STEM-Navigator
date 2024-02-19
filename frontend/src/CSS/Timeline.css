@@ -1,13 +1,13 @@
-#bank, #timeline, .monthCol {
+#bank, .timeline, .monthCol {
   border: 1px solid darkgray;
 }
 
-#timelineContainer {
+.timelineContainer {
   width: 100%;
   overflow-x: auto;
 }
 
-#timeline {
+.timeline {
   display: inline-flex;
 }
 
