@@ -21,26 +21,40 @@ const StickyColumn = styled(Col)`
   position: sticky;
   top: 50px;
   height: fit-content; // Adjust the height
-  max-height: 100vh; // Limit the max height
-  overflow-y: visible; // allow overflow to be visible
 `;
 
-const ErrorMessage = styled.div`
+  // other Messages inherit from this to reduce redundancy
+  const BaseMessage = styled.h5`
+  text-align: center;
+  padding: 2rem;
+  border-radius: 5px;
+  `
+
+// appears when there is not a connection to the backend
+const ErrorMessage = styled(BaseMessage)`
   background-color: #dc3545; // Bootstrap danger background
   color: white;
-  text-align: center;
-  padding: 2rem;
-  border-radius: 5px;
 `;
 
-const DefaultMessage = styled.div`
-  text-align: center;
+// appears by default place of the selected program or tag form 
+const DefaultMessage = styled(BaseMessage)`
   border: 1px solid black;
-  border-radius: 5px;
-  padding: 2rem;
   margin: 3rem;
   flex-fill: 1;
 `;
+
+// appears on small screens to inform user to scroll down to edit 
+// the form after they press the 'add' button or select a program or tag.
+// 992 px = large screen size
+const ScrollNotice = styled(BaseMessage)`
+  @media (max-width: 991px) {
+    display: block; // display to small screens
+  background-color: #2A2A2A;  
+  color: white;
+  }
+
+  display: none; 
+`
 
 function AdminPage() {
   const { isAuthenticated, isLoading } = useAuth0(); // Get user information
@@ -58,8 +72,6 @@ function AdminPage() {
   const [selectionState, setSelectionState] = useState({
     selectedProgram: null, // the id of the currently selected Program
     selectedTag: null, // the id of the currently selected Tag
-    addingProgram: false, // becomes true when the user presses the add btn on the ProgramsButtonList
-    addingTag: false, // becomes true when the user presses the add btn Tags ButtonList
   });
 
   /* formattedProgramTags uses Tags and formats them for use by the Select <Select options={}>*/
@@ -73,6 +85,8 @@ function AdminPage() {
   // button list items, transformed from programs and tags
   const [programItems, setProgramItems] = useState([]);
   const [tagItems, setTagItems] = useState([]);
+
+  const [submitClicked, setSubmitClicked] = useState(false);
 
   // iterate over the tags to find a tag with matching name
   function isUniqueTagName(newTagName) {
@@ -130,8 +144,6 @@ function AdminPage() {
       setSelectionState((prevState) => ({
         ...prevState,
         selectedTag: null,
-        addingProgram: false,
-        addingTag: false,
       }));
       setSelectedTagInfo(null);
     }
@@ -197,15 +209,10 @@ function AdminPage() {
   const isTagSelected = (tagId) => tagId === selectionState.selectedTag;
 
   const handleTagClick = (tag) => {
-    if (selectionState.addingProgram) {
-      selectionState.addingProgram = false;
-    }
     if (selectionState.selectedProgram !== null) {
       setSelectionState((prevState) => ({
         ...prevState,
         selectedProgram: null,
-        addingProgram: false,
-        addingTag: false,
       }));
       setSelectedProgramInfo(null);
     }
@@ -238,9 +245,7 @@ function AdminPage() {
       // Handle successful deletion
       // update the ButtonList for Programs
       // update the Form to be empty
-      //setSelectedProgram(null);
-      //setSelectedProgramInfo(null);
-
+      window.location.reload();
     };
     const onError = (error) => {
       // Handle error
@@ -251,8 +256,8 @@ function AdminPage() {
       "programs",
       selectionState.selectedProgram,
       "are you sure you want to delete the selected program?",
-      onError,
-      onSuccess
+      onSuccess,
+      onError
     );
   };
 
@@ -260,8 +265,6 @@ function AdminPage() {
     setSelectionState((prevState) => ({
       selectedProgram: -1, // -1 is an available temporary Program ID
       selectedTag: null,
-      addingProgram: true,
-      addingTag: false,
     }));
 
     setSelectedProgramInfo({
@@ -272,8 +275,8 @@ function AdminPage() {
       contact_email: "",
       link_to_web: "",
       long_description: "",
-      duration: "",
-      duration_unit: "",
+      duration: "1",
+      duration_unit: "Terms",
       },
       AssociatedTags: null
     });
@@ -285,32 +288,37 @@ function AdminPage() {
       ...prevState,
       selectedTag: -1,
       selectedProgram: null,
-      addingTag: true,
-      addingProgram: false,
     }));
     setSelectedTagInfo({tag_id: -1, tag_name: "", category:null});
     setSelectedProgramInfo(null);
   };
 
-  // not fully implemented yet
   const handleRemoveTag = () => {
     // -1 used for temporary program id of 'adding' tag
-    if (selectionState.selectedTag == null || selectionState.selectedTag === -1) {
+    if (
+      selectionState.selectedTag == null ||
+      selectionState.selectedTag === -1
+    ) {
       window.alert("No currently selected tag to remove!");
       return;
     }
+
     const onSuccess = (response_data) => {
       // Handle successful deletion
+      // Refresh page to reflect changes
+      window.location.reload();
       console.log(response_data);
     };
+
     const onError = (error) => {
       // Handle error
       console.log(error);
     };
+
     handleDelete(
-      "tags",
+      "tags/remove",
       selectionState.selectedTag,
-      "are you sure you want to delete the selected tag?",
+      "Are you sure you want to delete the selected tag?",
       onSuccess,
       onError
     );
@@ -325,15 +333,26 @@ function AdminPage() {
     return <p>Access Denied</p>;
   }
 
+  //  handle refreshing the site after a successful submission
+  const handleReloadAfterSubmission = () => setSubmitClicked(!submitClicked);
+
   return (
     <PageContainer>
       <ProgramsAndTagsRow>
         <Col md={12} lg={6}>
           {(programsError || tagsError || programTagsError) && (
             <ErrorMessage>
-              <h5>Failed to load data. Ensure the backend is running!</h5>
+              Failed to load data. Ensure the backend is running!
             </ErrorMessage>
           )}
+          <div>
+            {(selectionState.selectedProgram || selectionState.selectedTag) && (
+              <ScrollNotice>
+                This webpage works best with larger screens. Scroll down to view
+                form.
+              </ScrollNotice>
+            )}
+          </div>
           <ButtonList
             name="Programs"
             items={programItems}
@@ -361,6 +380,7 @@ function AdminPage() {
               allProgramTags={formattedTags}
               onProgramDataChange={setSelectedProgramInfo}
               isUniqueName={isUniqueProgramName}
+              handleReloadAfterSubmission={handleReloadAfterSubmission}
             />
           )}
           {selectionState.selectedTag != null && (
@@ -369,30 +389,12 @@ function AdminPage() {
               categories={formattedCategories}
               onTagDataChange={setSelectedTagInfo}
               isUniqueName={isUniqueTagName}
+              handleReloadAfterSubmission={handleReloadAfterSubmission}
             />
           )}
-          {/* render the blank form for adding new program */}
-          {selectionState.addingProgram &&
-            selectionState.selectedProgram == null && (
-              <ProgramInfo
-                programData={{}}
-                allProgramTags={formattedTags}
-                onProgramDataChange={setSelectedProgramInfo}
-              />
-            )}
-          {/* render the blank form for adding new tag */}
-          {selectionState.addingTag && selectionState.selectedTag == null && (
-            <TagInfo
-              tagData={{}}
-              categories={formattedCategories}
-              onTagDataChange={setSelectedTagInfo}
-            />
-          )}
-
+          {/* Show the default message when there is not a currently selected Tag or Program */}
           {selectionState.selectedTag == null &&
-            selectionState.selectedProgram == null &&
-            !selectionState.addingProgram &&
-            !selectionState.addingTag && (
+            selectionState.selectedProgram == null && (
               <DefaultMessage>
                 <p>Click on a Program or Tag to show information here.</p>
               </DefaultMessage>

@@ -53,46 +53,46 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
   });
 
   return (
-    <div>
-      {/* if the total favorite programs will display data unless display an alert message*/}
+    <>
+      <Row className="g-4" key="searchAndPrograms">
       {favoritePrograms.length > 0 ? (
-        <ProgramColumn
-          favoritePrograms={favoritePrograms}
-          cookieUID={cookieUID}
-          handleFavoriteClicked={handleFavoriteClicked}
-        />
+        favoritePrograms.map((program) => (
+          <ProgramColumn
+            key={program.id}
+            program={program}
+            cookieUID={cookieUID}
+            handleFavoriteClicked={handleFavoriteClicked}
+          />
+        ))
       ) : (
         <p>You don't have any favorite programs at the moment.</p>
       )}
-    </div>
+      </Row>
+    </>
   );
 }
 
 // Function to display favorite programs in columns
-function ProgramColumn({ favoritePrograms, cookieUID, handleFavoriteClicked }) {
-  const [mdValue, setMdValue] = useState(4);
+function ProgramColumn({ program, cookieUID, handleFavoriteClicked }) {
+  const [mdValue, setMdValue] = useState(2);
 
   const changeMdValue = () => {
-    if (mdValue === 4) {
-      setMdValue(12);
+    if (mdValue === 2) {
+      setMdValue(6);
     } else {
-      setMdValue(4);
+      setMdValue(2);
     }
   };
 
   return (
-    <div className="row mb-4">
-      {favoritePrograms.map((program) => (
-        <div key={program.id} className={`col-md-${mdValue} d-inline-block`}>
+    <Col key={program.id} md={mdValue} className="mb-4">
           <ProgramCard
             program={program}
             cookieUID={cookieUID}
             changeColumnWidth={changeMdValue}
             handleFavoriteClicked={handleFavoriteClicked}
           />
-        </div>
-      ))}
-    </div>
+    </Col>
   );
 }
 
@@ -136,7 +136,7 @@ function ProgramCard({
   };
   return (
     <div>
-      <Card key={program.program_id} className="w-100 position-relative mb-3">
+      <Card className="w-auto position-relative" style={{ height: "100%" }}>
         <FontAwesomeIcon
           icon={solidStar}
           className="star-icon position-absolute top-0 end-0 m-2"
