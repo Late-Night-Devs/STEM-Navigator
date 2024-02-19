@@ -28,21 +28,26 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
           withCredentials: true,
         }
       );
-    if (response.data.length > 1) {
-      const sortedPrograms = response.data
-        .map((program) => {
-          // Add the isFavorite property to each program object
-          return { ...program, isFavorite: true };
-        })
-        .sort((a, b) => {
-          return a.title.localeCompare(b.title);
-        });
+    if (response.data.length > 0) {
+      if (response.data.length > 1) {
+        const sortedPrograms = response.data
+          .map((program) => {
+            // Add the isFavorite property to each program object
+            return { ...program, isFavorite: true };
+          })
+          .sort((a, b) => {
+            return a.title.localeCompare(b.title);
+          });
 
-      setFavoritePrograms(sortedPrograms);
+        setFavoritePrograms(sortedPrograms);
+      } else {
+        // Handle only one favorite program.
+        const programWithIsFavorite = { ...response.data[0], isFavorite: true };
+        setFavoritePrograms([programWithIsFavorite]);
+      }
     } else {
-      // Handle only one favorite program.
-      const programWithIsFavorite = { ...response.data[0], isFavorite: true };
-      setFavoritePrograms([programWithIsFavorite]);
+      // Handle case where there is no data
+      setFavoritePrograms([]);
     }
     } catch (error) {
       console.log(
@@ -59,31 +64,35 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
 
   return (
     <>
-      <Row
-        className="px-2"
-        key="searchAndPrograms"
-        style={{
-          overflowX: "auto",
-          height: "calc(2 * 100px)",
-          paddingBottom: "500px",
-        }}
-      >
-        {favoritePrograms.length > 0 ? (
-          favoritePrograms.map((program) => (
-            <ProgramColumn
-              key={program.id}
-              program={program}
-              programTags={programTags}
-              tags={tags}
-              cookieUID={cookieUID}
-              handleFavoriteClicked={handleFavoriteClicked}
-            />
-          ))
-        ) : (
-          <p>You don't have any favorite programs at the moment.</p>
-        )}
-      </Row>
-      <div style={{ paddingBottom: "500px" }}>{/* Content goes here */}</div>
+      <div style={{ height: "750px", overflowX: "auto" }}>
+        <Row
+          className="px-2"
+          key="searchAndPrograms"
+          style={{
+            paddingBottom: "100px",
+          }}
+        >
+          {favoritePrograms.length > 0 ? (
+            favoritePrograms.map((program) => (
+              <ProgramColumn
+                key={program.id}
+                program={program}
+                programTags={programTags}
+                tags={tags}
+                cookieUID={cookieUID}
+                handleFavoriteClicked={handleFavoriteClicked}
+              />
+            ))
+          ) : (
+            <p className="p-4 bg-light text-center rounded">
+              You don't have any favorite programs at the moment.
+            </p>
+          )}
+        </Row>
+      </div>
+      <div className="border border-2" style={{ paddingBottom: "500px" }}>
+        {/* Content goes here */}
+      </div>
     </>
   );
 }
