@@ -8,6 +8,7 @@ export const TagInfo = ({
   onTagDataChange,
   categories,
   isUniqueName,
+  handleReloadAfterSubmission,
 }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,6 +43,7 @@ export const TagInfo = ({
       payload,
       (response) => {
         console.log("Response from Backend: " + JSON.stringify(response));
+        handleReloadAfterSubmission();
       },
       (error) => {
         console.error("Backend returned error: " + error);

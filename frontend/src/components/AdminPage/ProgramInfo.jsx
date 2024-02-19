@@ -26,11 +26,11 @@ const StyledRow = styled(Row)`
   margin: 0.25rem 0;
 `;
 
-  const durationUnitOptions = [
-  { value: 'Weeks', label: 'Weeks' },
-  { value: 'Months', label: 'Months' },
-  { value: 'Terms', label: 'Terms' },
-  { value: 'Years', label: 'Years' }
+const durationUnitOptions = [
+  { value: "Weeks", label: "Weeks" },
+  { value: "Months", label: "Months" },
+  { value: "Terms", label: "Terms" },
+  { value: "Years", label: "Years" },
   // ... add more options as needed here
 ];
 
@@ -39,6 +39,7 @@ export const ProgramInfo = ({
   allProgramTags,
   onProgramDataChange,
   isUniqueName,
+  handleReloadAfterSubmission,
 }) => {
   const associatedTags = programData ? programData.AssociatedTags : null;
 
@@ -66,7 +67,9 @@ export const ProgramInfo = ({
       duration: ProgramInfo.duration,
       duration_unit: ProgramInfo.duration_unit,
       long_description: ProgramInfo.long_description,
-      tag_ids: AssociatedTags.map((tag) => tag.value),
+      tag_ids: AssociatedTags?.length
+        ? AssociatedTags.map((tag) => tag.value)
+        : [],
     };
 
     postData(
@@ -74,6 +77,7 @@ export const ProgramInfo = ({
       payload,
       (response) => {
         console.log("Response from Backend: " + JSON.stringify(response));
+        handleReloadAfterSubmission();
       },
       (error) => {
         console.error("Backend returned error: " + error);
@@ -179,7 +183,7 @@ export const ProgramInfo = ({
                 min="1" // duration can't be zero or negative
                 value={programData?.ProgramInfo?.duration}
                 onChange={handleChange}
-                style={{width: "75px"}}
+                style={{ width: "75px" }}
                 required
               />
             </Col>
@@ -188,14 +192,12 @@ export const ProgramInfo = ({
                 Unit
                 <Select
                   options={durationUnitOptions}
-                  value={
-                    durationUnitOptions.find(
-                      (option) =>
-                        option.value === programData?.ProgramInfo?.duration_unit
-                    )
-                  }
+                  value={durationUnitOptions.find(
+                    (option) =>
+                      option.value === programData?.ProgramInfo?.duration_unit
+                  )}
                   onChange={handleDurationUnitChange}
-                required
+                  required
                 />
               </label>
             </Col>

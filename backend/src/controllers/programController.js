@@ -285,6 +285,7 @@ exports.updateProgram = (req, res) => {
     long_description,
     tag_ids,
   } = req.body;
+
   const query =
     "UPDATE Programs SET title = ?, lead_contact = ?, contact_email = ?, link_to_web = ?, duration = ?, duration_unit = ?, long_description = ? WHERE program_id = ?";
 
@@ -306,15 +307,18 @@ exports.updateProgram = (req, res) => {
         res.status(500).send("Error updating program");
         return;
       }
-      if (tag_ids && tag_ids.length > 0) {
-        const deleteQuery = "DELETE FROM ProgramTags WHERE program_id = ?";
-        db.query(deleteQuery, [program_id], (errDelete, resultsDelete) => {
-          if (errDelete) {
-            console.error("Error deleting existing program tags:", errDelete);
-            res.status(500).send("Error deleting existing program tags");
-            return;
-          }
-          console.log("Existing program tags deleted successfully");
+
+      const deleteQuery = "DELETE FROM ProgramTags WHERE program_id = ?";
+      db.query(deleteQuery, [program_id], (errDelete, resultsDelete) => {
+        if (errDelete) {
+          console.error("Error deleting existing program tags:", errDelete);
+          res.status(500).send("Error deleting existing program tags");
+          return;
+        }
+        console.log("Existing program tags deleted successfully");
+
+        // If there are new tags to add, proceed with insertion
+        if (tag_ids && tag_ids.length > 0) {
           const programTagValues = tag_ids.map((tag_id) => [
             program_id,
             tag_id,
@@ -333,8 +337,9 @@ exports.updateProgram = (req, res) => {
               console.log("Program tags updated successfully");
             }
           );
-        });
-      }
+        }
+      });
+
       if (results.affectedRows === 0) {
         res.status(404).send("Program not found");
         return;
