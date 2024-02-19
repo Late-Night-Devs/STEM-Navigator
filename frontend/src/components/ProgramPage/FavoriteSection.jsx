@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Card, Row, Col, Button } from "react-bootstrap";
-import Collapse from "react-bootstrap/Collapse";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Row, Col} from "react-bootstrap";
 import axios from "axios";
-import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
+import ProgramCard from "./ProgramCard";
+import useFetchData from "../AdminPage/dataUtils";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
@@ -12,6 +11,8 @@ const backend_url = process.env.REACT_APP_BACKEND_URL;
 function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
   const { isAuthenticated } = useAuth0();
   const [favoritePrograms, setFavoritePrograms] = useState([]);
+  const { data: programTags } = useFetchData("program-tags");
+  const { data: tags } = useFetchData("tags");
 
   // fetching favorite data through API
   const checkFavoriteDatabase = async () => {
@@ -27,18 +28,22 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
           withCredentials: true,
         }
       );
-      if (response.data.length > 1) {
-        //   avoid the case if there's only one program to be sorted out
-        const sortedPrograms = response.data.sort((a, b) => {
-          // storing Alphabetically favorited programs
+    if (response.data.length > 1) {
+      const sortedPrograms = response.data
+        .map((program) => {
+          // Add the isFavorite property to each program object
+          return { ...program, isFavorite: true };
+        })
+        .sort((a, b) => {
           return a.title.localeCompare(b.title);
         });
-        //   after sorting successfully, storing them to programs
-        setFavoritePrograms(sortedPrograms);
-      } else {
-        //  Handle only one favorite program.
-        setFavoritePrograms(response.data);
-      }
+
+      setFavoritePrograms(sortedPrograms);
+    } else {
+      // Handle only one favorite program.
+      const programWithIsFavorite = { ...response.data[0], isFavorite: true };
+      setFavoritePrograms([programWithIsFavorite]);
+    }
     } catch (error) {
       console.log(
         "-----!!!!---- fetching fav programs from favorite display ERROR ----------"
@@ -54,153 +59,109 @@ function FavoriteProgramsDisplay({ cookieUID, handleFavoriteClicked }) {
 
   return (
     <>
-      <Row className="g-4" key="searchAndPrograms">
-      {favoritePrograms.length > 0 ? (
-        favoritePrograms.map((program) => (
-          <ProgramColumn
-            key={program.id}
-            program={program}
-            cookieUID={cookieUID}
-            handleFavoriteClicked={handleFavoriteClicked}
-          />
-        ))
-      ) : (
-        <p>You don't have any favorite programs at the moment.</p>
-      )}
+      <Row
+        className="px-2"
+        key="searchAndPrograms"
+        style={{
+          overflowX: "auto",
+          height: "calc(2 * 100px)",
+          paddingBottom: "500px",
+        }}
+      >
+        {favoritePrograms.length > 0 ? (
+          favoritePrograms.map((program) => (
+            <ProgramColumn
+              key={program.id}
+              program={program}
+              programTags={programTags}
+              tags={tags}
+              cookieUID={cookieUID}
+              handleFavoriteClicked={handleFavoriteClicked}
+            />
+          ))
+        ) : (
+          <p>You don't have any favorite programs at the moment.</p>
+        )}
       </Row>
+      <div style={{ paddingBottom: "500px" }}>{/* Content goes here */}</div>
     </>
   );
 }
 
-// Function to display favorite programs in columns
-function ProgramColumn({ program, cookieUID, handleFavoriteClicked }) {
-  const [mdValue, setMdValue] = useState(2);
+function ProgramColumn({
+  program,
+  cookieUID,
+  programTags,
+  tags,
+  handleFavoriteClicked,
+}) {
+  const [mdValue, setMdValue] = useState(getInitialMdValue());
+  const [prevMdValue, setPrevMdValue] = useState(null);
+
+  useEffect(() => {
+    function handleResize() {
+      setMdValue(getInitialMdValue());
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []); // Empty dependency array ensures this effect runs only once after initial render
+
+  function getInitialMdValue() {
+    const screenWidth = window.innerWidth;
+    if (screenWidth >= 1400) {
+      return 2; // Large screen: 6 cards per row
+    } else if (screenWidth >= 992) {
+      return 3; // Large screen: 4 cards per row
+    } else if (screenWidth >= 768) {
+      return 4; // Medium screen: 3 cards per row
+    } else {
+      return 12; // Small screen: 1 card per row
+    }
+  }
 
   const changeMdValue = () => {
-    if (mdValue === 2) {
-      setMdValue(6);
+    if (prevMdValue !== null) {
+      // If prevMdValue is set, it means "Show Less" was clicked
+      setMdValue(prevMdValue); // Revert to the previous mdValue
+      setPrevMdValue(null); // Reset prevMdValue
     } else {
-      setMdValue(2);
+      // Store the current mdValue as prevMdValue before changing
+      setPrevMdValue(mdValue);
+      // Toggle mdValue based on the current value
+      switch (mdValue) {
+        case 2:
+          setMdValue(6); // Change from 4 cards to expanded card
+          break;
+        case 3:
+          setMdValue(4); // Change from 6 cards to 4 cards
+          break;
+        case 4:
+          setMdValue(12); // Change from 4 cards to 1 card
+          break;
+        default:
+          break;
+      }
     }
   };
 
   return (
     <Col key={program.id} md={mdValue} className="mb-4">
-          <ProgramCard
-            program={program}
-            cookieUID={cookieUID}
-            changeColumnWidth={changeMdValue}
-            handleFavoriteClicked={handleFavoriteClicked}
-          />
+      <ProgramCard
+        program={program}
+        programTags={programTags}
+        tags={tags}
+        changeColumnWidth={changeMdValue}
+        cookieUID={cookieUID}
+        handleFavoriteClicked={handleFavoriteClicked}
+      />
     </Col>
   );
 }
 
-// Function to display individual program cards
-function ProgramCard({
-  program,
-  cookieUID,
-  changeColumnWidth,
-  handleFavoriteClicked,
-}) {
-  const { isAuthenticated } = useAuth0();
-  const [isCollapsed, toggleIsCollapsed] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const toggleText = () => {
-    setIsExpanded(!isExpanded);
-  };
-
-  //   since this section is all about favorited programs, clicking on the favorite btn again will
-  //  send a Delete request to remove that favorite program.
-  const toggleFavorite = async () => {
-    try {
-      if (!isAuthenticated) {
-        alert(
-          "Oops! It looks like you're not logged in. Please log in to unlock this feature!"
-        );
-        return;
-      }
-      const url = `${backend_url}/user/favorite/removeFavorite`;
-      const requestData = {
-        userID: cookieUID, // Include the user's ID
-        programID: program.program_id, // Include the ID of the program to remove
-      };
-
-      // Update the isFavorite status in the database by making a POST request
-      await axios.post(url, requestData, {
-        withCredentials: true,
-      });
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-  return (
-    <div>
-      <Card className="w-auto position-relative" style={{ height: "100%" }}>
-        <FontAwesomeIcon
-          icon={solidStar}
-          className="star-icon position-absolute top-0 end-0 m-2"
-          onClick={() => {
-            toggleFavorite();
-            handleFavoriteClicked();
-          }}
-          style={{
-            cursor: "pointer",
-            color: "gold",
-          }}
-        />
-        <Card.Body>
-          <Card.Title>{program.title}</Card.Title>
-          <Card.Text>
-            Lead Contact: {program.lead_contact}
-            <br />
-            Contact Email:{" "}
-            <a href={`mailto:${program.contact_email}`}>
-              {program.contact_email}
-            </a>
-            <Collapse in={isCollapsed}>
-              <div id="collapse-text">
-                Web Link:{" "}
-                <a href={program.link_to_web}>{program.link_to_web}</a>
-                <br />
-                <ProgramDuration program={program} />
-                <br />
-                <br />
-                {program.long_description}
-              </div>
-            </Collapse>
-          </Card.Text>
-        </Card.Body>
-        <Card.Footer className="text-center">
-          <Button
-            onClick={() => {
-              toggleIsCollapsed(!isCollapsed);
-              toggleText();
-              changeColumnWidth();
-            }}
-            aria-controls="collapse-text"
-            aria-expanded={isCollapsed}
-          >
-            <ShowMoreShowLess isExpanded={isExpanded} />
-          </Button>
-        </Card.Footer>
-      </Card>
-    </div>
-  );
-}
-
-const ProgramDuration = ({ program }) => {
-  return (
-    <>
-      {program.duration
-        ? "Program Duration: " + program.duration + " " + program.duration_unit
-        : "Program Duration: Varies"}
-    </>
-  );
-};
-
-const ShowMoreShowLess = ({ isExpanded }) => {
-  return <>{isExpanded ? "Show Less" : "Show More"}</>;
-};
 
 export default FavoriteProgramsDisplay;

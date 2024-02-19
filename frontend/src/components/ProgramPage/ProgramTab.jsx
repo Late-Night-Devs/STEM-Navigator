@@ -88,8 +88,18 @@ function ProgramTab() {
 
       <Row>
         {cookieUID && (
-          <div id="favoriteSection" className="mt-4 border border-2">
-            <h3 className="p-2"> Display Favorite</h3>
+          <div id="favoriteSection" className=" mt-4 p-0">
+            <h3
+              className="mx-1 p-3 shadow"
+              style={{
+                backgroundColor: "#f8f9fa",
+                borderRadius: "8px",
+                border: "2px solid #667a11",
+              }}
+            >
+              Display Favorites
+            </h3>
+
             <FavoriteProgramsDisplay
               cookieUID={cookieUID}
               handleFavoriteClicked={handleFavoriteClicked}

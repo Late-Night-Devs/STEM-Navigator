@@ -160,17 +160,17 @@ const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
       <Row>
         <SearchByCategory handleSearch={handleSearch} categories={categories} />
         {clickedName && <DropdownCategory handleSearch={handleDropdown} />}
-        
+
         {/* Dropdown function */}
         <Dropdown>
           <Dropdown.Toggle
             id="dropdown"
             style={{
               background: "grey",
-              width: "50%",
-              margin: "10px",
+              width: "100%",
+              marginBottom: "10px",
               border: "var(--salmon)",
-              fontSize: "1vw",
+              fontSize: "1em",
             }}
           >
             {clickedName}
@@ -181,7 +181,7 @@ const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
               width: "50%",
               textAlign: "center",
               fontFamily: "Cocogoose",
-              fontSize: "1vw",
+              fontSize: "1em",
             }}
           >
             {Object.keys(tempCategories).map((categoryName, index) => (
@@ -198,9 +198,7 @@ const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
               <Card.Header as="h5" className="bg-success text-white">
                 {category}
               </Card.Header>
-              <Card.Body
-                className="scrollable-category"
-              >
+              <Card.Body className="scrollable-category">
                 {tags.map((tag, index) => (
                   <Form.Check
                     type="checkbox"
