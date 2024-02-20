@@ -30,7 +30,7 @@ Copy and paste the `commands` into the terminal while in the correct directory.
 ## Database ( db-dump )
 
 - First, start the Docker app (setup instructions are [here](https://docs.google.com/document/d/1q8bqvd6FhOafz8Zxq68hQeaFpCEWgvlNUS7upZFeFrc/edit#heading=h.g7oil7w2sfn3))
-- Set up the database container in Docker: `docker compose up -d`
+- Set up the database container for Docker in terminal: `docker compose up -d`
 - Create and fill the database: `docker exec -i db mysql -uroot -pmy-secret db < stem_navigator.sql`
 
 ### Database (windows)
