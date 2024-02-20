@@ -219,6 +219,10 @@ function CalendarTab() {
     setTimeline(updatedTimeline);
   }
 
+  function deleteYear(year) {
+
+  }
+
   return (
     <Container fluid>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -236,10 +240,19 @@ function CalendarTab() {
         {/* drag n drop the program to the timeline */}
         {years.map((year, index) => (
           <div className="timelineContainer">
-            <h3 className="my-0">{year}-{year+1}</h3>
+            <div>
+              <h3 className="my-0 timelineHeader">{year}-{year+1}</h3>
+              <Button onClick={() => {}} id="deleteYear"
+                className="mx-3 mt-0 mb-2 timelineHeader" size="sm"
+              >
+                Delete Year
+              </Button>
+            </div>
+
             <Timeline
               timelineData={timeline}
-              year={index}
+              year={year}
+              index={index}
               programOptions={favoritesList}
               cookieUID={cookieUID}
               handleFavoriteClicked={handleFavoriteClicked}
