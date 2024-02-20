@@ -158,6 +158,7 @@ const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
   return (
     <Container>
       <Row>
+        <h2 className="mt-4 text-center">Filter by Tag</h2>
         <SearchByCategory handleSearch={handleSearch} categories={categories} />
         {clickedName && <DropdownCategory handleSearch={handleDropdown} />}
         

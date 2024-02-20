@@ -94,6 +94,7 @@ const Programs = ({ selectedTagIds, cookieUID, handleFavoriteClicked }) => {
   return (
     <>
       <Row className="g-4" key="searchAndPrograms">
+        <h2 className="text-center mt-5">Programs</h2>
         <SearchByProgram handleSearchByProgram={handleSearchByProgram} />
         {currentItems.map((program) => (
           <ProgramColumn
