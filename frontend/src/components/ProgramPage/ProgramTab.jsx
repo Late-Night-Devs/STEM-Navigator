@@ -27,12 +27,12 @@ function ProgramTab() {
 
   return (
     <Container fluid>
-      <Row class="img-hero-welcome">
+      <Row className="img-hero-welcome">
         <div className="hero-img"></div>
         <section>
-          <p className="intro text-center fs-3 fw-bold p-5">
-            Welcome to PSU STEM
-          </p>
+          <h1 className="intro text-center fs-3 fw-bold p-5" aria-label="Portland State University STEM Programs" tabIndex="0">
+            PSU STEM Programs
+          </h1>
           {cookieUID && (
             <div className="d-flex justify-content-end ">
               <Link
@@ -56,17 +56,28 @@ function ProgramTab() {
         </section>
       </Row>
       <Row className="mt-5">
-        <Col md={12} lg={6}>
+        <Col
+        xs={12}
+        sm={6}
+        md={5}
+        lg={6}
+          role="region"
+          aria-label="FILTER PROGRAMS BY TAG"
+        >
           <FilterByTag
             setSelectedTagIds={setSelectedTagIds}
             cookieUID={cookieUID}
           />
         </Col>
         <Col
-          md={12}
+          xs={12}
+          sm={6}
+          md={7}
           lg={6}
           className="border-end rounded shadow "
           style={{ minHeight: "200px" }}
+          role="region"
+          aria-label="FILTERED PROGRAMS"
         >
           <div>
             {selectedTagIds.size > 0 ? (
@@ -86,11 +97,12 @@ function ProgramTab() {
         </Col>
       </Row>
 
-      <Row>
+      <Row role="region" aria-label="FAVORITED PROGRAMS">
         {cookieUID && (
           <div id="favoriteSection" className=" mt-4 p-0">
-            <h3
+            <h2
               className="mx-1 p-3 shadow"
+              tabIndex="0"
               style={{
                 backgroundColor: "#f8f9fa",
                 borderRadius: "8px",
@@ -98,7 +110,7 @@ function ProgramTab() {
               }}
             >
               Display Favorites
-            </h3>
+            </h2>
 
             <FavoriteProgramsDisplay
               cookieUID={cookieUID}
