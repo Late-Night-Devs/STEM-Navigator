@@ -14,6 +14,7 @@ import {
 // const cookieUserID = Cookies.get("cookieUId");
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
+
 const ProgramCard = ({
   program,
   programTags,
@@ -120,45 +121,23 @@ const ProgramCard = ({
         }}
       />
       <Card.Body>
-        <Card.Title as="h5" tabIndex="0">
-          {program.title}
-        </Card.Title>
+        <Card.Title as="h5" tabIndex="0">{program.title}</Card.Title>
         <Card.Text as="div">
           {isCollapsed === false ? "" : <br aria-hidden="true" />}
           <ProgramDetailsTitle isCollapsed={isCollapsed} />
           <div>Lead Contact: {program.lead_contact}</div>
-          <div>
-            Lead Contact Email:{" "}
-            <a href={`mailto:${program.contact_email}`} tabIndex="-1">
-              {" "}
-              {program.contact_email}
-            </a>
-          </div>
-          <ProgramWebsite
-            isCollapsed={isCollapsed}
-            program={program}
-            tabIndex="-1"
-          />
-          <ProgramDuration program={program} /> <br aria-hidden="true" />
+          <div>Lead Contact Email:{" "} <a href={`mailto:${program.contact_email}`} tabIndex="-1"> {program.contact_email}</a></div>
+          <ProgramWebsite isCollapsed={isCollapsed} program={program} tabIndex="-1" />
+          <ProgramDuration program={program} />  <br aria-hidden="true" />
           <Collapse in={isCollapsed}>
             <div id="collapse-text">
               <div>{program.long_description}</div>
 
-              {eligibilityTags.length === 0 &&
-              studentServicesTags.length === 0 ? (
-                ""
-              ) : (
-                <br aria-hidden="true" />
-              )}
+              {eligibilityTags.length === 0 && studentServicesTags.length === 0 ? "" : <br aria-hidden="true" />}
               <EligibilityCriteriaTitle eligibilityTags={eligibilityTags} />
               <EligibilityCriteriaTags eligibilityTags={eligibilityTags} />
 
-              {eligibilityTags.length !== 0 &&
-              studentServicesTags.length !== 0 ? (
-                <br aria-hidden="true" />
-              ) : (
-                ""
-              )}
+              {eligibilityTags.length !== 0 && studentServicesTags.length !== 0 ? <br aria-hidden="true" /> : ""}
               <StudentServicesTitle studentServicesTags={studentServicesTags} />
               <StudentServicesTags studentServicesTags={studentServicesTags} />
             </div>
@@ -184,26 +163,15 @@ const ProgramCard = ({
 };
 
 const ProgramDetailsTitle = ({ isCollapsed }) => {
-  return <div> {isCollapsed === false ? "" : <b>PROGRAM DETAILS</b>} </div>;
+  return <div> {
+    isCollapsed === false ? "" : <b>PROGRAM DETAILS</b>
+  } </div>
 };
 
 const ProgramWebsite = ({ isCollapsed, program }) => {
-  return (
-    <div>
-      {" "}
-      {isCollapsed === false ? (
-        ""
-      ) : (
-        <>
-          Program Website:{" "}
-          <a href={program.link_to_web} tabIndex="-1">
-            {" "}
-            {program.link_to_web}
-          </a>
-        </>
-      )}{" "}
-    </div>
-  );
+  return <div> {
+    isCollapsed === false ? "" : <>Program Website: <a href={program.link_to_web} tabIndex="-1"> {program.link_to_web}</a></>
+  } </div>
 };
 
 const ProgramDuration = ({ program }) => {
@@ -219,10 +187,7 @@ const ProgramDuration = ({ program }) => {
 
 const EligibilityCriteriaTitle = ({ eligibilityTags }) => {
   return (
-    <div>
-      {" "}
-      {eligibilityTags.length === 0 ? "" : <b>ELIGIBILITY CRITERIA</b>}{" "}
-    </div>
+    <div> {eligibilityTags.length === 0 ? "" : <b>ELIGIBILITY CRITERIA</b>} </div>
   );
 };
 
@@ -255,10 +220,7 @@ const StudentServicesTags = ({ studentServicesTags }) => {
     <>
       {" "}
       {studentServicesTags.map((studentServicesTag) => (
-        <IndividualTag
-          individualTag={studentServicesTag}
-          key={studentServicesTag}
-        />
+        <IndividualTag individualTag={studentServicesTag} key={studentServicesTag} />
       ))}{" "}
     </>
   );
