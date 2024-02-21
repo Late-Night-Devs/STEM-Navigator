@@ -158,6 +158,7 @@ const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
   return (
     <Container>
       <Row>
+        <h2 className="mt-4 text-center">Filter by Tag</h2>
         <SearchByCategory handleSearch={handleSearch} categories={categories} />
         {clickedName && <DropdownCategory handleSearch={handleDropdown} />}
         
@@ -193,23 +194,26 @@ const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
         </Dropdown>
 
         {Object.entries(categories).map(([category, tags]) => (
-          <Col key={category} md={4} className="mb-4 ">
+          <Col key={category} xs={12} lg={6} xxl={4} className="mb-4 ">
             <Card>
-              <Card.Header as="h5" className="bg-success text-white">
+              <Card.Header as="h5" className="bg-success text-white" aria-label={`${category} tag category`} tabIndex="0">
                 {category}
               </Card.Header>
               <Card.Body
                 className="scrollable-category"
               >
+                <ul className="tagList">
                 {tags.map((tag, index) => (
                   <Form.Check
                     type="checkbox"
                     id={`check-${tag}-${index}`}
                     key={`${tag}-${index}`}
                     label={tag}
+                    tabIndex="-1"
                     onChange={() => handleCheckboxChange(tag)}
                   />
                 ))}
+                </ul>
               </Card.Body>
             </Card>
           </Col>
