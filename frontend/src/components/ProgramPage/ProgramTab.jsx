@@ -111,7 +111,6 @@ function ProgramTab() {
             >
               Display Favorites
             </h2>
-
             <FavoriteProgramsDisplay
               cookieUID={cookieUID}
               handleFavoriteClicked={handleFavoriteClicked}
