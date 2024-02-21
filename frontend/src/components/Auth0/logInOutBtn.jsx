@@ -23,7 +23,7 @@ const LogInOutBtn = () => {
     }
   };
   return (
-    <div className="nav-item">
+    <div>
       {/* User authentication section */}
       {isLoading ? (
         // Display loading indicator when authentication status is being determined

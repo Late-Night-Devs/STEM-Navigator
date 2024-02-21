@@ -1,19 +1,74 @@
+/* Styles for the navbar */
 .navbar {
-  background-color: rgba(109, 139, 39, 1);
+  background-color: rgba(106, 127, 16, 1); 
 }
-.nav-link {
-  font-weight: bolder;
+
+/* Styles for the logo image */
+.logo-image {
+  margin-left: 20px; 
+  margin-bottom: 10px;
+  margin-top: 10px; 
+  height: 40px;
 }
+
+/* Styles for navbar items */
 .navbar-nav .nav-item {
-  display: block;
+  display: block; 
 }
+
+/* Styles for navbar links */
+.navbar-nav .nav-link {
+  font-size: 16px; 
+  font-weight: 700;
+  letter-spacing:0.075em;
+
+}
+
+/* Styles for individual nav items */
 .nav-item {
-  padding: 10px;
-  font-weight: bold;
-  font-size: larger;
-  margin-left: 1px;
-  display: block;
+  padding-left: 10px; 
+  margin-left: 1px; 
+  display: block; 
+  
 }
+
+/* Styles for nav item links */
 .nav-item a {
-  color: #121111;
+  color: #000000; /* Set text color */
+}
+
+/* Styles for nav link hover */
+.nav-item .nav-link:hover {
+  color: #ffffff; /* Change color on hover */
+}
+
+.navbar-toggler:hover {
+  background-color: #ffffff;
+  border-color: #000; 
+}
+
+
+/* Media query for screens up to 1060px */
+@media (max-width: 1060px) {
+  /* Styles for smaller screens */
+  .nav-item {
+    padding-left: 5px;
+    font-size: 15px;
+    transition: padding-left 0.4s ease;
+  }
+}
+
+/* Media query for screens up to 991px */
+@media (max-width: 991px) {
+  /* Styles for smaller screens */
+  .navbar .logo-image {
+    height: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Styles for smaller screens */
+  .navbar .logo-image {
+    height: 45px;
+  }
 }

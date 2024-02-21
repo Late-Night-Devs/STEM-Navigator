@@ -91,25 +91,37 @@ const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
 
   //Handle search for search function by tag in categories
   const handleSearch = (key) => {
+    // Perform search within the store based on the provided key
     let myResult = findKeyValuePair(store, key);
+
+    // If the key is empty, reset to the original store
     if (key === "") {
       myResult = store;
     }
+
+    // Update the categories state variable with the search result
     setCategories(myResult);
   };
 
+  // Helper function to find key-value pairs containing the search key
   function findKeyValuePair(data, key) {
     let result = {};
+
+    // Iterate over each key in the data object
     for (const dataKey in data) {
       const values = data[dataKey];
+
+      // Check each value in the array for a match with the search key
       for (const value of values) {
         if (value.toLowerCase().includes(key.toLowerCase())) {
+          // If a match is found, add the key-value pair to the result object
           result[dataKey] = values;
-          break; 
+          break; // Exit the loop after finding the first match for efficiency
         }
       }
     }
-    return result;
+
+    return result; 
   }
 
   ///********Handle Dropdown function******** *//
@@ -161,17 +173,17 @@ const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
         <h2 className="mt-4 text-center">Filter by Tag</h2>
         <SearchByCategory handleSearch={handleSearch} categories={categories} />
         {clickedName && <DropdownCategory handleSearch={handleDropdown} />}
-        
+
         {/* Dropdown function */}
         <Dropdown>
           <Dropdown.Toggle
             id="dropdown"
             style={{
               background: "grey",
-              width: "50%",
-              margin: "10px",
+              width: "100%",
+              marginBottom: "10px",
               border: "var(--salmon)",
-              fontSize: "1vw",
+              fontSize: "1em",
             }}
           >
             {clickedName}
@@ -182,7 +194,7 @@ const FilterByTag = ({ setSelectedTagIds, cookieUID }) => {
               width: "50%",
               textAlign: "center",
               fontFamily: "Cocogoose",
-              fontSize: "1vw",
+              fontSize: "1em",
             }}
           >
             {Object.keys(tempCategories).map((categoryName, index) => (

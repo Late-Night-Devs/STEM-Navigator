@@ -99,8 +99,18 @@ function ProgramTab() {
 
       <Row role="region" aria-label="FAVORITED PROGRAMS">
         {cookieUID && (
-          <div id="favoriteSection" className="mt-4 border border-2">
-            <h2 className="p-2" tabIndex="0"> Favorite Programs</h2>
+          <div id="favoriteSection" className=" mt-4 p-0">
+            <h2
+              className="mx-1 p-3 shadow"
+              tabIndex="0"
+              style={{
+                backgroundColor: "#f8f9fa",
+                borderRadius: "8px",
+                border: "2px solid #667a11",
+              }}
+            >
+              Display Favorites
+            </h2>
             <FavoriteProgramsDisplay
               cookieUID={cookieUID}
               handleFavoriteClicked={handleFavoriteClicked}
