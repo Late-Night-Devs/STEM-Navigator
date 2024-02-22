@@ -97,7 +97,7 @@ export const ButtonList = ({
   return (
     <div className="mb-5" style={{ minHeight: "125px" }}>
       <div className="text-center border border-dark rounded-5 p-1 m-3">
-        <h1>{name}</h1>
+        <h1 style={{fontSize:"32px"}}>{name}</h1>
         <hr />
         <label htmlFor={`filter-${name}`}>
           Filter:
@@ -106,7 +106,7 @@ export const ButtonList = ({
         <hr />
         {sortedCategories.map((category) => (
           <div key={category}>
-            {category !== "NoCategory" && <h2>{category !== "NoCategory" ? category : ""}</h2>}
+            {category !== "NoCategory" && <h2 style={{fontSize: "26px"}}>{category !== "NoCategory" ? category : ""}</h2>}
             {/* filtering by 'shouldShowItem' before displaying */}
             {groupedItems[category].filter(shouldShowItem).map((item) => (
               <StyledButton
