@@ -1,3 +1,54 @@
+The Admin page is one of several ways for people with database permissions
+to alter the database with CRUD (Create, Read, Update, Delete) operations 
+being supported.
+
+This page is made of several components
+---------------------------------------
+AdminPage.jsx  
+The 'main' component which others are nested inside.
+
+ButtonList.jsx  
+designed to work with both programs and tags. These buttons can
+be clicked on to display more information about a particular item.
+
+ProgramInfo.jsx  
+A form for submitting information about a program
+-- Program Name
+-- Title
+-- Coordinator
+-- Email
+-- url
+-- long description
+-- duration number
+-- duration unit
+
+TagInfo.jsx  
+A form for submitting information about a tag
+-- Tag Name
+-- Tag Category
+
+---------------------------------------
+
+dataUtils.js
+used to FETCH data 
+used to POST data 
+used to DELETE data
+https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Fetching_data
+
+sharedStyles.js
+contains styling information for using styled-components library
+which is shared across various components
+https://styled-components.com/
+
+
+
+
+
+
+
+
+
+
 # get the most current data from the backend
 # currently on page load / refresh, we fetch the data
 useFetchData -> programs
