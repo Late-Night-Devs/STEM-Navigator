@@ -1,11 +1,12 @@
 # STEM Navigator
+
 Capstone Project for Portland State University FW23-24
 
-Team Members:  Anh Ho, Dan Ha, Daniel Tran,
-               Linh Nguyen, Matej Bozic, Wes Wolf  
-Team Lead:     Nicholas Nguyen  
-Supervisor:    Bruce Irvin  
-Sponsor:       Tong Zhang  
+Team Members: Anh Ho, Dan Ha, Daniel Tran,
+Linh Nguyen, Matej Bozic, Wes Wolf  
+Team Lead: Nicholas Nguyen  
+Supervisor: Bruce Irvin  
+Sponsor: Tong Zhang
 
 The purpose of this project is to create a curriculum navigator for current
 and future students who are interested in STEM fields.
@@ -35,12 +36,12 @@ Copy and paste the `commands` into the terminal while in the correct directory.
 
 ### Database (windows)
 
-If creating and filling the database resulted in an error:
+Steps for using Windows PowerShell:
 
-- Copy the stem_navigator.sql to the Docker container: `docker cp stem_navigator.sql db:/var/lib/mysql/stem_navigator.sql`
+- Set up the database container for Docker in terminal: `docker compose up -d`
+- Copy the stem_navigator.sql to the Docker container: `docker cp .\stem_navigator.sql db:/tmp/stem_navigator.sql`
 - Execute the file with Docker to create database:
-- `docker exec -i db cat /var/lib/mysql/stem_navigator.sql | docker exec -i db mysql -uroot -pmy-secret db`
-- Feed data: `docker exec -i db mysql -uroot -pmy-secret db < stem_navigator.sql`
+- `docker exec -i db mysql -uroot -pmy-secret db -e "source /tmp/stem_navigator.sql"`
 
 ## Back End
 
