@@ -3,17 +3,17 @@ import { Droppable } from "react-beautiful-dnd";
 import BankProgram from "./BankProgram";
 
 function Timeline({
-  timelineData, year, index, programOptions, 
+  timelineData, year, yearIndex, programOptions, 
   cookieUID, handleFavoriteClicked,
 }) {
   return (
     <div className="mt-2 mb-4 mx-1 p-3 timeline">
       {timelineData.order.map((name) => (
         <MonthCol
-          title={timelineData[name+index].title}
+          title={timelineData[name+yearIndex].title}
           year={year}
           programOptions={programOptions}
-          programList={timelineData[name+index].programIds}
+          programList={timelineData[name+yearIndex].programIds}
           key={name}
           cookieUID={cookieUID}
           handleFavoriteClicked={handleFavoriteClicked}

@@ -189,40 +189,52 @@ function CalendarTab() {
   }
 
   function addYear() {
-    const newYear = currYear + years.length;
-    // don't push this to 'years' array until end
-    // to keep years.length the same value
+    let newYear = 0;
+    
+    // years can be deleted out of order (if user takes gap year)
+    // so find gaps in timeline to fill before adding new years
+    let i = 1;
+    for (; i < years.length; i++) {
+      if (years[i] - 1 !== years[i-1]) {
+        newYear = years[i-1] + 1;
+        break;
+      }
+    } // no gaps found, add new year at end
+    if (newYear === 0) {
+      // if user deletes first timeline row (the one corresponding to currYear)
+      if (years[0] !== currYear) i = 0;
+
+      newYear = currYear + i;
+    }
 
     const updatedTimeline = {
       ...timeline,
-      ['Fall'+years.length]: {
-        title: 'Fall'+years.length,
-        programIds: []
-      },
-      ['Winter'+years.length]: {
-        title: 'Winter'+years.length,
-        programIds: []
-      },
-      ['Spring'+years.length]: {
-        title: 'Spring'+years.length,
-        programIds: []
-      },
-      ['Summer'+years.length]: {
-        title: 'Summer'+years.length,
-        programIds: []
-      },
+      ['Fall'+i]: { title: 'Fall'+i, programIds: [] },
+      ['Winter'+i]: { title: 'Winter'+i, programIds: [] },
+      ['Spring'+i]: { title: 'Spring'+i, programIds: [] },
+      ['Summer'+i]: { title: 'Summer'+i, programIds: [] },
     }
-
     const updatedYears = years;
-    updatedYears.push(newYear);
+    updatedYears.splice(i, 0, newYear);
     setYears(updatedYears);
     setTimeline(updatedTimeline);
   }
 
   function deleteYear(year) {
+    const yearIndex = years.indexOf(year);
+    const updatedTimeline = { ...timeline };
 
+    delete updatedTimeline['Fall'+yearIndex];
+    delete updatedTimeline['Winter'+yearIndex];
+    delete updatedTimeline['Spring'+yearIndex];
+    delete updatedTimeline['Summer'+yearIndex];
+
+    const updatedYears = years;
+    updatedYears.splice(yearIndex, 1);
+    setYears(updatedYears);
+    setTimeline(updatedTimeline);
   }
-
+  
   return (
     <Container fluid>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -238,11 +250,11 @@ function CalendarTab() {
         </Button>
 
         {/* drag n drop the program to the timeline */}
-        {years.map((year, index) => (
+        {years.map((year) => (
           <div className="timelineContainer">
             <div>
               <h3 className="my-0 timelineHeader">{year}-{year+1}</h3>
-              <Button onClick={() => {}} id="deleteYear"
+              <Button onClick={() => deleteYear(year)} id="deleteYear"
                 className="mx-3 mt-0 mb-2 timelineHeader" size="sm"
               >
                 Delete Year
@@ -252,7 +264,7 @@ function CalendarTab() {
             <Timeline
               timelineData={timeline}
               year={year}
-              index={index}
+              yearIndex={year - currYear}
               programOptions={favoritesList}
               cookieUID={cookieUID}
               handleFavoriteClicked={handleFavoriteClicked}
