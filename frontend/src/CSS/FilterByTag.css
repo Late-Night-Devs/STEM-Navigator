@@ -51,6 +51,10 @@
   background-color: #0a0101; /* Color of the track */
 }
 
+.tagList {
+  margin-left: 0px;
+  padding-left: 0px;
+}
 
 /* tablet, mobile view */
 @media (max-width: 768px) {

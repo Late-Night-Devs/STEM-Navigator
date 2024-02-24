@@ -9,7 +9,7 @@ const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 function BankProgram({ program, index, cookieUID, handleFavoriteClicked }) {
   return (
-    <Draggable key={program.id} draggableId={program.id} index={index}>
+    <Draggable key={program.title} draggableId={program.id} index={index}>
       {(provided, snapshot, rubric) => (
         <Col md={4} className="w-25 text-start">
           {/* 

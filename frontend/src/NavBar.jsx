@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
-import logo from "./image/PSU_logo.png";
+import logo from "./image/PSU_logo2.svg";
 import "./CSS/NavBar.css";
 import LogInOutBtn from "./components/Auth0/logInOutBtn";
 import { useAuth0 } from "@auth0/auth0-react"; // Import the Auth0 hook
@@ -8,144 +8,201 @@ import LoginMessage from "./components/Auth0/LoginMessage.jsx";
 import Cookies from "js-cookie"; // Import Cookies
 
 const NavBar = () => {
-  const { isAuthenticated } = useAuth0(); // Get user information
+  // Get user authentication information from Auth0
+  const { isAuthenticated } = useAuth0();
+  // State variables for managing admin status, user ID, and menu toggling
   const [isAdmin, setIsAdmin] = useState(false);
   const [isUserID, setUserID] = useState(false);
-  const activeLink = "bg-light text-dark rounded p-1";
-  const normalLink = "";
+  const [isOpen, setIsOpen] = useState(false); // State for controlling mobile menu
+  // Ref for referencing the menu container
+  const dispearMenu = useRef(null);
 
-  // Call the function to update isAdmin on component mount and whenever isAuthenticated changes
+  // CSS class for highlighting active links in the navbar
+  const activeLink = "bg-light text-dark rounded p-2";
+
+  // Function to toggle the menu open/close state
+  const handleMenuToggle = () => {
+    setIsOpen(!isOpen);
+  };
+
+  console.log("is open:  ", isOpen);
+  // Function to handle clicks outside the menu, closing it if clicked outside
+  const handleClickOutside = (event) => {
+    // Check if the click event occurred outside the menu container
+    if (
+      dispearMenu.current &&
+      !dispearMenu.current.contains(event.target) &&
+      !event.target.closest(".navbar-toggler") // Check if the collapse button is clicked
+    ) {
+      // Close the menu if it's open
+      setIsOpen(false);
+    }
+  };
+
+  // Add event listener to detect clicks outside the menu and call handleClickOutside
   useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Remove event listener when component unmounts to avoid memory leaks
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Use effect to update isAdmin state based on cookie on component mount or when isAuthenticated changes
+  useEffect(() => {
+    // Retrieve isAdmin cookie value
     const getCookieAdmin = Cookies.get("isAdmin");
+    // Retrieve cookieUID
     const cookieUID = Cookies.get("cookieUId");
+    // Set the userID state
     setUserID(cookieUID);
-    if (getCookieAdmin === "true") { 
+    // Update isAdmin state based on the cookie value
+    if (getCookieAdmin === "true") {
       setIsAdmin(true);
     } else {
       setIsAdmin(false);
     }
-  }, []); // Empty dependency array ensures the effect runs only once on initial render
+  }, []);
 
+  // Function to handle changes in isAdmin status
   const handleAdminStatusChange = (newAdminValue) => {
+    // Update isAdmin state with the new value
     setIsAdmin(newAdminValue);
   };
+
   return (
     <>
-      <nav className="navbar navbar-expand-lg ">
-        <div className="container-fluid text-dark">
-          <div>
+      <nav className="navbar navbar-expand-lg">
+        <div className="container-fluid">
+          <div className="pl-5">
             <img
-              className="d-inline-block align-top"
+              className="d-inline-block align-top logo-image"
               alt="icon-logo"
               src={logo}
-              height="40"
             />
           </div>
 
-          <ul className="nav">
-            <li className="nav-item custom-list">
-              <NavLink
-                exact='true'
-                to="/"
-                className={({ isActive }) =>
-                  `linkStyle ${isActive ? activeLink : normalLink}`
-                }
-                style={{ textDecoration: "none" }}
-              >
-                Home
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                exact='true'
-                to="/events"
-                className={({ isActive }) =>
-                  `linkStyle ${isActive ? activeLink : normalLink}`
-                }
-                style={{ textDecoration: "none" }}
-              >
-                Events
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                exact='true'
-                to="/scholarship"
-                className={({ isActive }) =>
-                  `linkStyle ${isActive ? activeLink : normalLink}`
-                }
-                style={{ textDecoration: "none" }}
-              >
-                Scholarship
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                exact='true'
-                to="/calendar"
-                className={({ isActive }) =>
-                  `linkStyle ${isActive ? activeLink : normalLink}`
-                }
-                style={{ textDecoration: "none" }}
-              >
-                Calendar
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                exact='true'
-                to="/program"
-                className={({ isActive }) =>
-                  `linkStyle ${isActive ? activeLink : normalLink}`
-                }
-                style={{ textDecoration: "none" }}
-              >
-                Program
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                exact='true'
-                to="/newsletter"
-                className={({ isActive }) =>
-                  `linkStyle ${isActive ? activeLink : normalLink}`
-                }
-                style={{ textDecoration: "none" }}
-              >
-                Newsletter
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                exact='true'
-                to="/contact"
-                className={({ isActive }) =>
-                  `linkStyle ${isActive ? activeLink : normalLink}`
-                }
-                style={{ textDecoration: "none" }}
-              >
-                Contact
-              </NavLink>
-            </li>
-            {isAdmin && isAuthenticated && (
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            onClick={handleMenuToggle}
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div
+            className={`navbar-collapse justify-content-between Larger 
+                 collapse ${isOpen ? "show" : ""}`}
+            ref={dispearMenu}
+            id="navbarNav"
+          >
+            <ul
+              className={`navbar-nav ${
+                isOpen ? "flex-column" : "flex-row ms-auto"
+              }`}
+            >
               <li className="nav-item">
                 <NavLink
                   exact
-                  to="/admin-modify-db"
+                  to="/"
                   className={({ isActive }) =>
-                    `linkStyle ${isActive ? activeLink : normalLink}`
+                    `nav-link ${isActive && activeLink} `
                   }
-                  style={{ textDecoration: "none" }}
                 >
-                  Admin Tools
+                  Home
                 </NavLink>
               </li>
-            )}
-          </ul>
-
-          <LogInOutBtn />
+              {/* <li className="nav-item">
+                <NavLink
+                  exact
+                  to="/events"
+                  className={({ isActive }) =>
+                    `nav-link ${isActive && activeLink} `
+                  }
+                >
+                  Events
+                </NavLink>
+              </li> */}
+              <li className="nav-item">
+                <NavLink
+                  exact
+                  to="/scholarship"
+                  className={({ isActive }) =>
+                    `nav-link ${isActive && activeLink} `
+                  }
+                >
+                  Scholarship
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink
+                  exact
+                  to="/calendar"
+                  className={({ isActive }) =>
+                    `nav-link ${isActive && activeLink} `
+                  }
+                >
+                  Calendar
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink
+                  exact
+                  to="/program"
+                  className={({ isActive }) =>
+                    `nav-link ${isActive && activeLink} `
+                  }
+                >
+                  Program
+                </NavLink>
+              </li>
+              {/* <li className="nav-item ">
+                <NavLink
+                  exact
+                  to="/contact"
+                  className={({ isActive }) =>
+                    `nav-link ${isActive && activeLink} `
+                  }
+                >
+                  Newsletter
+                </NavLink>
+              </li> */}
+              <li className="nav-item ">
+                <NavLink
+                  exact
+                  to="/contact"
+                  className={({ isActive }) =>
+                    `nav-link ${isActive && activeLink} `
+                  }
+                >
+                  Contact
+                </NavLink>
+              </li>
+              {isAdmin && isAuthenticated && (
+                <li className="nav-item">
+                  <NavLink
+                    exact
+                    to="/admin-modify-db"
+                    className={({ isActive }) =>
+                      `nav-link ${isActive && activeLink} text-nowrap`
+                    }
+                  >
+                    Admin Tools
+                  </NavLink>
+                </li>
+              )}
+              <li className="nav-item">
+                <LogInOutBtn />
+              </li>
+            </ul>
+          </div>
         </div>
       </nav>
+
       <LoginMessage handleAdminStatusChange={handleAdminStatusChange} />
     </>
   );
