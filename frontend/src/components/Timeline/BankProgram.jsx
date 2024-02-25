@@ -4,12 +4,13 @@ import { Draggable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import "../../CSS/Timeline.css";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 function BankProgram({ program, index, cookieUID, handleFavoriteClicked }) {
   return (
-    <Draggable key={program.title} draggableId={program.id} index={index}>
+    <Draggable key={program.id} draggableId={program.id} index={index}>
       {(provided, snapshot, rubric) => (
         <Col md={4} className="w-25 text-start">
           {/* 

@@ -1,7 +1,7 @@
 import React from "react";
-import { Row, Col } from "react-bootstrap";
 import { Droppable } from "react-beautiful-dnd";
 import BankProgram from "./BankProgram";
+import "../../CSS/Timeline.css";
 
 function Timeline({
   timelineData, year, yearIndex, programOptions, 

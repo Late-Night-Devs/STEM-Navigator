@@ -1,7 +1,5 @@
 const emptyTimeline = {
-  monthOrder: ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ],
+  order: ["Fall", "Winter", "Spring", "Summer"],
 
   // CURRENT YEAR
   Fall0: { title: "Fall0", programIds: [] },

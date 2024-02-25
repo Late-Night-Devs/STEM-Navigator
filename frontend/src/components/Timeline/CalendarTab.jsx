@@ -9,29 +9,6 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import Cookies from "js-cookie"; // Import Cookies
 
-const testPgrms = [
-  {
-    title: "LSAMP",
-    lead_contact: "Joyce Pieretti Ph.D",
-    contact_email: "lsamp@pdx.edu",
-    link_to_web: "https://www.pdx.edu/alliance-minority-participation/",
-    id: uuid4(),
-  },
-  {
-    title: "MESA C2C",
-    lead_contact: "Yongwen Lampert",
-    contact_email: "mesac2c@pcc.edu",
-    link_to_web: "https://www.pcc.edu/maker/stem-center/programming/mesac2c/",
-    id: uuid4(),
-  },
-  {
-    title: "ACCESS",
-    lead_contact: "Vvdaul Holloway",
-    contact_email: "vvdaul.holloway@pdx.edu",
-    link_to_web: "https://ondeck.pdx.edu/multicultural-retention-services/access",
-    id: uuid4(),
-  },
-];
 const currDate = new Date();
 const currYear = currDate.getFullYear();
 const first4Years = [ currYear, currYear+1, currYear+2, currYear+3 ];
@@ -145,56 +122,37 @@ function CalendarTab() {
     let updatedTimeline = null;
     switch (source.droppableId) {
       case destination.droppableId: {
-        const month = timeline[destination.droppableId];
-        const reorderedList = Array.from(month.programIds);
-        const [movedProgram] = reorderedList.splice(source.index, 1);
-        reorderedList.splice(destination.index, 0, movedProgram);
+        const [movedProgram] = destList.splice(source.index, 1);
+        destList.splice(destination.index, 0, movedProgram);
 
-        const updatedTimeline = {
+        updatedTimeline = {
           ...timeline,
-          [month.title]: {
-            ...month,
-            programIds: reorderedList
-          },
+          [destMonth.title]: { ...destMonth, programIds: destList },
         }
         setTimeline(updatedTimeline);
         break;
       }
       case 'bankDroppable': {
-        const month = timeline[destination.droppableId];
-        const updatedList = Array.from(month.programIds);
         const program = favoritesList[source.index];
-        updatedList.splice(destination.index, 0, { ...program, id: uuid4() });
+        destList.splice(destination.index, 0, { ...program, id: uuid4() });
 
-        const updatedTimeline = {
+        updatedTimeline = {
           ...timeline,
-          [month.title]: {
-            ...month,
-            programIds: updatedList
-          },
+          [destMonth.title]: { ...destMonth, programIds: destList },
         }
         setTimeline(updatedTimeline);
         break;
       }
       default: {
         const srcMonth = timeline[source.droppableId];
-        const destMonth = timeline[destination.droppableId];
+        const srcList = Array.from(srcMonth.programIds);
+        const [movedProgram] = srcList.splice(source.index, 1);
+        destList.splice(destination.index, 0, movedProgram);
 
-        const updatedSrcList = Array.from(srcMonth.programIds);
-        const updatedDestList = Array.from(destMonth.programIds);
-        const [movedProgram] = updatedSrcList.splice(source.index, 1);
-        updatedDestList.splice(destination.index, 0, movedProgram);
-
-        const updatedTimeline = {
+        updatedTimeline = {
           ...timeline,
-          [srcMonth.title]: {
-            ...srcMonth,
-            programIds: updatedSrcList
-          },
-          [destMonth.title]: {
-            ...destMonth,
-            programIds: updatedDestList
-          },
+          [srcMonth.title]: { ...srcMonth, programIds: srcList },
+          [destMonth.title]: { ...destMonth, programIds: destList },
         }
         setTimeline(updatedTimeline);
         break;
@@ -232,6 +190,10 @@ function CalendarTab() {
     updatedYears.splice(i, 0, newYear);
     setYears(updatedYears);
     setTimeline(updatedTimeline);
+    alert(
+      `Added academic year ${currYear+i}-${currYear+i+1}.`+
+      `\nScroll down if it is not currently visible.`
+    )
   }
 
   function deleteYear(year) {
@@ -244,48 +206,49 @@ function CalendarTab() {
     delete updatedTimeline['Summer'+yearIndex];
 
     const updatedYears = years;
-    updatedYears.splice(yearIndex, 1);
+    const removedYear = updatedYears.splice(yearIndex, 1);
     setYears(updatedYears);
     setTimeline(updatedTimeline);
+    alert(`Removed academic year ${removedYear}-${parseInt(removedYear)+1}`)
   }
-  
+
   return (
     <Container fluid>
-      <DragDropContext onDragEnd={onDragEnd}>
-        {/* display favorite programs */}
-        <FavoritesBank
-          favoritesList={favoritesList}
-          cookieUID={cookieUID}
-          handleFavoriteClicked={handleFavoriteClicked}
-        />
+    <DragDropContext onDragEnd={onDragEnd}>
+      {/* display favorite programs */}
+      <FavoritesBank
+        favoritesList={favoritesList}
+        cookieUID={cookieUID}
+        handleFavoriteClicked={handleFavoriteClicked}
+      />
 
-        <Button onClick={() => addYear()} className="my-3" id="newYear">
-          New Year
-        </Button>
+      <Button onClick={() => addYear()} className="my-3" id="newYear">
+        New Year
+      </Button>
 
-        {/* drag n drop the program to the timeline */}
-        {years.map((year) => (
-          <div className="timelineContainer">
-            <div>
-              <h3 className="my-0 timelineHeader">{year}-{year+1}</h3>
-              <Button onClick={() => deleteYear(year)} id="deleteYear"
-                className="mx-3 mt-0 mb-2 timelineHeader" size="sm"
-              >
-                Delete Year
-              </Button>
-            </div>
-
-            <Timeline
-              timelineData={timeline}
-              year={year}
-              yearIndex={year - currYear}
-              programOptions={favoritesList}
-              cookieUID={cookieUID}
-              handleFavoriteClicked={handleFavoriteClicked}
-            />
+      {/* drag n drop the program to the timeline */}
+      {years.map((year) => (
+        <div className="timelineContainer">
+          <div>
+            <h3 className="my-0 timelineHeader">{year}-{year+1}</h3>
+            <Button onClick={() => deleteYear(year)} id="deleteYear"
+              className="mx-3 mt-0 mb-2 timelineHeader" size="sm"
+            >
+              Delete Year
+            </Button>
           </div>
-        ))}
-      </DragDropContext>
+
+          <Timeline
+            timelineData={timeline}
+            year={year}
+            yearIndex={year - currYear}
+            programOptions={favoritesList}
+            cookieUID={cookieUID}
+            handleFavoriteClicked={handleFavoriteClicked}
+          />
+        </div>
+      ))}
+    </DragDropContext>
     </Container>
   );
 }
