@@ -50,14 +50,14 @@ Steps for using Windows PowerShell:
 - Install [Node.js](https://nodejs.org/en/download/) if you don't already have it
   - All the default options are fine, no need to change the given settings
   - You will need administrator credentials to install this
-- Enter the frontend directory from the base of the folder: `cd backend`
+- Enter the backend directory from the base of the folder: `cd backend`
 - Install the necessary dependencies: `npm i`
 - Start the web app backend: `node server.js`
 - **KEEP THIS TERMINAL OPEN** while exploring the web app to keep the backend "server" running
 
 ## Front End:
 
-- Enter the backend directory from the base of the folder: `cd frontend`
+- Enter the frontend directory from the base of the folder: `cd frontend`
 - Install the necessary dependencies: `npm i`
   - You may see warnings about vulnerabilities. These should not affect the web app's
     performance and can be ignored as we are working on those.
