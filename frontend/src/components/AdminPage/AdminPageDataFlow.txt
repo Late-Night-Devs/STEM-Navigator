@@ -1,8 +1,45 @@
-# get the most current data from the backend
-# currently on page load / refresh, we fetch the data
-useFetchData -> programs
-useFetchData -> tags
-useFetchData -> programTags
+The Admin page is one of several ways for people with database permissions
+to alter the database with CRUD (Create, Read, Update, Delete) operations 
+being supported.
+
+This page is made of several components
+---------------------------------------
+AdminPage.jsx  
+The 'main' component which others are nested inside.
+
+ButtonList.jsx  
+designed to work with both programs and tags. These buttons can
+be clicked on to display more information about a particular item.
+
+ProgramInfo.jsx  
+A form for submitting information about a program
+-- Program Name
+-- Title
+-- Coordinator
+-- Email
+-- url
+-- long description
+-- duration number
+-- duration unit
+
+TagInfo.jsx  
+A form for submitting information about a tag
+-- Tag Name
+-- Tag Category
+
+---------------------------------------
+
+dataUtils.js
+used to FETCH data 
+used to POST data 
+used to DELETE data
+https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Fetching_data
+
+sharedStyles.js
+contains styling information for using styled-components library
+which is shared across various components
+https://styled-components.com/
+
 
 # transform the tag data as needed 
 tags -> formattedProgramTags  # gives the tag 'value' and 'label' attributes to be used by Select
@@ -12,23 +49,6 @@ tags -> formattedCategories  # finds unique categories by searching all tags
 programs -> programItems
 tags -> tagItems
 
-
-#selected program or tag
-
-selectedProgramInfo
-
-
-
-
-# updated tag info by clicking a tag
-{tag_id: 27, tag_name: 'Community College', category: 'Identity'}
-
-# updated tag info by clicking the 'Add' button
-updated tag info:  {tag_name: '', tag_id: -1, category: ''}
-
-# updated tag info by filling out the tag-form-submit
-TagInfo.jsx:15 Before updating:  {}
-TagInfo.jsx:17 After updating:  {tag_name: 'a'}
 
 
 
