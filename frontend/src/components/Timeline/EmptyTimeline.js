@@ -1,4 +1,8 @@
-const emptyTimeline = {
+const currDate = new Date();
+export const currYear = currDate.getFullYear();
+export const first4Years = [ currYear, currYear+1, currYear+2, currYear+3 ];
+
+export const emptyTimeline = {
   order: ["Fall", "Winter", "Spring", "Summer"],
 
   // CURRENT YEAR
@@ -25,5 +29,3 @@ const emptyTimeline = {
   Spring3: { title: "Spring3", programIds: [] },
   Summer3: { title: "Summer3", programIds: [] },
 };
-
-export default emptyTimeline;

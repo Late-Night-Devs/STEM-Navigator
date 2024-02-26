@@ -2,16 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Button, Container } from "react-bootstrap";
 import FavoritesBank from "./FavoritesBank";
 import Timeline from "./Timeline";
-import emptyTimeline from "./EmptyTimeline";
+import { emptyTimeline, currYear, first4Years} from "./EmptyTimeline";
 import { DragDropContext } from "react-beautiful-dnd";
 import { v4 as uuid4 } from "uuid";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import Cookies from "js-cookie"; // Import Cookies
-
-const currDate = new Date();
-const currYear = currDate.getFullYear();
-const first4Years = [ currYear, currYear+1, currYear+2, currYear+3 ];
 
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
@@ -197,7 +193,7 @@ function CalendarTab() {
   }
 
   function deleteYear(year) {
-    const yearIndex = years.indexOf(year);
+    const yearIndex = year-currYear;
     const updatedTimeline = { ...timeline };
 
     delete updatedTimeline['Fall'+yearIndex];
@@ -206,10 +202,10 @@ function CalendarTab() {
     delete updatedTimeline['Summer'+yearIndex];
 
     const updatedYears = years;
-    const removedYear = updatedYears.splice(yearIndex, 1);
+    const removedYear = updatedYears.splice(years.indexOf(year), 1);
     setYears(updatedYears);
     setTimeline(updatedTimeline);
-    alert(`Removed academic year ${removedYear}-${parseInt(removedYear)+1}`)
+    alert(`Removed academic year ${removedYear}-${parseInt(removedYear)+1}`);
   }
 
   return (
