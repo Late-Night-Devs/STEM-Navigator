@@ -8,32 +8,34 @@ function FavoritesBank({ favoritesList, cookieUID, handleFavoriteClicked }) {
   const noFavorites = favoritesList.length === 0;
 
   return (
-    <Row id="bank" className="my-2 mx-1 p-2">
-      <h3 className="mt-1">Favorited Programs</h3>
-      <Droppable droppableId="bankDroppable" direction="horizontal">
-        {(provided) => (
-          <Row {...provided.droppableProps} ref={provided.innerRef}>
-            {Array.isArray(favoritesList) &&
-              favoritesList.map((program, index) => (
-                <BankProgram
-                  program={program}
-                  cookieUID={cookieUID}
-                  index={index}
-                  key={program.title}
-                  handleFavoriteClicked={handleFavoriteClicked}
-                />
-              ))}
-            {noFavorites && (
-              <p>
-                Your favorited programs will be listed here. <br />
-                You can search for and favorite programs in our "Program" tab!
-              </p>
-            )}
-            {provided.placeholder}
-          </Row>
-        )}
-      </Droppable>
-    </Row>
+    <div className="mt-5">
+      <Row id="bank" className="my-2 mx-1 p-2">
+        <h3 className="mt-1">Favorited Programs</h3>
+        <Droppable droppableId="bankDroppable" direction="horizontal">
+          {(provided) => (
+            <Row {...provided.droppableProps} ref={provided.innerRef}>
+              {Array.isArray(favoritesList) &&
+                favoritesList.map((program, index) => (
+                  <BankProgram
+                    program={program}
+                    cookieUID={cookieUID}
+                    index={index}
+                    key={program.title}
+                    handleFavoriteClicked={handleFavoriteClicked}
+                  />
+                ))}
+              {noFavorites && (
+                <p>
+                  Your favorited programs will be listed here. <br />
+                  You can search for and favorite programs in our "Program" tab!
+                </p>
+              )}
+              {provided.placeholder}
+            </Row>
+          )}
+        </Droppable>
+      </Row>
+    </div>
   );
 }
 
