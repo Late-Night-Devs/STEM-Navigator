@@ -1,13 +1,17 @@
-#bank, #timeline, .monthCol {
+#bank, .timeline, .monthCol {
   border: 1px solid darkgray;
 }
 
-#timelineContainer {
+.timelineContainer {
   width: 100%;
   overflow-x: auto;
 }
 
-#timeline {
+.timelineHeader {
+  display: inline-block; 
+}
+
+.timeline {
   display: inline-flex;
 }
 
@@ -20,4 +24,12 @@
 .bankProgram {
   width: 190px;
   margin: 5px;
+}
+
+#newYear {
+  background-color: green;
+}
+
+#deleteYear {
+  background-color: red;
 }

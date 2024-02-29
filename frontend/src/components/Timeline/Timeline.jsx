@@ -1,21 +1,20 @@
 import React from "react";
-import { Row, Col } from "react-bootstrap";
 import { Droppable } from "react-beautiful-dnd";
 import BankProgram from "./BankProgram";
+import "../../CSS/Timeline.css";
 
 function Timeline({
-  timelineData,
-  programOptions,
-  cookieUID,
-  handleFavoriteClicked,
+  timelineData, year, yearIndex, programOptions, 
+  cookieUID, handleFavoriteClicked,
 }) {
   return (
-    <div id="timeline" className="my-4 mx-1 p-3">
-      {timelineData.monthOrder.map((name) => (
+    <div className="mt-2 mb-4 mx-1 p-3 timeline">
+      {timelineData.order.map((name) => (
         <MonthCol
-          title={timelineData[name].title}
+          title={timelineData[name+yearIndex].title}
+          year={year}
           programOptions={programOptions}
-          programList={timelineData[name].programIds}
+          programList={timelineData[name+yearIndex].programIds}
           key={name}
           cookieUID={cookieUID}
           handleFavoriteClicked={handleFavoriteClicked}
@@ -25,7 +24,7 @@ function Timeline({
   );
 }
 
-function MonthCol({ title, programList, cookieUID, handleFavoriteClicked }) {
+function MonthCol({ title, year, programList, cookieUID, handleFavoriteClicked }) {
   const emptyColumn = programList.length === 0;
 
   return (
@@ -36,7 +35,9 @@ function MonthCol({ title, programList, cookieUID, handleFavoriteClicked }) {
           ref={provided.innerRef}
           className="monthCol"
         >
-          <h4>{title}</h4>
+          <h4>
+            {title.substring(0, title.length-1)} {title.includes("Fall")? year : year+1}
+          </h4>
           {programList.map((program, index) => (
             <BankProgram
               program={program}

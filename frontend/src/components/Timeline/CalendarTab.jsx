@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 import FavoritesBank from "./FavoritesBank";
 import Timeline from "./Timeline";
-import emptyTimeline from "./EmptyTimeline";
+import { emptyTimeline, currYear, first4Years} from "./EmptyTimeline";
 import { DragDropContext } from "react-beautiful-dnd";
 import { v4 as uuid4 } from "uuid";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import Cookies from "js-cookie"; // Import Cookies
 
-
 const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 function CalendarTab() {
   const [favoritesList, setFavoritesList] = useState([]);
   const [timeline, setTimeline] = useState(emptyTimeline);
+  const [years, setYears] = useState(first4Years);
   const { isAuthenticated } = useAuth0();
   // get userID from cookies 
   const cookieUID = Cookies.get("cookieUId");
@@ -88,60 +88,67 @@ function CalendarTab() {
   function onDragEnd(result) {
     const { source, destination } = result;
 
-    if (!destination || destination.droppableId === 'bankDroppable') return;
+    if (!destination) return; // invalid destination
+    if (  // cancelled add from bank
+      source.droppableId === 'bankDroppable' &&
+      destination.droppableId === 'bankDroppable'
+    ) return;
 
+    if (  // putting timeline entries back into bank
+      source.droppableId !== 'bankDroppable' && 
+      destination.droppableId === 'bankDroppable'
+    ) {
+      const srcMonth = timeline[source.droppableId];
+      const srcList = Array.from(srcMonth.programIds);
+      srcList.splice(source.index, 1);
+
+      const updatedTimeline = {
+        ...timeline,
+        [srcMonth.title]: {
+          ...srcMonth,
+          programIds: srcList
+        },
+      }
+      setTimeline(updatedTimeline);
+      return;
+    }
+
+    const destMonth = timeline[destination.droppableId];
+    const destList = Array.from(destMonth.programIds);
+    let updatedTimeline = null;
     switch (source.droppableId) {
       case destination.droppableId: {
-        const month = timeline[destination.droppableId];
-        const reorderedList = Array.from(month.programIds);
-        const [movedProgram] = reorderedList.splice(source.index, 1);
-        reorderedList.splice(destination.index, 0, movedProgram);
+        const [movedProgram] = destList.splice(source.index, 1);
+        destList.splice(destination.index, 0, movedProgram);
 
-        const updatedTimeline = {
+        updatedTimeline = {
           ...timeline,
-          [month.title]: {
-            ...month,
-            programIds: reorderedList
-          },
+          [destMonth.title]: { ...destMonth, programIds: destList },
         }
         setTimeline(updatedTimeline);
         break;
       }
       case 'bankDroppable': {
-        const month = timeline[destination.droppableId];
-        const updatedList = Array.from(month.programIds);
         const program = favoritesList[source.index];
-        updatedList.splice(destination.index, 0, { ...program, id: uuid4() });
+        destList.splice(destination.index, 0, { ...program, id: uuid4() });
 
-        const updatedTimeline = {
+        updatedTimeline = {
           ...timeline,
-          [month.title]: {
-            ...month,
-            programIds: updatedList
-          },
+          [destMonth.title]: { ...destMonth, programIds: destList },
         }
         setTimeline(updatedTimeline);
         break;
       }
       default: {
         const srcMonth = timeline[source.droppableId];
-        const destMonth = timeline[destination.droppableId];
+        const srcList = Array.from(srcMonth.programIds);
+        const [movedProgram] = srcList.splice(source.index, 1);
+        destList.splice(destination.index, 0, movedProgram);
 
-        const updatedSrcList = Array.from(srcMonth.programIds);
-        const updatedDestList = Array.from(destMonth.programIds);
-        const [movedProgram] = updatedSrcList.splice(source.index, 1);
-        updatedDestList.splice(destination.index, 0, movedProgram);
-
-        const updatedTimeline = {
+        updatedTimeline = {
           ...timeline,
-          [srcMonth.title]: {
-            ...srcMonth,
-            programIds: updatedSrcList
-          },
-          [destMonth.title]: {
-            ...destMonth,
-            programIds: updatedDestList
-          },
+          [srcMonth.title]: { ...srcMonth, programIds: srcList },
+          [destMonth.title]: { ...destMonth, programIds: destList },
         }
         setTimeline(updatedTimeline);
         break;
@@ -149,16 +156,95 @@ function CalendarTab() {
     }
   }
 
+  function addYear() {
+    let newYear = 0;
+    
+    // years can be deleted out of order (if user takes gap year)
+    // so find gaps in timeline to fill before adding new years
+    let i = 1;
+    for (; i < years.length; i++) {
+      if (years[i] - 1 !== years[i-1]) {
+        newYear = years[i-1] + 1;
+        break;
+      }
+    } // no gaps found, add new year at end
+    if (newYear === 0) {
+      // if user deletes first timeline row (the one corresponding to currYear)
+      if (years[0] !== currYear) i = 0;
+
+      newYear = currYear + i;
+    }
+
+    const updatedTimeline = {
+      ...timeline,
+      ['Fall'+i]: { title: 'Fall'+i, programIds: [] },
+      ['Winter'+i]: { title: 'Winter'+i, programIds: [] },
+      ['Spring'+i]: { title: 'Spring'+i, programIds: [] },
+      ['Summer'+i]: { title: 'Summer'+i, programIds: [] },
+    }
+    const updatedYears = years;
+    updatedYears.splice(i, 0, newYear);
+    setYears(updatedYears);
+    setTimeline(updatedTimeline);
+    alert(
+      `Added academic year ${currYear+i}-${currYear+i+1}.`+
+      `\nScroll down if it is not currently visible.`
+    )
+  }
+
+  function deleteYear(year) {
+    const yearIndex = year-currYear;
+    const updatedTimeline = { ...timeline };
+
+    delete updatedTimeline['Fall'+yearIndex];
+    delete updatedTimeline['Winter'+yearIndex];
+    delete updatedTimeline['Spring'+yearIndex];
+    delete updatedTimeline['Summer'+yearIndex];
+
+    const updatedYears = years;
+    const removedYear = updatedYears.splice(years.indexOf(year), 1);
+    setYears(updatedYears);
+    setTimeline(updatedTimeline);
+    alert(`Removed academic year ${removedYear}-${parseInt(removedYear)+1}`);
+  }
+
   return (
     <Container fluid>
-      <DragDropContext onDragEnd={onDragEnd}>
-        {/* display favorite programs */}
-        <FavoritesBank favoritesList={favoritesList} cookieUID={cookieUID} handleFavoriteClicked={handleFavoriteClicked} />
-        {/* drag n drop the program to the timeline */}
-        <div id="timelineContainer">
-          <Timeline timelineData={timeline} programOptions={favoritesList} cookieUID={cookieUID} handleFavoriteClicked={handleFavoriteClicked} />
+    <DragDropContext onDragEnd={onDragEnd}>
+      {/* display favorite programs */}
+      <FavoritesBank
+        favoritesList={favoritesList}
+        cookieUID={cookieUID}
+        handleFavoriteClicked={handleFavoriteClicked}
+      />
+
+      <Button onClick={() => addYear()} className="my-3" id="newYear">
+        New Year
+      </Button>
+
+      {/* drag n drop the program to the timeline */}
+      {years.map((year) => (
+        <div className="timelineContainer">
+          <div>
+            <h3 className="my-0 timelineHeader">{year}-{year+1}</h3>
+            <Button onClick={() => deleteYear(year)} id="deleteYear"
+              className="mx-3 mt-0 mb-2 timelineHeader" size="sm"
+            >
+              Delete Year
+            </Button>
+          </div>
+
+          <Timeline
+            timelineData={timeline}
+            year={year}
+            yearIndex={year - currYear}
+            programOptions={favoritesList}
+            cookieUID={cookieUID}
+            handleFavoriteClicked={handleFavoriteClicked}
+          />
         </div>
-      </DragDropContext>
+      ))}
+    </DragDropContext>
     </Container>
   );
 }
