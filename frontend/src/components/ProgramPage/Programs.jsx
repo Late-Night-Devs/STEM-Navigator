@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {  Row, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import Viking from "../../image/viking.png";
 import SearchByProgram from "./SearchByProgram";
 import useFetchData from "../AdminPage/dataUtils";
-import ProgramCard from "./ProgramCard"
+import ProgramCard from "./ProgramCard";
 
 // Fetch the user ID from the cookie
 // const cookieUserID = Cookies.get("cookieUId");
@@ -42,6 +42,7 @@ const Programs = ({ selectedTagIds, cookieUID, handleFavoriteClicked }) => {
           }
         });
         setPrograms(sortedPrograms);
+        setStorePrograms(sortedPrograms);
         console.log("Sorted Programs from Programs.jsx: ", sortedPrograms);
       } else {
         console.log(
@@ -49,6 +50,7 @@ const Programs = ({ selectedTagIds, cookieUID, handleFavoriteClicked }) => {
           allProgramsResponse.data
         );
         setPrograms(allProgramsResponse.data);
+        setStorePrograms(allProgramsResponse.data);
       }
     } catch (error) {
       console.error("Error fetching programs:", error);
@@ -135,11 +137,11 @@ const ProgramColumn = ({
   cookieUID,
   handleFavoriteClicked,
 }) => {
-  const [mdValue,  setMdValue]  = useState(6);
+  const [mdValue, setMdValue] = useState(6);
   const [xxlValue, setXxlValue] = useState(4);
 
   const changeColumnWidth = () => {
-    mdValue  === 6 ? setMdValue (12) : setMdValue (6);
+    mdValue === 6 ? setMdValue(12) : setMdValue(6);
     xxlValue === 4 ? setXxlValue(12) : setXxlValue(4);
     // if (mdValue === 4) {
     //   setMdValue(12);
