@@ -18,45 +18,44 @@ const Programs = ({ selectedTagIds, cookieUID, handleFavoriteClicked }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(9);
   const [storePrograms, setStorePrograms] = useState([]);
-
+  const fetchProgramsBySelectingTagsID = async () => {
+    try {
+      console.log("Display all the programs - no filter\n", cookieUID);
+      const tagIdsArray = Array.from(selectedTagIds);
+      // If no tags are selected, fetch all programs
+      const allProgramsResponse = await axios.post(
+        `${backend_url}/programs/filter`,
+        {
+          tagIds: tagIdsArray,
+          userID: cookieUID, // Make sure to include the userID
+        }
+      );
+      if (allProgramsResponse.data.length > 1) {
+        const sortedPrograms = allProgramsResponse.data.sort((a, b) => {
+          // Compare the isFavorite property of program a and program b
+          if (a.isFavorite === b.isFavorite) {
+            // If they have the same isFavorite value, compare by title alphabetically
+            return a.title.localeCompare(b.title);
+          } else {
+            // If they have different isFavorite values, prioritize the one with isFavorite: true
+            return a.isFavorite ? -1 : 1;
+          }
+        });
+        setPrograms(sortedPrograms);
+        console.log("Sorted Programs from Programs.jsx: ", sortedPrograms);
+      } else {
+        console.log(
+          "allProgramsResponse.data from Programs.jsx: ",
+          allProgramsResponse.data
+        );
+        setPrograms(allProgramsResponse.data);
+      }
+    } catch (error) {
+      console.error("Error fetching programs:", error);
+    }
+  };
   // Fetch programs based on selected tags or all programs if no tags are selected
   useEffect(() => {
-    const fetchProgramsBySelectingTagsID = async () => {
-      try {
-        console.log("Fetching programs with selected tags\n", cookieUID);
-        const tagIdsArray = Array.from(selectedTagIds);
-        // If no tags are selected, fetch all programs
-        const response = await axios.post(`${backend_url}/programs/filter`, {
-          tagIds: tagIdsArray,
-          userID: cookieUID,
-        });
-        if (response.data.length > 1) {
-          const sortedPrograms = response.data.sort((a, b) => {
-            // Compare the isFavorite property of program a and program b
-            if (a.isFavorite === b.isFavorite) {
-              // If they have the same isFavorite value, compare by title alphabetically
-              return a.title.localeCompare(b.title);
-            } else {
-              // If they have different isFavorite values, prioritize the one with isFavorite: true
-              return a.isFavorite ? -1 : 1;
-            }
-          });
-          setPrograms(sortedPrograms); // Update the programs displayed with sorted ones
-          setStorePrograms(sortedPrograms); // Also update storePrograms with sorted list for future reference
-          console.log("Sorted Programs from Programs.jsx: ", sortedPrograms);
-        } else {
-          // If no programs are returned, update states to reflect that
-          setPrograms([]);
-          setStorePrograms([]);
-        }
-      } catch (error) {
-        console.error("Error fetching programs:", error);
-        // Ensure states are updated to reflect error or empty state
-        setPrograms([]);
-        setStorePrograms([]);
-      }
-    };
-
     fetchProgramsBySelectingTagsID();
   }, [selectedTagIds, cookieUID]);
 
